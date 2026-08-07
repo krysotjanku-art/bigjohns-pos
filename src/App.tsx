@@ -3,7 +3,27 @@ import { CategoryBar } from "./components/CategoryBar";
 import { OrderPanel } from "./components/OrderPanel";
 import { PizzaGrid } from "./components/PizzaGrid";
 import { PizzaModal } from "./components/PizzaModal";
-import { menu } from "./data/menu";
+import { menu, pizzaPrices } from "./data/menu";
 import type { Category, MenuItem, OrderItem, OrderItemInput, PizzaSize } from "./types/menu";
-function App() { const [order, setOrder] = useState<OrderItem[]>([]); const [activeCategory, setActiveCategory] = useState<Category>("Pizza"); const [selectedPizza, setSelectedPizza] = useState<MenuItem | null>(null); const total = useMemo(() => order.reduce((sum, item) => sum + item.cena * item.pocet, 0), [order]); const addItem = (item: OrderItemInput) => setOrder((current) => { const found = current.find((entry) => entry.id === item.id); return found ? current.map((entry) => entry.id === item.id ? { ...entry, pocet: entry.pocet + 1 } : entry) : [...current, { ...item, pocet: 1 }]; }); const decrementItem = (itemId: number) => setOrder((current) => current.flatMap((item) => item.id !== itemId ? [item] : item.pocet > 1 ? [{ ...item, pocet: item.pocet - 1 }] : [])); const handleSize = (pizza: MenuItem, size: PizzaSize) => { addItem({ id: pizza.id + size.idOffset, cislo: pizza.cislo, nazev: `${pizza.nazev} ${size.label.charAt(0)}`, cena: pizza.cena + size.priceOffset }); setSelectedPizza(null); }; return <div style={{ display: "flex", height: "100vh", fontFamily: "Arial" }}><main style={{ flex: 2, padding: 20, background: "#f5f5f5" }}><h1>🍕 Menu</h1><CategoryBar activeCategory={activeCategory} onCategoryChange={setActiveCategory} /><PizzaGrid activeCategory={activeCategory} menuItems={menu} onItemSelect={(item) => item.kategorie === "Pizza" ? setSelectedPizza(item) : addItem(item)} /></main><OrderPanel items={order} total={total} onIncrement={(itemId) => setOrder((current) => current.map((item) => item.id === itemId ? { ...item, pocet: item.pocet + 1 } : item))} onDecrement={decrementItem} onPay={() => { window.print(); setOrder([]); }} /><PizzaModal pizza={selectedPizza} onClose={() => setSelectedPizza(null)} onSizeSelect={handleSize} /></div>; }
+
+function App() {
+  const [order, setOrder] = useState<OrderItem[]>([]);
+  const [activeCategory, setActiveCategory] = useState<Category>("Pizza");
+  const [selectedPizza, setSelectedPizza] = useState<MenuItem | null>(null);
+  const total = useMemo(() => order.reduce((sum, item) => sum + item.cena * item.pocet, 0), [order]);
+
+  const addItem = (item: OrderItemInput) => setOrder((current) => {
+    const found = current.find((entry) => entry.id === item.id);
+    return found ? current.map((entry) => entry.id === item.id ? { ...entry, pocet: entry.pocet + 1 } : entry) : [...current, { ...item, pocet: 1 }];
+  });
+  const decrementItem = (itemId: number) => setOrder((current) => current.flatMap((item) => item.id !== itemId ? [item] : item.pocet > 1 ? [{ ...item, pocet: item.pocet - 1 }] : []));
+  const handleSize = (pizza: MenuItem, size: PizzaSize) => {
+    if (!pizza.pizzaPricing) return;
+    addItem({ id: pizza.id + size.idOffset, cislo: pizza.cislo, nazev: `${pizza.cislo} ${pizza.nazev} ${size.code}`, cena: pizzaPrices[pizza.pizzaPricing][size.code] });
+    setSelectedPizza(null);
+  };
+
+  return <div style={{ display: "flex", height: "100vh", fontFamily: "Arial" }}><main style={{ flex: 2, padding: 20, background: "#f5f5f5" }}><h1>🍕 Menu</h1><CategoryBar activeCategory={activeCategory} onCategoryChange={setActiveCategory} /><PizzaGrid activeCategory={activeCategory} menuItems={menu} onItemSelect={(item) => item.kategorie === "Pizza" ? setSelectedPizza(item) : addItem(item)} /></main><OrderPanel items={order} total={total} onIncrement={(itemId) => setOrder((current) => current.map((item) => item.id === itemId ? { ...item, pocet: item.pocet + 1 } : item))} onDecrement={decrementItem} onPay={() => { window.print(); setOrder([]); }} /><PizzaModal pizza={selectedPizza} onClose={() => setSelectedPizza(null)} onSizeSelect={handleSize} /></div>;
+}
+
 export default App;
