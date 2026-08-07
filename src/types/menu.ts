@@ -6,6 +6,7 @@ export interface MenuItem {
   nazev: string;
   cena: number;
   kategorie: Category;
+  pizzaPricing?: PizzaPricingGroup;
 }
 
 export interface OrderItem extends Omit<MenuItem, "kategorie"> {
@@ -14,4 +15,11 @@ export interface OrderItem extends Omit<MenuItem, "kategorie"> {
 
 export type OrderItemInput = Omit<OrderItem, "pocet">;
 
-export interface PizzaSize { label: string; priceOffset: number; idOffset: number; }
+export type PizzaSizeCode = "S" | "M" | "XL";
+export type PizzaPricingGroup = "Margherita" | "Classic" | "Combo" | "Premium";
+
+export interface PizzaSize {
+  code: PizzaSizeCode;
+  label: string;
+  idOffset: number;
+}
