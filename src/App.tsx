@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { flushSync } from "react-dom";
 import { CategoryBar } from "./components/CategoryBar";
+import { HistoryScreen } from "./components/HistoryScreen";
 import { OrderPanel } from "./components/OrderPanel";
 import { PizzaGrid } from "./components/PizzaGrid";
 import { PizzaModal } from "./components/PizzaModal";
 import { Receipt } from "./components/Receipt";
 import { menu, pizzaPrices } from "./data/menu";
+import { addCompletedOrder, createCompletedOrder, loadOrderHistory, receiptFromCompletedOrder, saveOrderHistory, type CompletedOrder } from "./orderHistory";
 import { addToOrder, orderItemKey } from "./order";
 import { createReceiptSnapshot, type ReceiptSnapshot } from "./receiptSnapshot";
 import type { Category, MenuItem, OrderItem, OrderItemInput, PizzaSize } from "./types/menu";
@@ -21,6 +23,8 @@ function App() {
   const [activeCategory, setActiveCategory] = useState<Category>("Pizza");
   const [selectedPizza, setSelectedPizza] = useState<MenuItem | null>(null);
   const [receipt, setReceipt] = useState<ReceiptSnapshot | null>(null);
+  const [history, setHistory] = useState<CompletedOrder[]>(() => loadOrderHistory(localStorage));
+  const [view, setView] = useState<"pos" | "history">("pos");
   const total = useMemo(() => order.reduce((sum, item) => sum + item.cena * item.pocet, 0), [order]);
 
   useEffect(() => { const clearReceipt = () => setReceipt(null); window.addEventListener("afterprint", clearReceipt); return () => window.removeEventListener("afterprint", clearReceipt); }, []);
@@ -32,11 +36,25 @@ function App() {
     if (!order.length) { setReceipt(null); return; }
     const issuedAt = new Date();
     const currentOrderReceipt = createReceiptSnapshot(order, nextReceiptNumber(), nextOrderNumber(issuedAt), issuedAt);
-    flushSync(() => { setReceipt(currentOrderReceipt); setOrder([]); });
+    const completedOrder = createCompletedOrder(currentOrderReceipt);
+    const updatedHistory = addCompletedOrder(history, completedOrder);
+    saveOrderHistory(localStorage, updatedHistory);
+    flushSync(() => {
+      setReceipt(currentOrderReceipt);
+      setOrder([]);
+      setHistory(updatedHistory);
+    });
+    requestAnimationFrame(() => window.print());
+  };
+  const printCopy = (completedOrder: CompletedOrder) => {
+    flushSync(() => setReceipt(receiptFromCompletedOrder(completedOrder)));
     requestAnimationFrame(() => window.print());
   };
 
-  return <><div className="pos-app" style={{ display: "flex", height: "100vh", fontFamily: "Arial" }}><main style={{ flex: "1 1 auto", minWidth: 0, padding: 20, background: "#f5f5f5" }}><h1>🍕 Menu</h1><CategoryBar activeCategory={activeCategory} onCategoryChange={setActiveCategory} /><PizzaGrid activeCategory={activeCategory} menuItems={menu} onItemSelect={(item) => item.kategorie === "Pizza" ? setSelectedPizza(item) : addMenuItem(item)} /></main><OrderPanel items={order} total={total} onIncrement={(itemKey) => { setReceipt(null); setOrder((current) => current.map((item) => orderItemKey(item) === itemKey ? { ...item, pocet: item.pocet + 1 } : item)); }} onDecrement={decrementItem} onPay={handlePay} /><PizzaModal pizza={selectedPizza} onClose={() => setSelectedPizza(null)} onSizeSelect={handleSize} /></div><Receipt receipt={receipt} /></>;
+  const navigation = <div style={{ display: "flex", gap: 8, padding: 12, fontFamily: "Arial", background: "white" }}><button type="button" onClick={() => setView("pos")} style={{ fontWeight: view === "pos" ? "bold" : "normal" }}>Pokladna</button><button type="button" onClick={() => setView("history")} style={{ fontWeight: view === "history" ? "bold" : "normal" }}>Historie</button></div>;
+  if (view === "history") return <>{navigation}<main style={{ minHeight: "calc(100vh - 52px)", padding: 20, fontFamily: "Arial", background: "#f5f5f5" }}><HistoryScreen orders={history} onPrintCopy={printCopy} /></main><Receipt receipt={receipt} /></>;
+
+  return <>{navigation}<div className="pos-app" style={{ display: "flex", height: "calc(100vh - 52px)", fontFamily: "Arial" }}><main style={{ flex: "1 1 auto", minWidth: 0, padding: 20, background: "#f5f5f5" }}><h1>Menu</h1><CategoryBar activeCategory={activeCategory} onCategoryChange={setActiveCategory} /><PizzaGrid activeCategory={activeCategory} menuItems={menu} onItemSelect={(item) => item.kategorie === "Pizza" ? setSelectedPizza(item) : addMenuItem(item)} /></main><OrderPanel items={order} total={total} onIncrement={(itemKey) => { setReceipt(null); setOrder((current) => current.map((item) => orderItemKey(item) === itemKey ? { ...item, pocet: item.pocet + 1 } : item)); }} onDecrement={decrementItem} onPay={handlePay} /><PizzaModal pizza={selectedPizza} onClose={() => setSelectedPizza(null)} onSizeSelect={handleSize} /></div><Receipt receipt={receipt} /></>;
 }
 
 export default App;
