@@ -1,12 +1,12 @@
-.receipt { display: none; }
+.receipt, .daily-summary-receipt { display: none; }
 
 @media print {
   @page { margin: 0; size: 80mm auto; }
 
   body { margin: 0; background: #fff; }
   #root { display: block; width: auto; min-height: 0; margin: 0; border: 0; }
-  #root > :not(.receipt) { display: none !important; }
-  .receipt { display: block; width: 72mm; margin: 0 auto; padding: 5mm 0; color: #000; background: #fff; font: 11px/1.35 Arial, sans-serif; text-align: left; }
+  #root > :not(.receipt):not(.daily-summary-receipt) { display: none !important; }
+  .receipt, .daily-summary-receipt { display: block; width: 72mm; margin: 0 auto; padding: 5mm 0; color: #000; background: #fff; font: 11px/1.35 Arial, sans-serif; text-align: left; }
   .receipt__center, .receipt__vat-title { text-align: center; }
   .receipt__center strong { font-size: 14px; }
   .receipt__rule { overflow: hidden; white-space: nowrap; letter-spacing: -1px; }
