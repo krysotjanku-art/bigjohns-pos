@@ -1,8 +1,9 @@
 import { ORDER_HISTORY_KEY } from "./orderHistory";
+import { PIZZA_MENU_KEY } from "./pizzaMenu";
 
 export const RECEIPT_COUNTER_KEY = "bigjohns.receipt-counter";
 export const ORDER_COUNTER_KEY = "bigjohns.order-counter";
-export const PERSISTENT_POS_KEYS = [ORDER_HISTORY_KEY, RECEIPT_COUNTER_KEY, ORDER_COUNTER_KEY] as const;
+export const PERSISTENT_POS_KEYS = [ORDER_HISTORY_KEY, RECEIPT_COUNTER_KEY, ORDER_COUNTER_KEY, PIZZA_MENU_KEY] as const;
 export interface PosBackup { version: 1; exportedAt: string; data: Record<(typeof PERSISTENT_POS_KEYS)[number], string | null>; }
 type StorageLike = Pick<Storage, "getItem" | "setItem" | "removeItem">;
 

@@ -7,6 +7,7 @@ export interface MenuItem {
   cena: number;
   kategorie: Category;
   pizzaPricing?: PizzaPricingGroup;
+  pizzaSizePrices?: Record<PizzaSizeCode, number>;
 }
 
 export interface OrderItem extends MenuItem {

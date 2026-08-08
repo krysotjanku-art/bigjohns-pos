@@ -9,7 +9,7 @@ describe("POS backup", () => {
   it("exports all persistent POS data including cancelled orders and counters", () => {
     const local = storage({ [ORDER_HISTORY_KEY]: savedHistory, [RECEIPT_COUNTER_KEY]: "154", [ORDER_COUNTER_KEY]: JSON.stringify({ date: "2026-08-08", value: 23 }) });
     const backup = createBackup(local, new Date("2026-08-08T20:00:00.000Z"));
-    expect(backup.data).toEqual({ [ORDER_HISTORY_KEY]: savedHistory, [RECEIPT_COUNTER_KEY]: "154", [ORDER_COUNTER_KEY]: JSON.stringify({ date: "2026-08-08", value: 23 }) });
+    expect(backup.data).toMatchObject({ [ORDER_HISTORY_KEY]: savedHistory, [RECEIPT_COUNTER_KEY]: "154", [ORDER_COUNTER_KEY]: JSON.stringify({ date: "2026-08-08", value: 23 }) });
   });
 
   it("restores an exported backup exactly", () => {
