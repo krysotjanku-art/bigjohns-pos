@@ -42,12 +42,18 @@ describe("order history", () => {
     expect(currentOrder).toEqual([item(1, 2)]);
   });
 
-  it("prints a copy from saved data without creating new numbers or history entries", () => {
+  it("prints a copy from saved data without changing receipt or order numbering", () => {
     const completed = createCompletedOrder(receipt(154, 23, "2026-08-08T18:42:00.000Z", [item(1, 2)]));
     const history = [completed];
+    const receiptNumberBefore = completed.receiptNumber;
+    const orderNumberBefore = completed.orderNumber;
+    const historyCountBefore = history.length;
     const copy = receiptFromCompletedOrder(completed);
 
     expect(copy).toMatchObject({ receiptNumber: 154, orderNumber: 23, total: 20 });
+    expect(copy.receiptNumber).toBe(receiptNumberBefore);
+    expect(copy.orderNumber).toBe(orderNumberBefore);
+    expect(history).toHaveLength(historyCountBefore);
     expect(history).toEqual([completed]);
   });
 

@@ -5,7 +5,7 @@
 
   body { margin: 0; background: #fff; }
   #root { display: block; width: auto; min-height: 0; margin: 0; border: 0; }
-  .pos-app { display: none !important; }
+  #root > :not(.receipt) { display: none !important; }
   .receipt { display: block; width: 72mm; margin: 0 auto; padding: 5mm 0; color: #000; background: #fff; font: 11px/1.35 Arial, sans-serif; text-align: left; }
   .receipt__center, .receipt__vat-title { text-align: center; }
   .receipt__center strong { font-size: 14px; }
