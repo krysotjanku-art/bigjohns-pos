@@ -7,7 +7,7 @@ import { PizzaGrid } from "./components/PizzaGrid";
 import { PizzaModal } from "./components/PizzaModal";
 import { Receipt } from "./components/Receipt";
 import { menu, pizzaPrices } from "./data/menu";
-import { addCompletedOrder, createCompletedOrder, loadOrderHistory, receiptFromCompletedOrder, saveOrderHistory, type CompletedOrder } from "./orderHistory";
+import { addCompletedOrder, cancelCompletedOrder, cancelOrderInHistory, createCompletedOrder, loadOrderHistory, receiptFromCompletedOrder, saveOrderHistory, type CompletedOrder } from "./orderHistory";
 import { addToOrder, orderItemKey, removeOrderItem } from "./order";
 import { createReceiptSnapshot, type ReceiptSnapshot } from "./receiptSnapshot";
 import type { Category, MenuItem, OrderItem, OrderItemInput, PizzaSize } from "./types/menu";
@@ -51,9 +51,17 @@ function App() {
     flushSync(() => setReceipt(receiptFromCompletedOrder(completedOrder)));
     requestAnimationFrame(() => window.print());
   };
+  const cancelOrder = (completedOrder: CompletedOrder) => {
+    const cancelledAt = new Date();
+    const cancelledOrder = cancelCompletedOrder(completedOrder, cancelledAt);
+    const updatedHistory = cancelOrderInHistory(history, completedOrder, cancelledAt);
+    saveOrderHistory(localStorage, updatedHistory);
+    setHistory(updatedHistory);
+    return cancelledOrder;
+  };
 
   const navigation = <div style={{ display: "flex", gap: 8, padding: 12, fontFamily: "Arial", background: "white" }}><button type="button" onClick={() => setView("pos")} style={{ fontWeight: view === "pos" ? "bold" : "normal" }}>Pokladna</button><button type="button" onClick={() => setView("history")} style={{ fontWeight: view === "history" ? "bold" : "normal" }}>Historie</button></div>;
-  if (view === "history") return <>{navigation}<main style={{ minHeight: "calc(100vh - 52px)", padding: 20, fontFamily: "Arial", background: "#f5f5f5" }}><HistoryScreen orders={history} onPrintCopy={printCopy} onBackToPos={() => setView("pos")} /></main><Receipt receipt={receipt} /></>;
+  if (view === "history") return <>{navigation}<main style={{ minHeight: "calc(100vh - 52px)", padding: 20, fontFamily: "Arial", background: "#f5f5f5" }}><HistoryScreen orders={history} onPrintCopy={printCopy} onCancel={cancelOrder} onBackToPos={() => setView("pos")} /></main><Receipt receipt={receipt} /></>;
 
   return <>{navigation}<div className="pos-app" style={{ display: "flex", height: "calc(100vh - 52px)", fontFamily: "Arial" }}><main style={{ flex: "1 1 auto", minWidth: 0, padding: 20, background: "#f5f5f5" }}><div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}><h1>Menu</h1><button type="button" onClick={() => setView("history")} style={{ padding: "12px 20px", fontSize: 18, cursor: "pointer" }}>Historie</button></div><CategoryBar activeCategory={activeCategory} onCategoryChange={setActiveCategory} /><PizzaGrid activeCategory={activeCategory} menuItems={menu} onItemSelect={(item) => item.kategorie === "Pizza" ? setSelectedPizza(item) : addMenuItem(item)} /></main><OrderPanel items={order} total={total} onIncrement={(itemKey) => { setReceipt(null); setOrder((current) => current.map((item) => orderItemKey(item) === itemKey ? { ...item, pocet: item.pocet + 1 } : item)); }} onDecrement={decrementItem} onRemove={removeItem} onPay={handlePay} /><PizzaModal pizza={selectedPizza} onClose={() => setSelectedPizza(null)} onSizeSelect={handleSize} /></div><Receipt receipt={receipt} /></>;
 }

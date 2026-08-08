@@ -7,6 +7,7 @@ export interface ReceiptSnapshot {
   items: readonly OrderItem[];
   total: number;
   vatBreakdown?: readonly VatBreakdown[];
+  isCancelled?: boolean;
 }
 
 export interface VatBreakdown {

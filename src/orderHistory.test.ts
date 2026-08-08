@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addCompletedOrder, createCompletedOrder, loadOrderHistory, receiptFromCompletedOrder, saveOrderHistory } from "./orderHistory";
+import { addCompletedOrder, cancelOrderInHistory, createCompletedOrder, loadOrderHistory, receiptFromCompletedOrder, saveOrderHistory } from "./orderHistory";
 import { createReceiptSnapshot } from "./receiptSnapshot";
 import type { OrderItem } from "./types/menu";
 
@@ -49,5 +49,15 @@ describe("order history", () => {
 
     expect(copy).toMatchObject({ receiptNumber: 154, orderNumber: 23, total: 20 });
     expect(history).toEqual([completed]);
+  });
+
+  it("persists a cancellation without changing the original order or receipt numbers", () => {
+    const storage = memoryStorage();
+    const completed = createCompletedOrder(receipt(154, 23, "2026-08-08T18:42:00.000Z", [item(1, 2)]));
+    const cancelled = cancelOrderInHistory([completed], completed, new Date("2026-08-08T19:00:00.000Z"));
+    saveOrderHistory(storage, cancelled);
+
+    expect(loadOrderHistory(storage)).toEqual([{ ...completed, cancelledAt: "2026-08-08T19:00:00.000Z" }]);
+    expect(receiptFromCompletedOrder(cancelled[0])).toMatchObject({ receiptNumber: 154, orderNumber: 23, isCancelled: true });
   });
 });

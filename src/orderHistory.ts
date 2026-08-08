@@ -12,6 +12,7 @@ export interface CompletedOrder {
   total: number;
   vatBreakdown: readonly VatBreakdown[];
   paymentType: "cash";
+  cancelledAt?: string;
 }
 
 const cloneItems = (items: readonly OrderItem[]) => items.map((item) => ({ ...item, selectedOptions: item.selectedOptions ? [...item.selectedOptions] : undefined }));
@@ -31,6 +32,10 @@ export const newestFirst = (orders: readonly CompletedOrder[]) => [...orders].so
 
 export const addCompletedOrder = (orders: readonly CompletedOrder[], order: CompletedOrder) => newestFirst([...orders, order]);
 
+export const cancelCompletedOrder = (order: CompletedOrder, cancelledAt = new Date()): CompletedOrder => ({ ...order, cancelledAt: cancelledAt.toISOString() });
+
+export const cancelOrderInHistory = (orders: readonly CompletedOrder[], order: CompletedOrder, cancelledAt = new Date()) => orders.map((entry) => entry.receiptNumber === order.receiptNumber && entry.issuedAt === order.issuedAt ? cancelCompletedOrder(entry, cancelledAt) : entry);
+
 export const loadOrderHistory = (storage: Pick<Storage, "getItem">): CompletedOrder[] => {
   try {
     const saved = JSON.parse(storage.getItem(ORDER_HISTORY_KEY) ?? "[]");
@@ -47,4 +52,5 @@ export const receiptFromCompletedOrder = (order: CompletedOrder): ReceiptSnapsho
   items: cloneItems(order.items),
   total: order.total,
   vatBreakdown: order.vatBreakdown,
+  isCancelled: Boolean(order.cancelledAt),
 });
