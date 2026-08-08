@@ -9,9 +9,11 @@ export interface MenuItem {
   pizzaPricing?: PizzaPricingGroup;
 }
 
-export interface OrderItem extends Omit<MenuItem, "kategorie"> {
+export interface OrderItem extends MenuItem {
   pocet: number;
   vatRate: 12 | 21;
+  selectedSize?: PizzaSizeCode;
+  selectedOptions?: readonly string[];
 }
 
 export type OrderItemInput = Omit<OrderItem, "pocet">;
