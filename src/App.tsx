@@ -12,6 +12,8 @@ import { Receipt } from "./components/Receipt";
 import { SalesOverviewScreen } from "./components/SalesOverviewScreen";
 import { SettingsScreen } from "./components/SettingsScreen";
 import { MenuManagementScreen } from "./components/MenuManagementScreen";
+import { PinDialog } from "./components/PinDialog";
+import { loadPin } from "./adminPin";
 import { pizzaPrices } from "./data/menu";
 import { ORDER_COUNTER_KEY, RECEIPT_COUNTER_KEY } from "./backup";
 import { calculateDailySummary, type DailySummary } from "./dailySummary";
@@ -40,6 +42,8 @@ function App() {
   const [pizzas, setPizzas] = useState<ManagedPizza[]>(() => loadPizzas(localStorage));
   const [otherMenu, setOtherMenu] = useState<MenuItem[]>(() => loadOtherMenu(localStorage));
   const [view, setView] = useState<"pos" | "history" | "summary" | "overview" | "backup" | "settings" | "menu">("pos");
+  const [pendingView,setPendingView]=useState<typeof view|null>(null);
+  const [admin,setAdmin]=useState(false);
   const total = useMemo(() => order.reduce((sum, item) => sum + item.cena * item.pocet, 0), [order]);
   const dailySummary = useMemo(() => calculateDailySummary(history), [history]);
   const configuredMenu = useMemo(() => applyPizzas(pizzas, [...otherMenu,...menuWithSettings(settings).filter(item=>item.kategorie!=="Pizza"&&item.kategorie!=="Nápoje"&&item.kategorie!=="Káva")]), [otherMenu,pizzas,settings]);
@@ -83,7 +87,9 @@ function App() {
     return cancelledOrder;
   };
 
-  const navigation = <div style={{ display:"flex",gap:8,padding:12 }}><button onClick={()=>setView("pos")}>Pokladna</button><button onClick={()=>setView("history")}>Historie</button><button onClick={()=>setView("summary")}>Denní přehled</button><button onClick={()=>setView("overview")}>Přehled</button><button onClick={()=>setView("backup")}>Záloha</button><button onClick={()=>setView("settings")}>Nastavení</button><button onClick={()=>setView("menu")}>Správa menu</button></div>;
+  const open=(next:typeof view)=>next==="settings"&&!admin?setPendingView(next):setView(next);
+  const navigation = <div style={{ display:"flex",gap:8,padding:12 }}><button onClick={()=>open("pos")}>Pokladna</button><button onClick={()=>open("history")}>Historie</button><button onClick={()=>open("summary")}>Denní přehled</button><button onClick={()=>open("overview")}>Přehled</button><button onClick={()=>open("backup")}>Záloha</button><button onClick={()=>open("settings")}>Nastavení</button><button onClick={()=>open("menu")}>Správa menu</button></div>;
+  if(pendingView)return <PinDialog onCancel={()=>setPendingView(null)} onSubmit={(pin)=>{if(pin!==loadPin(localStorage))return false;setAdmin(true);setView(pendingView);setPendingView(null);return true;}}/>;
   if (view === "history") return <>{navigation}<main style={{ minHeight: "calc(100vh - 52px)", padding: 20, fontFamily: "Arial", background: "#f5f5f5" }}><HistoryScreen orders={history} onPrintCopy={printCopy} onCancel={cancelOrder} onBackToPos={() => setView("pos")} /></main><Receipt receipt={receipt} /></>;
   if (view === "summary") return <>{navigation}<main style={{ minHeight: "calc(100vh - 52px)", padding: 20, fontFamily: "Arial", background: "#f5f5f5" }}><DailySummaryScreen summary={dailySummary} onPrint={printDailySummary} onBackToPos={() => setView("pos")} /></main><Receipt receipt={receipt} /><DailySummaryReceipt summary={summaryPrint?.summary ?? null} issuedAt={summaryPrint?.issuedAt ?? null} /></>;
   if (view === "overview") return <>{navigation}<main style={{ minHeight: "calc(100vh - 52px)", padding: 20, fontFamily: "Arial", background: "#f5f5f5" }}><SalesOverviewScreen orders={history} onBackToPos={() => setView("pos")} /></main><Receipt receipt={receipt} /></>;
