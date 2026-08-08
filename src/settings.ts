@@ -1,0 +1,10 @@
+import { menu } from "./data/menu";
+
+export const SETTINGS_KEY = "bigjohns.settings";
+export interface CompanySettings { companyName: string; tradeName: string; address: string; phone: string; ic: string; dic: string; web: string; }
+export interface PosSettings { company: CompanySettings; reducedVat: number; standardVat: number; prices: Record<number, number>; }
+export const defaultSettings: PosSettings = { company: { companyName: "BIG JOHN'S PIZZA", tradeName: "Bistro4you s.r.o.", address: "Bedřichov 146\n543 51 Špindlerův Mlýn", phone: "+420 777 706 666", ic: "10735941", dic: "CZ10735941", web: "www.bigjohnspizza.cz" }, reducedVat: 12, standardVat: 21, prices: Object.fromEntries(menu.filter((item) => item.id >= 201 && item.id <= 208 || item.id >= 401 && item.id <= 406 || item.id >= 501 && item.id <= 503 || item.id >= 601 && item.id <= 604).map((item) => [item.id, item.cena])) };
+export const loadSettings = (storage: Pick<Storage, "getItem">): PosSettings => { try { const value = JSON.parse(storage.getItem(SETTINGS_KEY) ?? "null"); return value && value.company && value.prices ? { ...defaultSettings, ...value, company: { ...defaultSettings.company, ...value.company }, prices: { ...defaultSettings.prices, ...value.prices } } : defaultSettings; } catch { return defaultSettings; } };
+export const validSettings = (settings: PosSettings) => Boolean(settings.company.companyName.trim()) && [settings.reducedVat, settings.standardVat].every((value) => Number.isFinite(value) && value > 0 && value < 100) && Object.values(settings.prices).every((value) => Number.isFinite(value) && value >= 0);
+export const saveSettings = (storage: Pick<Storage, "setItem">, settings: PosSettings) => storage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+export const menuWithSettings = (settings: PosSettings) => menu.map((item) => ({ ...item, cena: settings.prices[item.id] ?? item.cena }));

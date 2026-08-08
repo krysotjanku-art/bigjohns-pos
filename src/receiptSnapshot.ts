@@ -11,12 +11,12 @@ export interface ReceiptSnapshot {
 }
 
 export interface VatBreakdown {
-  rate: 12 | 21;
+  rate: number;
   base: number;
   vat: number;
 }
 
-export const calculateVatBreakdown = (items: readonly OrderItem[]): VatBreakdown[] => ([12, 21] as const).map((rate) => {
+export const calculateVatBreakdown = (items: readonly OrderItem[]): VatBreakdown[] => [...new Set(items.map((item) => item.vatRate))].sort((a, b) => a - b).map((rate) => {
   const gross = items.filter((item) => item.vatRate === rate).reduce((sum, item) => sum + item.cena * item.pocet, 0);
   const base = gross / (1 + rate / 100);
   return { rate, base, vat: gross - base };

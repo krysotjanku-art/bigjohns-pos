@@ -11,7 +11,7 @@ export interface MenuItem {
 
 export interface OrderItem extends MenuItem {
   pocet: number;
-  vatRate: 12 | 21;
+  vatRate: number;
   selectedSize?: PizzaSizeCode;
   selectedOptions?: readonly string[];
 }
