@@ -1,2 +1,3 @@
 import type { MenuItem } from "./types/menu";
-export const searchMenu = (items: readonly MenuItem[], query: string) => { const term = query.trim().toLocaleLowerCase("cs-CZ"); return term ? items.filter((item) => `${item.cislo ?? ""} ${item.nazev}`.toLocaleLowerCase("cs-CZ").includes(term)) : items; };
+const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("cs-CZ");
+export const searchMenu = (items: readonly MenuItem[], query: string) => { const term = normalize(query.trim()); return term ? items.filter((item) => normalize(`${item.cislo ?? ""} ${item.nazev}`).includes(term)) : items; };
