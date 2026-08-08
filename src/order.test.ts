@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addToOrder } from "./order";
+import { addToOrder, orderItemKey, removeOrderItem } from "./order";
 import type { OrderItemInput } from "./types/menu";
 
 const drink = (id: number, nazev: string): OrderItemInput => ({ id, nazev, cena: 49, kategorie: "Nápoje", vatRate: 21 });
@@ -13,4 +13,8 @@ describe("order line identity", () => {
   it("merges the same drink", () => expect(addToOrder(addToOrder([], drink(101, "Coca-Cola")), drink(101, "Coca-Cola"))).toEqual([expect.objectContaining({ pocet: 2 })]));
   it("merges the same pizza and size", () => expect(addToOrder(addToOrder([], pizza(1, "Margherita", "M")), pizza(1, "Margherita", "M"))).toEqual([expect.objectContaining({ pocet: 2 })]));
   it("keeps pizza sizes separate", () => expect(addToOrder(addToOrder([], pizza(1, "Margherita", "S")), pizza(1, "Margherita", "XL"))).toHaveLength(2));
+  it("removes a whole matching line regardless of quantity", () => {
+    const currentOrder = addToOrder(addToOrder([], drink(101, "Coca-Cola")), drink(101, "Coca-Cola"));
+    expect(removeOrderItem(currentOrder, orderItemKey(currentOrder[0]))).toEqual([]);
+  });
 });

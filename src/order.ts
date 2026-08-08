@@ -10,3 +10,5 @@ export const addToOrder = (order: readonly OrderItem[], item: OrderItemInput): O
   const index = order.findIndex((entry) => sameOrderItem(entry, item));
   return index === -1 ? [...order, { ...item, pocet: 1 }] : order.map((entry, entryIndex) => entryIndex === index ? { ...entry, pocet: entry.pocet + 1 } : entry);
 };
+
+export const removeOrderItem = (order: readonly OrderItem[], itemKey: string): OrderItem[] => order.filter((item) => orderItemKey(item) !== itemKey);
