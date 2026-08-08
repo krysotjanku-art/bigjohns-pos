@@ -1,0 +1,17 @@
+import { useMemo, useState } from "react";
+import { calculateSalesOverview, dateKey } from "../salesOverview";
+import type { CompletedOrder } from "../orderHistory";
+
+interface Props { orders: readonly CompletedOrder[]; onBackToPos: () => void; }
+const money = (value: number, decimals = 0) => new Intl.NumberFormat("cs-CZ", { style: "currency", currency: "CZK", minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(value);
+const monday = (day: Date) => { const value = new Date(day); value.setDate(value.getDate() - ((value.getDay() + 6) % 7)); return value; };
+
+export function SalesOverviewScreen({ orders, onBackToPos }: Props) {
+  const today = new Date(); const todayKey = dateKey(today);
+  const [from, setFrom] = useState(todayKey); const [to, setTo] = useState(todayKey);
+  const overview = useMemo(() => calculateSalesOverview(orders, from, to), [orders, from, to]);
+  const setRange = (start: Date, end: Date) => { setFrom(dateKey(start)); setTo(dateKey(end)); };
+  const thisWeek = () => setRange(monday(today), today);
+  const thisMonth = () => setRange(new Date(today.getFullYear(), today.getMonth(), 1), today);
+  return <section><button type="button" onClick={onBackToPos}>← Zpět na pokladnu</button><h1>Přehled prodejů</h1><div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center", marginBottom: 20 }}><label>Od <input type="date" value={from} onChange={(event) => setFrom(event.target.value)} /></label><label>Do <input type="date" value={to} onChange={(event) => setTo(event.target.value)} /></label><button type="button" onClick={() => setRange(today, today)}>Dnes</button><button type="button" onClick={thisWeek}>Tento týden</button><button type="button" onClick={thisMonth}>Tento měsíc</button><button type="button" onClick={() => { setFrom(""); setTo(""); }}>Celá historie</button></div><div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12, textAlign: "left" }}><div>Počet objednávek: <strong>{overview.orderCount}</strong></div><div>Tržba celkem: <strong>{money(overview.grossRevenue)}</strong></div><div>Počet stornovaných objednávek: <strong>{overview.cancelledOrderCount}</strong></div><div>Hodnota storen: <strong>{money(overview.cancelledValue)}</strong></div><div>Tržba po odečtení storen: <strong>{money(overview.netRevenue)}</strong></div><div>Základ 12 %: <strong>{money(overview.base12, 2)}</strong></div><div>DPH 12 %: <strong>{money(overview.vat12, 2)}</strong></div><div>Základ 21 %: <strong>{money(overview.base21, 2)}</strong></div><div>DPH 21 %: <strong>{money(overview.vat21, 2)}</strong></div></div><h2>Prodeje</h2><div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 8, textAlign: "left" }}><div>Pizzy: <strong>{overview.pizzas}</strong></div><div>Nápoje: <strong>{overview.drinks}</strong></div><div>Káva: <strong>{overview.coffees}</strong></div><div>Toppingy: <strong>{overview.toppings}</strong></div><div>Krabice: <strong>{overview.boxes}</strong></div><div>Rozvozy: <strong>{overview.deliveries}</strong></div></div><h2>Top 10 nejprodávanějších pizz</h2>{overview.topPizzas.length ? <ol style={{ textAlign: "left" }}>{overview.topPizzas.map((pizza) => <li key={pizza.number}>{pizza.number} {pizza.name} — <strong>{pizza.quantity} ks</strong></li>)}</ol> : <p>V tomto období nebyla prodána žádná pizza.</p>}</section>;
+}
