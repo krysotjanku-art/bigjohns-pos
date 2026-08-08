@@ -1,4 +1,4 @@
-.menu-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:14px; }
-.menu-grid__tile { min-height:112px; padding:18px; border:1px solid #e5e2e9; border-radius:12px; background:#fff; box-shadow:0 3px 12px rgba(32,20,55,.06); font-size:20px; text-align:left; cursor:pointer; transition:transform .18s,box-shadow .18s; }
-.menu-grid__tile:hover { transform:translateY(-2px); box-shadow:0 8px 18px rgba(32,20,55,.12); }
-.menu-grid__tile strong { display:block; margin-top:6px; }
+.menu-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:16px; }
+.menu-grid__tile { min-height:128px; display:flex; flex-direction:column; justify-content:center; align-items:flex-start; gap:8px; padding:20px; border:1px solid #e5e2e9; border-radius:12px; background:#fff; box-shadow:0 3px 12px rgba(32,20,55,.06); color:#201b28; font-size:20px; text-align:left; cursor:pointer; transition:transform .18s,box-shadow .18s,border-color .18s; }
+.menu-grid__tile:hover { transform:translateY(-2px); border-color:#cfc5dc; box-shadow:0 8px 18px rgba(32,20,55,.12); }.menu-grid__tile:active{transform:scale(.98)}
+.menu-grid__tile strong { font-size:18px; }.menu-grid__tile--pizza{align-items:center;text-align:center}.menu-grid__tile--pizza strong{font-size:26px;line-height:1}.menu-grid__tile--pizza span{font-size:21px;font-weight:650}
