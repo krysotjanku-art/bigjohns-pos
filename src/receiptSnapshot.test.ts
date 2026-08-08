@@ -12,6 +12,18 @@ describe("receipt snapshot", () => {
   it("does not retain items from a previous order", () => { const first = snapshot([item(1, "Old")]); const second = snapshot([item(2, "New")]); expect(first.items).toHaveLength(1); expect(second.items).toEqual([item(2, "New")]); });
   it("does not include an item removed before payment", () => expect(snapshot([item(2, "Kept")]).items).toEqual([item(2, "Kept")]));
   it("uses the current quantity only", () => expect(snapshot([item(1, "Cookies", 3)]).items[0]?.pocet).toBe(3));
+  it("does not change when the order is edited after payment", () => {
+    const selectedOptions = ["Oat milk"];
+    const currentOrder = [item(1, "Cookies", 2), { ...item(2, "Coffee"), selectedOptions }];
+    const receipt = snapshot(currentOrder);
+
+    currentOrder[0].pocet = 5;
+    selectedOptions.push("Extra shot");
+    currentOrder.splice(1, 1);
+
+    expect(receipt.items).toEqual([item(1, "Cookies", 2), { ...item(2, "Coffee"), selectedOptions: ["Oat milk"] }]);
+    expect(receipt.total).toBe(40);
+  });
   it("keeps receipt keys distinct for product variants with the same id", () => {
     const small = { ...item(1, "Margherita S"), kategorie: "Pizza" as const, selectedSize: "S" as const };
     const medium = { ...item(1, "Margherita M"), kategorie: "Pizza" as const, selectedSize: "M" as const };
