@@ -17,6 +17,7 @@ const drinkDefinitions = [[101, "Coca-Cola 0,5 l", 49], [102, "Coca-Cola Zero 0,
 const coffeeDefinitions = [[201, "Espresso", 49], [202, "Lungo", 55], [203, "Cappuccino", 59], [204, "Americano", 55], [205, "Flat White", 69], [206, "Caffè Latte", 69], [207, "Espresso Double", 59], [208, "Hot Tea", 49]] as const;
 const toppingDefinitions = [[401, "S topping", 25], [402, "S topping", 30], [403, "M topping", 35], [404, "M topping", 40], [405, "XL topping", 55], [406, "XL topping", 65]] as const;
 const boxDefinitions = [[501, "Krabice S", 10], [502, "Krabice M", 15], [503, "Krabice XL", 20]] as const;
+const deliveryDefinitions = [[601, "Rozvoz", 50], [602, "Rozvoz", 100], [603, "Rozvoz", 150], [604, "Rozvoz", 200]] as const;
 
 export const menu: readonly MenuItem[] = [
   ...pizzaDefinitions.map(([nazev, pizzaPricing], index): MenuItem => ({ id: index + 1, cislo: String(index + 1).padStart(2, "0"), nazev, cena: pizzaPrices[pizzaPricing].S, kategorie: "Pizza", pizzaPricing })),
@@ -25,4 +26,5 @@ export const menu: readonly MenuItem[] = [
   { id: 301, nazev: "Cookies", cena: 55, kategorie: "Dezerty" },
   ...toppingDefinitions.map(([id, nazev, cena]): MenuItem => ({ id, nazev, cena, kategorie: "Toppingy" })),
   ...boxDefinitions.map(([id, nazev, cena]): MenuItem => ({ id, nazev, cena, kategorie: "Krabice" })),
+  ...deliveryDefinitions.map(([id, nazev, cena]): MenuItem => ({ id, nazev, cena, kategorie: "Rozvoz" })),
 ];
