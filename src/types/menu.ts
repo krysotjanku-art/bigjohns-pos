@@ -1,4 +1,4 @@
-export type Category = "Pizza" | "Nápoje" | "Dezerty" | "Toppingy" | "Káva";
+export type Category = "Pizza" | "Nápoje" | "Dezerty" | "Toppingy" | "Káva" | "Krabice";
 
 export interface MenuItem {
   id: number;
