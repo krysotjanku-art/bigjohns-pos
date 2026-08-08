@@ -1,16 +1,8 @@
-import type { OrderItem } from "../types/menu";
+import type { ReceiptSnapshot } from "../receiptSnapshot";
 import "./Receipt.css";
 
-interface ReceiptData {
-  issuedAt: Date;
-  receiptNumber: number;
-  orderNumber: number;
-  items: readonly OrderItem[];
-  total: number;
-}
-
 interface Props {
-  receipt: ReceiptData | null;
+  receipt: ReceiptSnapshot | null;
 }
 
 const money = (amount: number, decimals = 0) => new Intl.NumberFormat("cs-CZ", { style: "currency", currency: "CZK", minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(amount);
