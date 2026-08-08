@@ -1,0 +1,23 @@
+.receipt { display: none; }
+
+@media print {
+  @page { margin: 0; size: 80mm auto; }
+
+  body { margin: 0; background: #fff; }
+  #root { display: block; width: auto; min-height: 0; margin: 0; border: 0; }
+  .pos-app { display: none !important; }
+  .receipt { display: block; width: 72mm; margin: 0 auto; padding: 5mm 0; color: #000; background: #fff; font: 11px/1.35 Arial, sans-serif; text-align: left; }
+  .receipt__center, .receipt__vat-title { text-align: center; }
+  .receipt__center strong { font-size: 14px; }
+  .receipt__rule { overflow: hidden; white-space: nowrap; letter-spacing: -1px; }
+  .receipt__line { border-top: 1px dashed #000; margin: 12px 0; }
+  .receipt__items { display: grid; gap: 6px; }
+  .receipt__item, .receipt__total, .receipt__vat-head, .receipt__vat-row { display: grid; align-items: baseline; }
+  .receipt__item, .receipt__total { grid-template-columns: 1fr auto; gap: 8px; }
+  .receipt__item span:last-child, .receipt__total strong:last-child { text-align: right; white-space: nowrap; }
+  .receipt__total { font-size: 13px; }
+  .receipt__vat-title { margin: 18px 0 8px; }
+  .receipt__vat-head, .receipt__vat-row { grid-template-columns: 18% 42% 40%; gap: 0; }
+  .receipt__vat-head { font-weight: bold; }
+  .receipt__vat-head span:not(:first-child), .receipt__vat-row span:not(:first-child) { text-align: right; }
+}

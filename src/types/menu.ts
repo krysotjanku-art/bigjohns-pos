@@ -11,6 +11,7 @@ export interface MenuItem {
 
 export interface OrderItem extends Omit<MenuItem, "kategorie"> {
   pocet: number;
+  vatRate: 12 | 21;
 }
 
 export type OrderItemInput = Omit<OrderItem, "pocet">;
