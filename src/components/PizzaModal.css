@@ -1,0 +1,11 @@
+.pizza-modal__backdrop { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: 24px; background: rgba(10, 10, 16, .56); animation: pizza-modal-fade 180ms ease-out; }
+.pizza-modal { position: relative; width: min(100%, 480px); padding: 34px; border-radius: 22px; background: #fff; color: #17131d; box-shadow: 0 20px 55px rgba(0,0,0,.3); animation: pizza-modal-open 180ms ease-out; }
+.pizza-modal h2 { margin: 0 36px 8px 0; font-size: 30px; }
+.pizza-modal p { margin: 0 0 28px; font-size: 18px; color: #655d70; }
+.pizza-modal__close { position: absolute; top: 16px; right: 16px; width: 42px; height: 42px; border: 0; border-radius: 50%; background: #f1eef4; font-size: 30px; line-height: 1; cursor: pointer; }
+.pizza-modal__sizes { display: grid; gap: 14px; }
+.pizza-modal__sizes button { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 82px; padding: 18px 22px; border: 2px solid #ded7e5; border-radius: 14px; background: #fff; color: #17131d; font-size: 24px; cursor: pointer; }
+.pizza-modal__sizes button:hover, .pizza-modal__sizes button:focus-visible { border-color: #7d3cff; background: #f7f3ff; outline: none; }
+.pizza-modal__sizes strong { font-size: 22px; }
+@keyframes pizza-modal-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pizza-modal-open { from { transform: scale(.96); opacity: 0; } to { transform: scale(1); opacity: 1; } }
