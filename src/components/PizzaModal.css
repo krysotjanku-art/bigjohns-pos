@@ -1,5 +1,5 @@
 .pizza-modal__backdrop { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: 24px; background: rgba(10, 10, 16, .56); animation: pizza-modal-fade 180ms ease-out; }
-.pizza-modal { position: relative; width: min(100%, 480px); padding: 34px; border-radius: 22px; background: #fff; color: #17131d; box-shadow: 0 20px 55px rgba(0,0,0,.3); animation: pizza-modal-open 180ms ease-out; }
+.pizza-modal { position: relative; width: min(100%, 480px); padding: 34px; border-radius: 12px; background: #fff; color: #201b28; box-shadow: 0 20px 55px rgba(32,20,55,.24); animation: pizza-modal-open 180ms ease-out; }
 .pizza-modal h2 { margin: 0 36px 8px 0; font-size: 30px; }
 .pizza-modal p { margin: 0 0 28px; font-size: 18px; color: #655d70; }
 .pizza-modal__close { position: absolute; top: 16px; right: 16px; width: 42px; height: 42px; border: 0; border-radius: 50%; background: #f1eef4; font-size: 30px; line-height: 1; cursor: pointer; }
