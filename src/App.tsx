@@ -15,6 +15,7 @@ import { MenuManagementScreen } from "./components/MenuManagementScreen";
 import { PinDialog } from "./components/PinDialog";
 import bigJohnsLogo from "./assets/bigjohns-oval-logo.png";
 import { loadPin } from "./adminPin";
+import { loadAppearance, resolveAppearance, saveAppearance, type Appearance } from "./appearance";
 import { pizzaPrices } from "./data/menu";
 import { ORDER_COUNTER_KEY, RECEIPT_COUNTER_KEY } from "./backup";
 import { calculateDailySummary, type DailySummary } from "./dailySummary";
@@ -44,12 +45,17 @@ function App() {
   const [otherMenu, setOtherMenu] = useState<MenuItem[]>(() => loadOtherMenu(localStorage));
   const [view, setView] = useState<"pos" | "history" | "summary" | "overview" | "backup" | "settings" | "menu">("pos");
   const [pendingView,setPendingView]=useState<typeof view|null>(null);
+  const [appearance,setAppearance]=useState<Appearance>(()=>loadAppearance(localStorage));
+  const [systemDark,setSystemDark]=useState(()=>window.matchMedia("(prefers-color-scheme: dark)").matches);
   const total = useMemo(() => order.reduce((sum, item) => sum + item.cena * item.pocet, 0), [order]);
   const dailySummary = useMemo(() => calculateDailySummary(history), [history]);
   const configuredMenu = useMemo(() => applyPizzas(pizzas, [...otherMenu,...menuWithSettings(settings).filter(item=>item.kategorie!=="Pizza"&&item.kategorie!=="Nápoje"&&item.kategorie!=="Káva")]), [otherMenu,pizzas,settings]);
   const visibleMenu = useMemo(() => searchMenu(configuredMenu, search), [configuredMenu, search]);
+  const theme=resolveAppearance(appearance,systemDark);
 
   useEffect(() => { const clearPrint = () => { setReceipt(null); setSummaryPrint(null); }; window.addEventListener("afterprint", clearPrint); return () => window.removeEventListener("afterprint", clearPrint); }, []);
+  useEffect(()=>{document.documentElement.dataset.theme=theme;},[theme]);
+  useEffect(()=>{const query=window.matchMedia("(prefers-color-scheme: dark)"),change=(event:MediaQueryListEvent)=>setSystemDark(event.matches);query.addEventListener("change",change);return()=>query.removeEventListener("change",change)},[]);
   const addItem = (item: OrderItemInput) => { setReceipt(null); setOrder((current) => addToOrder(current, item)); };
   const addMenuItem = (item: MenuItem) => addItem({ ...item, vatRate: item.id >= 101 && item.id < 300 ? settings.standardVat : settings.reducedVat });
   const decrementItem = (itemKey: string) => { setReceipt(null); setOrder((current) => current.flatMap((item) => orderItemKey(item) !== itemKey ? [item] : item.pocet > 1 ? [{ ...item, pocet: item.pocet - 1 }] : [])); };
@@ -94,7 +100,7 @@ function App() {
   if (view === "summary") return <>{navigation}<main style={{ minHeight: "calc(100vh - 52px)", padding: 20, fontFamily: "Arial", background: "#f5f5f5" }}><DailySummaryScreen summary={dailySummary} onPrint={printDailySummary} onBackToPos={() => setView("pos")} /></main><Receipt receipt={receipt} /><DailySummaryReceipt summary={summaryPrint?.summary ?? null} issuedAt={summaryPrint?.issuedAt ?? null} /></>;
   if (view === "overview") return <>{navigation}<main style={{ minHeight: "calc(100vh - 52px)", padding: 20, fontFamily: "Arial", background: "#f5f5f5" }}><SalesOverviewScreen orders={history} onBackToPos={() => setView("pos")} /></main><Receipt receipt={receipt} /></>;
   if (view === "backup") return <>{navigation}<main style={{ minHeight: "calc(100vh - 52px)", padding: 20, fontFamily: "Arial", background: "#f5f5f5" }}><BackupScreen onBackToPos={() => setView("pos")} /></main><Receipt receipt={receipt} /></>;
-  if (view === "settings") return <>{navigation}<main style={{ minHeight: "calc(100vh - 52px)", padding: 20, fontFamily: "Arial", background: "#f5f5f5" }}><SettingsScreen settings={settings} onSave={(next) => { saveSettings(localStorage, next); setSettings(next); }} onBackToPos={() => setView("pos")} /></main><Receipt receipt={receipt} /></>;
+  if (view === "settings") return <>{navigation}<main style={{ minHeight: "calc(100vh - 52px)", padding: 20, fontFamily: "Arial", background: "#f5f5f5" }}><SettingsScreen settings={settings} appearance={appearance} onAppearanceChange={(next)=>{saveAppearance(localStorage,next);setAppearance(next)}} onSave={(next) => { saveSettings(localStorage, next); setSettings(next); }} onBackToPos={() => setView("pos")} /></main><Receipt receipt={receipt} /></>;
   if(view==="menu")return <>{navigation}<main><MenuManagementScreen pizzas={pizzas} onSave={next=>{if(valid(next)){savePizzas(localStorage,next);setPizzas(next);}}} onReset={()=>{if(window.confirm("Obnovit výchozí menu?")){const next=defaults();savePizzas(localStorage,next);setPizzas(next)}}} drinks={otherMenu.filter(x=>x.kategorie==="Nápoje")} onSaveDrinks={next=>{if(validOtherMenu(next)){const updated=[...next,...otherMenu.filter(x=>x.kategorie!=="Nápoje")];saveOtherMenu(localStorage,updated);setOtherMenu(updated)}}} onResetDrinks={()=>{if(window.confirm("Obnovit výchozí nápoje?")){const updated=[...defaultOtherMenu().filter(x=>x.kategorie==="Nápoje"),...otherMenu.filter(x=>x.kategorie!=="Nápoje")];saveOtherMenu(localStorage,updated);setOtherMenu(updated)}}} onBackToPos={()=>setView("pos")}/></main></>;
 
   return <>{navigation}<div className="pos-app" style={{ display: "flex", height: "calc(100vh - 52px)", fontFamily: "Arial" }}><main className="pos-menu" style={{ flex: "1 1 auto", minWidth: 0, padding: 20, background: "#f5f5f5" }}><div className="pos-menu__header"><h1>Menu</h1><button className="pos-menu__history" type="button" onClick={() => setView("history")}>Historie</button></div><input className="pos-menu__search" ref={searchInput} value={search} onChange={(event) => setSearch(event.target.value)} onKeyDown={(event) => { if (event.key === "Escape") setSearch(""); }} placeholder="Hledat položku..." />{search && <p className="pos-menu__search-status">Vyhledávání ve všech kategoriích</p>}<CategoryBar activeCategory={activeCategory} onCategoryChange={setActiveCategory} /><div className="pos-menu__content"><PizzaGrid activeCategory={activeCategory} menuItems={visibleMenu} searching={Boolean(search)} onItemSelect={(item) => { if (item.kategorie === "Pizza") setSelectedPizza(item); else { addMenuItem(item); requestAnimationFrame(() => searchInput.current?.focus()); } }} /></div></main><OrderPanel items={order} total={total} onIncrement={(itemKey) => { setReceipt(null); setOrder((current) => current.map((item) => orderItemKey(item) === itemKey ? { ...item, pocet: item.pocet + 1 } : item)); }} onDecrement={decrementItem} onRemove={removeItem} onPay={handlePay} /><PizzaModal pizza={selectedPizza} onClose={() => setSelectedPizza(null)} onSizeSelect={handleSize} /></div><Receipt receipt={receipt} /><DailySummaryReceipt summary={summaryPrint?.summary ?? null} issuedAt={summaryPrint?.issuedAt ?? null} /></>;
