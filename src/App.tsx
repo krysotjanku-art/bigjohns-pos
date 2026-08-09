@@ -13,6 +13,7 @@ import { SalesOverviewScreen } from "./components/SalesOverviewScreen";
 import { SettingsScreen } from "./components/SettingsScreen";
 import { MenuManagementScreen } from "./components/MenuManagementScreen";
 import { PinDialog } from "./components/PinDialog";
+import bigJohnsLogo from "./assets/bigjohns-oval-logo.png";
 import { loadPin } from "./adminPin";
 import { pizzaPrices } from "./data/menu";
 import { ORDER_COUNTER_KEY, RECEIPT_COUNTER_KEY } from "./backup";
@@ -87,7 +88,7 @@ function App() {
   };
 
   const open=(next:typeof view)=>["settings","menu","overview","backup"].includes(next)?setPendingView(next):setView(next);
-  const navigation = <nav className="pos-navigation"><button className={view === "pos" ? "is-active" : ""} onClick={()=>open("pos")}>Pokladna</button><button className={view === "history" ? "is-active" : ""} onClick={()=>open("history")}>Historie</button><button className={view === "summary" ? "is-active" : ""} onClick={()=>open("summary")}>Denní přehled</button><button className={view === "overview" ? "is-active" : ""} onClick={()=>open("overview")}>Přehled</button><button className={view === "backup" ? "is-active" : ""} onClick={()=>open("backup")}>Záloha</button><button className={view === "settings" ? "is-active" : ""} onClick={()=>open("settings")}>Nastavení</button><button className={view === "menu" ? "is-active" : ""} onClick={()=>open("menu")}>Správa menu</button></nav>;
+  const navigation = <nav className="pos-navigation"><img className="pos-navigation__logo" src={bigJohnsLogo} alt="Big John's Pizza" /><button className={view === "pos" ? "is-active" : ""} onClick={()=>open("pos")}>Pokladna</button><button className={view === "history" ? "is-active" : ""} onClick={()=>open("history")}>Historie</button><button className={view === "summary" ? "is-active" : ""} onClick={()=>open("summary")}>Denní přehled</button><button className={view === "overview" ? "is-active" : ""} onClick={()=>open("overview")}>Přehled</button><button className={view === "backup" ? "is-active" : ""} onClick={()=>open("backup")}>Záloha</button><button className={view === "settings" ? "is-active" : ""} onClick={()=>open("settings")}>Nastavení</button><button className={view === "menu" ? "is-active" : ""} onClick={()=>open("menu")}>Správa menu</button></nav>;
   if(pendingView)return <PinDialog onCancel={()=>setPendingView(null)} onSubmit={(pin)=>{if(pin!==loadPin(localStorage))return false;setView(pendingView);setPendingView(null);return true;}}/>;
   if (view === "history") return <>{navigation}<main style={{ minHeight: "calc(100vh - 52px)", padding: 20, fontFamily: "Arial", background: "#f5f5f5" }}><HistoryScreen orders={history} onPrintCopy={printCopy} onCancel={cancelOrder} onBackToPos={() => setView("pos")} /></main><Receipt receipt={receipt} /></>;
   if (view === "summary") return <>{navigation}<main style={{ minHeight: "calc(100vh - 52px)", padding: 20, fontFamily: "Arial", background: "#f5f5f5" }}><DailySummaryScreen summary={dailySummary} onPrint={printDailySummary} onBackToPos={() => setView("pos")} /></main><Receipt receipt={receipt} /><DailySummaryReceipt summary={summaryPrint?.summary ?? null} issuedAt={summaryPrint?.issuedAt ?? null} /></>;
