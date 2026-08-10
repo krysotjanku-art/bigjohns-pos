@@ -1,0 +1,1 @@
+const pad=(value:number)=>String(value).padStart(2,"0");export const formatDate=(date:Date)=>`${pad(date.getDate())}.${pad(date.getMonth()+1)}.${date.getFullYear()}`;export const formatDateTime=(date:Date)=>`${formatDate(date)} ${pad(date.getHours())}:${pad(date.getMinutes())}`;

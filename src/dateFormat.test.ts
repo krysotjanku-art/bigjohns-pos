@@ -1,0 +1,1 @@
+import{describe,expect,it}from"vitest";import{formatDate,formatDateTime}from"./dateFormat";describe("four digit dates",()=>{it("formats dates and times with a four-digit year",()=>{const date=new Date(2026,7,10,22,12);expect(formatDate(date)).toBe("10.08.2026");expect(formatDateTime(date)).toBe("10.08.2026 22:12")})});
