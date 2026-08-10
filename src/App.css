@@ -186,7 +186,37 @@
 .pos-menu__header-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
+  flex: 0 0 auto;
+}
+
+.pos-menu__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-bottom: 12px;
+}
+
+.pos-menu__toolbar .pos-menu__search {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+}
+
+.pos-menu__toolbar .pos-menu__history {
+  min-height: 46px;
+}
+
+@media (max-width: 760px) {
+  .pos-menu__toolbar {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .pos-menu__header-actions {
+    justify-content: flex-end;
+  }
 }
 
 .history-ui > h1,
