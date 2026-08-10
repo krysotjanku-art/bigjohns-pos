@@ -1,15 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { ORDER_COUNTER_KEY, RECEIPT_COUNTER_KEY, createBackup, parseBackup, restoreBackup } from "./backup";
 import { ORDER_HISTORY_KEY } from "./orderHistory";
+import { PIN_KEY } from "./adminPin";
 
 const storage = (initial: Record<string, string> = {}) => { const values = new Map(Object.entries(initial)); return { getItem: (key: string) => values.get(key) ?? null, setItem: (key: string, value: string) => values.set(key, value), removeItem: (key: string) => values.delete(key) }; };
 const savedHistory = JSON.stringify([{ receiptNumber: 154, orderNumber: 23, cancelledAt: "2026-08-08T19:00:00.000Z", subtotal: 850, total: 750, discount: { type: "fixed", amount: 100 } }]);
 
 describe("POS backup", () => {
   it("exports all persistent POS data including cancelled orders and counters", () => {
-    const local = storage({ [ORDER_HISTORY_KEY]: savedHistory, [RECEIPT_COUNTER_KEY]: "154", [ORDER_COUNTER_KEY]: JSON.stringify({ date: "2026-08-08", value: 23 }) });
+    const local = storage({ [ORDER_HISTORY_KEY]: savedHistory, [RECEIPT_COUNTER_KEY]: "154", [ORDER_COUNTER_KEY]: JSON.stringify({ date: "2026-08-08", value: 23 }),[PIN_KEY]:"2468" });
     const backup = createBackup(local, new Date("2026-08-08T20:00:00.000Z"));
-    expect(backup.data).toMatchObject({ [ORDER_HISTORY_KEY]: savedHistory, [RECEIPT_COUNTER_KEY]: "154", [ORDER_COUNTER_KEY]: JSON.stringify({ date: "2026-08-08", value: 23 }) });
+    expect(backup.data).toMatchObject({ [ORDER_HISTORY_KEY]: savedHistory, [RECEIPT_COUNTER_KEY]: "154", [ORDER_COUNTER_KEY]: JSON.stringify({ date: "2026-08-08", value: 23 }),[PIN_KEY]:"2468" });
   });
 
   it("restores an exported backup exactly", () => {
