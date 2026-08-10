@@ -1,4 +1,4 @@
-import { calculateVatBreakdown, type ReceiptSnapshot, type VatBreakdown } from "./receiptSnapshot";import type{OrderDiscount}from"./discount";
+import { calculateVatBreakdown, type ReceiptSnapshot, type VatBreakdown } from "./receiptSnapshot";import type{OrderDiscount}from"./discount";import type{PaymentMethod}from"./paymentMethod";
 import type { OrderItem } from "./types/menu";
 
 export const ORDER_HISTORY_KEY = "bigjohns.order-history";
@@ -13,7 +13,7 @@ export interface CompletedOrder {
   subtotal:number;
   discount?:OrderDiscount;
   vatBreakdown: readonly VatBreakdown[];
-  paymentType: "cash";
+  paymentType:PaymentMethod;
   cancelledAt?: string;
 }
 
@@ -26,7 +26,7 @@ export const createCompletedOrder = (receipt: ReceiptSnapshot, createdAt = recei
   issuedAt: receipt.issuedAt.toISOString(),
   items: cloneItems(receipt.items),
   subtotal:receipt.subtotal,total: receipt.total,discount:receipt.discount,vatBreakdown: receipt.vatBreakdown??calculateVatBreakdown(receipt.items),
-  paymentType: "cash",
+  paymentType: receipt.paymentMethod,
 });
 
 export const newestFirst = (orders: readonly CompletedOrder[]) => [...orders].sort((left, right) => right.issuedAt.localeCompare(left.issuedAt) || right.receiptNumber - left.receiptNumber);
@@ -49,6 +49,7 @@ export const saveOrderHistory = (storage: Pick<Storage, "setItem">, orders: read
 export const receiptFromCompletedOrder = (order: CompletedOrder): ReceiptSnapshot => ({
   receiptNumber: order.receiptNumber,
   orderNumber: order.orderNumber,
+  paymentMethod:order.paymentType??"cash",
   issuedAt: new Date(order.issuedAt),
   items: cloneItems(order.items),
   total: order.total,

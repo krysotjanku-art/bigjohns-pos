@@ -1,9 +1,10 @@
-import type { OrderItem } from "./types/menu";import{calculateOrderTotals,type OrderDiscount}from"./discount";
+import type { OrderItem } from "./types/menu";import{calculateOrderTotals,type OrderDiscount}from"./discount";import type{PaymentMethod}from"./paymentMethod";
 
 export interface ReceiptSnapshot {
   issuedAt: Date;
   receiptNumber: number;
   orderNumber: number;
+  paymentMethod:PaymentMethod;
   items: readonly OrderItem[];
   total: number;
   subtotal: number;
@@ -28,6 +29,7 @@ export const createReceiptSnapshot = (items: readonly OrderItem[], receiptNumber
   issuedAt,
   receiptNumber,
   orderNumber,
+  paymentMethod:"cash",
   items: items.map((item) => ({ ...item, selectedOptions: item.selectedOptions ? [...item.selectedOptions] : undefined })),
   subtotal:totals.subtotal,total:totals.total,discount:totals.discount??undefined,vatBreakdown:totals.vatBreakdown,
 };};

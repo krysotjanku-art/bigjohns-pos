@@ -1,0 +1,1 @@
+export type PaymentMethod="cash"|"card"|"online"|"gift-voucher";const labels:Record<PaymentMethod,string>={cash:"Hotově",card:"Kartou",online:"Online","gift-voucher":"Dárkový poukaz"};export const paymentMethodLabel=(method:PaymentMethod)=>labels[method];
