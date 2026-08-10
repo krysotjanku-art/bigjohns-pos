@@ -192,7 +192,8 @@
 }
 
 .pos-menu__toolbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 22px;
   margin-bottom: 28px;
@@ -207,18 +208,6 @@
 
 .pos-menu__toolbar .pos-menu__history {
   min-height: 46px;
-}
-
-@media (max-width: 760px) {
-  .pos-menu__toolbar {
-    align-items: stretch;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .pos-menu__header-actions {
-    justify-content: flex-end;
-  }
 }
 
 .history-ui > h1,
