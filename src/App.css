@@ -188,6 +188,7 @@
   align-items: center;
   gap: 14px;
   flex: 0 0 auto;
+  margin-left: auto;
 }
 
 .pos-menu__toolbar {
@@ -200,6 +201,7 @@
 .pos-menu__toolbar .pos-menu__search {
   flex: 1 1 auto;
   min-width: 0;
+  max-width: none;
   margin: 0;
 }
 
