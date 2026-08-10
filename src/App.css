@@ -188,3 +188,13 @@
   align-items: center;
   gap: 10px;
 }
+
+.history-ui > h1,
+.suspended-ui > h1,
+.daily-ui > h1,
+.overview-ui > h1,
+.settings-ui > h1,
+.menu-management-ui > h1,
+.backup-ui > h1 {
+  margin: 28px 0 32px;
+}
