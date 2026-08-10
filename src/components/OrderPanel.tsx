@@ -26,9 +26,8 @@ export function OrderPanel({ items, subtotal, total, discount, onDiscount, onInc
     })}</div>
     <footer>
       <div className="order-panel__total"><span>Celkem</span><strong>{total} Kč</strong><small>Včetně DPH</small></div>
-      <button className="order-panel__discount" onClick={onDiscount}>Sleva</button>
+      <div className="order-panel__secondary-actions"><button className="order-panel__discount" onClick={onDiscount}>Sleva</button><button className="order-panel__suspend" onClick={onSuspend} disabled={!items.length}>Pozastavit</button></div>
       {discount && <div className="order-panel__discount-summary"><span>Mezisoučet</span><strong>{subtotal} Kč</strong><span>Sleva{discount.type === "percentage" ? ` ${discount.percentage} %` : ""}</span><strong>−{discount.amount} Kč</strong></div>}
-      <button className="order-panel__suspend" onClick={onSuspend} disabled={!items.length}>Pozastavit</button>
       <button onClick={onPay}>Zaplatit</button>
     </footer>
   </aside>;
