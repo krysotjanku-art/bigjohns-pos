@@ -1,4 +1,4 @@
-import type { OrderItem } from "./types/menu";
+import type { OrderItem } from "./types/menu";import{calculateOrderTotals,type OrderDiscount}from"./discount";
 
 export interface ReceiptSnapshot {
   issuedAt: Date;
@@ -6,6 +6,8 @@ export interface ReceiptSnapshot {
   orderNumber: number;
   items: readonly OrderItem[];
   total: number;
+  subtotal: number;
+  discount?: OrderDiscount;
   vatBreakdown?: readonly VatBreakdown[];
   isCancelled?: boolean;
 }
@@ -22,10 +24,10 @@ export const calculateVatBreakdown = (items: readonly OrderItem[]): VatBreakdown
   return { rate, base, vat: gross - base };
 });
 
-export const createReceiptSnapshot = (items: readonly OrderItem[], receiptNumber: number, orderNumber: number, issuedAt: Date): ReceiptSnapshot => ({
+export const createReceiptSnapshot = (items: readonly OrderItem[], receiptNumber: number, orderNumber: number, issuedAt: Date, discount:OrderDiscount|null=null): ReceiptSnapshot => {const totals=calculateOrderTotals(items,discount);return{
   issuedAt,
   receiptNumber,
   orderNumber,
   items: items.map((item) => ({ ...item, selectedOptions: item.selectedOptions ? [...item.selectedOptions] : undefined })),
-  total: items.reduce((sum, item) => sum + item.cena * item.pocet, 0),
-});
+  subtotal:totals.subtotal,total:totals.total,discount:totals.discount??undefined,vatBreakdown:totals.vatBreakdown,
+};};

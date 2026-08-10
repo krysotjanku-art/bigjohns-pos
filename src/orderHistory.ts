@@ -1,4 +1,4 @@
-import { calculateVatBreakdown, type ReceiptSnapshot, type VatBreakdown } from "./receiptSnapshot";
+import { calculateVatBreakdown, type ReceiptSnapshot, type VatBreakdown } from "./receiptSnapshot";import type{OrderDiscount}from"./discount";
 import type { OrderItem } from "./types/menu";
 
 export const ORDER_HISTORY_KEY = "bigjohns.order-history";
@@ -10,6 +10,8 @@ export interface CompletedOrder {
   issuedAt: string;
   items: readonly OrderItem[];
   total: number;
+  subtotal:number;
+  discount?:OrderDiscount;
   vatBreakdown: readonly VatBreakdown[];
   paymentType: "cash";
   cancelledAt?: string;
@@ -23,8 +25,7 @@ export const createCompletedOrder = (receipt: ReceiptSnapshot, createdAt = recei
   createdAt: createdAt.toISOString(),
   issuedAt: receipt.issuedAt.toISOString(),
   items: cloneItems(receipt.items),
-  total: receipt.total,
-  vatBreakdown: calculateVatBreakdown(receipt.items),
+  subtotal:receipt.subtotal,total: receipt.total,discount:receipt.discount,vatBreakdown: receipt.vatBreakdown??calculateVatBreakdown(receipt.items),
   paymentType: "cash",
 });
 
@@ -51,6 +52,7 @@ export const receiptFromCompletedOrder = (order: CompletedOrder): ReceiptSnapsho
   issuedAt: new Date(order.issuedAt),
   items: cloneItems(order.items),
   total: order.total,
+  subtotal:order.subtotal??order.total,discount:order.discount,
   vatBreakdown: order.vatBreakdown,
   isCancelled: Boolean(order.cancelledAt),
 });

@@ -3,7 +3,7 @@ import { ORDER_COUNTER_KEY, RECEIPT_COUNTER_KEY, createBackup, parseBackup, rest
 import { ORDER_HISTORY_KEY } from "./orderHistory";
 
 const storage = (initial: Record<string, string> = {}) => { const values = new Map(Object.entries(initial)); return { getItem: (key: string) => values.get(key) ?? null, setItem: (key: string, value: string) => values.set(key, value), removeItem: (key: string) => values.delete(key) }; };
-const savedHistory = JSON.stringify([{ receiptNumber: 154, orderNumber: 23, cancelledAt: "2026-08-08T19:00:00.000Z" }]);
+const savedHistory = JSON.stringify([{ receiptNumber: 154, orderNumber: 23, cancelledAt: "2026-08-08T19:00:00.000Z", subtotal: 850, total: 750, discount: { type: "fixed", amount: 100 } }]);
 
 describe("POS backup", () => {
   it("exports all persistent POS data including cancelled orders and counters", () => {
@@ -32,6 +32,6 @@ describe("POS backup", () => {
     const parsed = parseBackup(JSON.stringify(createBackup(local)));
     expect(parsed?.data[RECEIPT_COUNTER_KEY]).toBe("154");
     expect(parsed?.data[ORDER_COUNTER_KEY]).toBe(JSON.stringify({ date: "2026-08-08", value: 23 }));
-    expect(parsed?.data[ORDER_HISTORY_KEY]).toContain("cancelledAt");
+    expect(parsed?.data[ORDER_HISTORY_KEY]).toContain("cancelledAt"); expect(parsed?.data[ORDER_HISTORY_KEY]).toContain('"discount"');
   });
 });
