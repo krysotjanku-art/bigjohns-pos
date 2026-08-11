@@ -1,0 +1,9 @@
+.history-ui > h1,
+.suspended-ui > h1,
+.daily-ui > h1,
+.overview-ui > h1,
+.settings-ui > h1,
+.menu-management-ui > h1,
+.backup-ui > h1 {
+  margin-bottom: 32px !important;
+}
