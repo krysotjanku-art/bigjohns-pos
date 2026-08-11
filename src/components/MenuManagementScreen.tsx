@@ -17,16 +17,16 @@ interface Props {
 
 const categories: ["pizza" | MenuCategory, string, string][] = [
   ["pizza", "🍕 Pizzy", "Obnovit výchozí pizzy"],
+  ["Přílohy", "🍴 Přílohy", "Obnovit výchozí přílohy"],
   ["Nápoje", "🥤 Nápoje", "Obnovit výchozí nápoje"],
   ["Káva", "☕ Káva", "Obnovit výchozí kávu"],
   ["Dezerty", "🍪 Dezerty", "Obnovit výchozí dezerty"],
   ["Toppingy", "🧀 Toppingy", "Obnovit výchozí toppingy"],
   ["Krabice", "📦 Krabice", "Obnovit výchozí krabice"],
   ["Rozvoz", "🚗 Rozvoz", "Obnovit výchozí rozvoz"],
-  ["Omáčky", "🥫 Omáčky", "Obnovit výchozí omáčky"],
 ];
 
-const base: Record<MenuCategory, number> = { Nápoje: 100, Káva: 200, Dezerty: 300, Toppingy: 400, Krabice: 500, Rozvoz: 600, Omáčky: 700 };
+const base: Record<MenuCategory, number> = { Přílohy: 700, Nápoje: 100, Káva: 200, Dezerty: 300, Toppingy: 400, Krabice: 500, Rozvoz: 600 };
 
 export function MenuManagementScreen({ pizzas, otherItems, onSavePizzas, onSaveOther, onResetPizzas, onResetCategory, onBackToPos }: Props) {
   const [pizzaDraft, setPizzaDraft] = useState(pizzas);
