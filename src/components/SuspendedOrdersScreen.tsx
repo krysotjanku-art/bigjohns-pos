@@ -1,5 +1,6 @@
 import { formatDateTime } from "../dateFormat";
 import type { SuspendedOrder } from "../suspendedOrders";
+import { BackToPosButton } from "./BackToPosButton";
 import "./SuspendedOrdersScreen.css";
 
 interface Props {
@@ -13,7 +14,7 @@ const money = (amount: number) => new Intl.NumberFormat("cs-CZ", { style: "curre
 
 export function SuspendedOrdersScreen({ orders, onRestore, onDelete, onBackToPos }: Props) {
   return <section className="suspended-ui">
-    <button className="suspended-ui__back" onClick={onBackToPos}>← Zpět na pokladnu</button>
+    <BackToPosButton onClick={onBackToPos} />
     <h1>Pozastavené objednávky</h1>
     {!orders.length ? <p className="suspended-ui__empty">Nemáte žádné pozastavené objednávky.</p> : <div className="suspended-ui__list">
       {orders.map((order) => <article key={order.id} className="suspended-ui__card">
