@@ -16,13 +16,13 @@ interface Props {
 }
 
 const categories: ["pizza" | MenuCategory, string, string][] = [
-  ["pizza", "đźŤ• Pizzy", "Obnovit výchozí pizzy"],
-  ["Nápoje", "đźĄ¤ Nápoje", "Obnovit výchozí nápoje"],
+  ["pizza", "🍕 Pizzy", "Obnovit výchozí pizzy"],
+  ["Nápoje", "🥤 Nápoje", "Obnovit výchozí nápoje"],
   ["Káva", "☕ Káva", "Obnovit výchozí kávu"],
-  ["Dezerty", "đźŤŞ Dezerty", "Obnovit výchozí dezerty"],
-  ["Toppingy", "đź§€ Toppingy", "Obnovit výchozí toppingy"],
-  ["Krabice", "đź“¦ Krabice", "Obnovit výchozí krabice"],
-  ["Rozvoz", "đźš— Rozvoz", "Obnovit výchozí rozvoz"],
+  ["Dezerty", "🍪 Dezerty", "Obnovit výchozí dezerty"],
+  ["Toppingy", "🧀 Toppingy", "Obnovit výchozí toppingy"],
+  ["Krabice", "📦 Krabice", "Obnovit výchozí krabice"],
+  ["Rozvoz", "🚗 Rozvoz", "Obnovit výchozí rozvoz"],
 ];
 
 const base: Record<MenuCategory, number> = { Nápoje: 100, Káva: 200, Dezerty: 300, Toppingy: 400, Krabice: 500, Rozvoz: 600 };
