@@ -1,0 +1,106 @@
+:root {
+  --ui-focus: #5FA8FF;
+  --ui-accent: #5FA8FF;
+  --ui-accent-hover: #7BB8FF;
+  --ui-accent-pressed: #4A96F2;
+  --ui-accent-surface: #eaf3ff;
+  --ui-accent-surface-dark: #1e3658;
+}
+
+html[data-theme="dark"] .pos-navigation__drawer button.is-active,
+html[data-theme="dark"] .category-bar button.active,
+html[data-theme="dark"] .settings-ui__appearance button.active,
+html[data-theme="dark"] .menu-management-ui__tabs button.active,
+html[data-theme="dark"] .discount-modal__tabs .active {
+  border-color: var(--ui-accent) !important;
+  background: var(--ui-accent-surface-dark) !important;
+  color: #dcecff !important;
+}
+
+html[data-theme="light"] .category-bar button.active,
+html[data-theme="light"] .settings-ui__appearance button.active,
+html[data-theme="light"] .menu-management-ui__tabs button.active,
+html[data-theme="light"] .discount-modal__tabs .active {
+  border-color: var(--ui-accent) !important;
+  background: var(--ui-accent-surface) !important;
+  color: #245d99 !important;
+}
+
+.pos-menu__search:focus {
+  border-color: var(--ui-accent) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-accent) 22%, transparent) !important;
+}
+
+.pos-app .menu-grid__tile strong,
+.pos-app .menu-grid__tile--pizza strong,
+.pos-app .menu-grid__tile:not(.menu-grid__tile--pizza) strong,
+.quick-add button strong,
+.order-panel footer .order-panel__total strong,
+html[data-theme="light"] .order-panel footer div strong {
+  color: var(--ui-accent) !important;
+}
+
+.quick-add button:hover,
+.pos-app .menu-grid__tile:hover {
+  border-color: var(--ui-accent-hover) !important;
+}
+
+.order-line__increase {
+  border-color: var(--ui-accent) !important;
+  background: #1e3658 !important;
+  color: #dcecff !important;
+}
+
+.order-line__increase:hover {
+  border-color: var(--ui-accent-hover) !important;
+  background: #27466f !important;
+}
+
+.order-panel footer > button:last-child {
+  border-color: #39a982 !important;
+  background: #23946f !important;
+  color: #fff !important;
+}
+
+.order-panel footer > button:last-child:hover {
+  border-color: #51c89f !important;
+  background: #29a67e !important;
+}
+
+.discount-modal__tabs .active,
+.discount-modal__actions .apply,
+.settings-ui__actions button:first-child,
+.pin-dialog__actions button:last-child,
+.backup-ui article button,
+.daily-ui__print {
+  border-color: var(--ui-accent) !important;
+  background: #315f9d !important;
+  color: #fff !important;
+}
+
+.discount-modal__tabs .active:hover,
+.discount-modal__actions .apply:hover,
+.settings-ui__actions button:first-child:hover,
+.pin-dialog__actions button:last-child:hover,
+.backup-ui article button:hover,
+.daily-ui__print:hover {
+  border-color: var(--ui-accent-hover) !important;
+  background: #3b70b5 !important;
+}
+
+.suspended-ui__actions button:first-child {
+  border-color: var(--ui-accent) !important;
+  background: #1e3658 !important;
+  color: #dcecff !important;
+}
+
+.pizza-modal__sizes button:hover,
+.pizza-modal__sizes button:focus-visible {
+  border-color: var(--ui-accent) !important;
+  background: var(--ui-accent-surface) !important;
+}
+
+html[data-theme="dark"] .pizza-modal__sizes button:hover,
+html[data-theme="dark"] .pizza-modal__sizes button:focus-visible {
+  background: var(--ui-accent-surface-dark) !important;
+}
