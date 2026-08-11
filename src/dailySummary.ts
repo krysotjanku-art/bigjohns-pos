@@ -14,6 +14,7 @@ export interface DailySummary {
   toppings: number;
   boxes: number;
   deliveries: number;
+  sauces: number;
   bestSellingPizza: { number: string; name: string; quantity: number } | null;
 }
 
@@ -38,5 +39,5 @@ export const calculateDailySummary = (orders: readonly CompletedOrder[], day = n
   const cancelledValue = cancelledOrders.reduce((sum, order) => sum + order.total, 0);
   const vat = (rate: 12 | 21) => activeOrders.reduce((sum, order) => sum + (order.vatBreakdown.find((entry) => entry.rate === rate)?.vat ?? 0), 0);
 
-  return { orderCount: todayOrders.length, grossRevenue, cancelledOrderCount: cancelledOrders.length, cancelledValue, netRevenue: grossRevenue - cancelledValue, vat12: vat(12), vat21: vat(21), pizzas: countCategory("Pizza"), drinks: countCategory("Nápoje"), coffees: countCategory("Káva"), toppings: countCategory("Toppingy"), boxes: countCategory("Krabice"), deliveries: countCategory("Rozvoz"), bestSellingPizza };
+  return { orderCount: todayOrders.length, grossRevenue, cancelledOrderCount: cancelledOrders.length, cancelledValue, netRevenue: grossRevenue - cancelledValue, vat12: vat(12), vat21: vat(21), pizzas: countCategory("Pizza"), drinks: countCategory("Nápoje"), coffees: countCategory("Káva"), toppings: countCategory("Toppingy"), boxes: countCategory("Krabice"), deliveries: countCategory("Rozvoz"), sauces: countCategory("Omáčky"), bestSellingPizza };
 };
