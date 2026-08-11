@@ -14,5 +14,6 @@ export function QuickAddPanel({ items, onAdd }: Props) {
     return item ? [item] : [];
   });
 
-  return <section className="quick-add" aria-label="Rychlé přidání"><span>⚡ Rychlé přidání</span><div>{quickItems.map((item) => <button key={item.id} type="button" onClick={() => onAdd(item)}>{item.nazev}<strong>{item.cena} Kč</strong></button>)}</div></section>;
+  const label = (item: MenuItem) => item.id >= 501 && item.id <= 503 ? item.nazev.replace(/^Krabice\s*/i, "") : item.nazev;
+  return <section className="quick-add" aria-label="Rychlé přidání"><span>⚡ Rychlé přidání</span><div>{quickItems.map((item) => <button key={item.id} type="button" onClick={() => onAdd(item)}><span>{label(item)}</span><strong>{item.cena} Kč</strong></button>)}</div></section>;
 }
