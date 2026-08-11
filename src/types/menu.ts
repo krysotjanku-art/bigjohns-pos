@@ -6,6 +6,7 @@ export interface MenuItem {
   nazev: string;
   cena: number;
   kategorie: Category;
+  favorite?: boolean;
   pizzaPricing?: PizzaPricingGroup;
   pizzaSizePrices?: Record<PizzaSizeCode, number>;
 }

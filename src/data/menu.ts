@@ -26,7 +26,7 @@ export const menu: readonly MenuItem[] = [
   ...coffeeDefinitions.map(([id, nazev, cena]): MenuItem => ({ id, nazev, cena, kategorie: "Káva" })),
   { id: 301, nazev: "Cookies", cena: 55, kategorie: "Dezerty" },
   ...toppingDefinitions.map(([id, nazev, cena]): MenuItem => ({ id, nazev, cena, kategorie: "Toppingy" })),
-  ...boxDefinitions.map(([id, nazev, cena]): MenuItem => ({ id, nazev, cena, kategorie: "Krabice" })),
+  ...boxDefinitions.map(([id, nazev, cena]): MenuItem => ({ id, nazev, cena, kategorie: "Krabice", favorite: true })),
   ...deliveryDefinitions.map(([id, nazev, cena]): MenuItem => ({ id, nazev, cena, kategorie: "Rozvoz" })),
-  ...sideDefinitions.map(([id, nazev, cena]): MenuItem => ({ id, nazev, cena, kategorie: "Přílohy" })),
+  ...sideDefinitions.map(([id, nazev, cena]): MenuItem => ({ id, nazev, cena, kategorie: "Přílohy", favorite: id === 701 })),
 ];
