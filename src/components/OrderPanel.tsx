@@ -25,7 +25,7 @@ export function OrderPanel({ items, subtotal, total, discount, onDiscount, onInc
       return <div className="order-line" key={key}><div className="order-line__details"><span className="order-line__name">{item.nazev}</span><div className="order-line__meta"><span>× {item.pocet}</span><strong>{item.cena * item.pocet} Kč</strong></div></div><div className="order-line__controls"><button aria-label="Odebrat jednu položku" onClick={() => onDecrement(key)}>−</button><button className="order-line__increase" aria-label="Přidat jednu položku" onClick={() => onIncrement(key)}>+</button><button className="order-line__remove" aria-label="Odstranit položku" onClick={() => onRemove(key)}>🗑</button></div></div>;
     })}</div>
     <footer>
-      <div className="order-panel__total"><span>Celkem</span><strong>{total} Kč</strong><small>Včetně DPH</small></div>
+      <div className="order-panel__total"><div className="order-panel__total-row"><span>Celkem</span><strong>{total} Kč</strong></div><div className="order-panel__vat-row"><span aria-hidden="true"/><small>Včetně DPH</small></div></div>
       <div className="order-panel__secondary-actions"><button className="order-panel__discount" onClick={onDiscount}>Sleva</button><button className="order-panel__suspend" onClick={onSuspend} disabled={!items.length}>Pozastavit</button></div>
       {discount && <div className="order-panel__discount-summary"><span>Mezisoučet</span><strong>{subtotal} Kč</strong><span>Sleva{discount.type === "percentage" ? ` ${discount.percentage} %` : ""}</span><strong>−{discount.amount} Kč</strong></div>}
       <button onClick={onPay}>Zaplatit</button>
