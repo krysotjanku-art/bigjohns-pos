@@ -28,6 +28,9 @@ describe("daily summary", () => {
 
     expect(summary.vat12).toBeCloseTo(12);
     expect(summary.vat21).toBeCloseTo(21);
+    expect(summary.revenueWithoutVat).toBeCloseTo(200);
+    expect(summary.totalVat).toBeCloseTo(33);
+    expect(summary.revenueIncludingVat).toBeCloseTo(233);
   });
 
   it("counts product quantities by category", () => {

@@ -23,6 +23,7 @@ describe("sales overview", () => {
   it("returns VAT bases and tax totals from active orders", () => {
     const overview = calculateSalesOverview([order(1, "2026-08-08T10:00:00Z", [item(1, "Pizza", "Pizza", 112, 1, 12), item(101, "Cola", "Nápoje", 121, 1, 21)])], "2026-08-08", "2026-08-08");
     expect(overview.base12).toBeCloseTo(100); expect(overview.vat12).toBeCloseTo(12); expect(overview.base21).toBeCloseTo(100); expect(overview.vat21).toBeCloseTo(21);
+    expect(overview.revenueWithoutVat).toBeCloseTo(200); expect(overview.totalVat).toBeCloseTo(33); expect(overview.revenueIncludingVat).toBeCloseTo(233);
   });
 
   it("counts products and ranks the top pizzas", () => {

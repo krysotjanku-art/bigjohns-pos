@@ -3,6 +3,7 @@ import type { CompletedOrder } from "./orderHistory";
 export interface SalesOverview {
   orderCount: number; grossRevenue: number; cancelledOrderCount: number; cancelledValue: number; netRevenue: number;
   base12: number; vat12: number; base21: number; vat21: number;
+  revenueWithoutVat: number; totalVat: number; revenueIncludingVat: number;
   pizzas: number; sides: number; drinks: number; coffees: number; toppings: number; boxes: number; deliveries: number;
   topPizzas: { number: string; name: string; quantity: number }[];
 }
@@ -22,5 +23,8 @@ export const calculateSalesOverview = (orders: readonly CompletedOrder[], from: 
   const pizzas = new Map<string, { number: string; name: string; quantity: number }>();
   items.filter((item) => item.kategorie === "Pizza").forEach((item) => { const key = String(item.id); const entry = pizzas.get(key) ?? { number: item.cislo ?? String(item.id).padStart(2, "0"), name: pizzaName(item.nazev), quantity: 0 }; entry.quantity += item.pocet; pizzas.set(key, entry); });
   const vat12 = vat(12); const vat21 = vat(21);
-  return { orderCount: period.length, grossRevenue, cancelledOrderCount: cancelled.length, cancelledValue, netRevenue: grossRevenue - cancelledValue, base12: vat12 * 100 / 12, vat12, base21: vat21 * 100 / 21, vat21, pizzas: count("Pizza"), sides: count("Přílohy"), drinks: count("Nápoje"), coffees: count("Káva"), toppings: count("Toppingy"), boxes: count("Krabice"), deliveries: count("Rozvoz"), topPizzas: [...pizzas.values()].sort((a, b) => b.quantity - a.quantity || a.number.localeCompare(b.number)).slice(0, 10) };
+  const totalVat = active.flatMap((order) => order.vatBreakdown).reduce((sum, entry) => sum + entry.vat, 0);
+  const revenueIncludingVat = active.reduce((sum, order) => sum + order.total, 0);
+  const revenueWithoutVat = revenueIncludingVat - totalVat;
+  return { orderCount: period.length, grossRevenue, cancelledOrderCount: cancelled.length, cancelledValue, netRevenue: grossRevenue - cancelledValue, base12: vat12 * 100 / 12, vat12, base21: vat21 * 100 / 21, vat21, revenueWithoutVat, totalVat, revenueIncludingVat, pizzas: count("Pizza"), sides: count("Přílohy"), drinks: count("Nápoje"), coffees: count("Káva"), toppings: count("Toppingy"), boxes: count("Krabice"), deliveries: count("Rozvoz"), topPizzas: [...pizzas.values()].sort((a, b) => b.quantity - a.quantity || a.number.localeCompare(b.number)).slice(0, 10) };
 };

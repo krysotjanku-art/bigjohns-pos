@@ -8,6 +8,9 @@ export interface DailySummary {
   netRevenue: number;
   vat12: number;
   vat21: number;
+  revenueWithoutVat: number;
+  totalVat: number;
+  revenueIncludingVat: number;
   pizzas: number;
   drinks: number;
   coffees: number;
@@ -38,6 +41,9 @@ export const calculateDailySummary = (orders: readonly CompletedOrder[], day = n
   const cancelledOrders = todayOrders.filter((order) => order.cancelledAt);
   const cancelledValue = cancelledOrders.reduce((sum, order) => sum + order.total, 0);
   const vat = (rate: 12 | 21) => activeOrders.reduce((sum, order) => sum + (order.vatBreakdown.find((entry) => entry.rate === rate)?.vat ?? 0), 0);
+  const totalVat = activeOrders.flatMap((order) => order.vatBreakdown).reduce((sum, entry) => sum + entry.vat, 0);
+  const revenueIncludingVat = activeOrders.reduce((sum, order) => sum + order.total, 0);
+  const revenueWithoutVat = revenueIncludingVat - totalVat;
 
-  return { orderCount: todayOrders.length, grossRevenue, cancelledOrderCount: cancelledOrders.length, cancelledValue, netRevenue: grossRevenue - cancelledValue, vat12: vat(12), vat21: vat(21), pizzas: countCategory("Pizza"), sides: countCategory("Přílohy"), drinks: countCategory("Nápoje"), coffees: countCategory("Káva"), toppings: countCategory("Toppingy"), boxes: countCategory("Krabice"), deliveries: countCategory("Rozvoz"), bestSellingPizza };
+  return { orderCount: todayOrders.length, grossRevenue, cancelledOrderCount: cancelledOrders.length, cancelledValue, netRevenue: grossRevenue - cancelledValue, vat12: vat(12), vat21: vat(21), revenueWithoutVat, totalVat, revenueIncludingVat, pizzas: countCategory("Pizza"), sides: countCategory("Přílohy"), drinks: countCategory("Nápoje"), coffees: countCategory("Káva"), toppings: countCategory("Toppingy"), boxes: countCategory("Krabice"), deliveries: countCategory("Rozvoz"), bestSellingPizza };
 };
