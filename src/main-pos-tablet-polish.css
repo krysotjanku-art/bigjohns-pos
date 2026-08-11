@@ -1,0 +1,69 @@
+/* Main POS only: keep the four tablet toolbar rows spacious and contained. */
+.pos-app .pos-menu__toolbar {
+  margin-bottom: 14px;
+}
+
+.pos-app .pos-menu__toolbar .pos-menu__search {
+  min-height: 48px;
+}
+
+.pos-app .pos-menu__actions-row {
+  min-height: 48px;
+  margin: 0 0 16px;
+  justify-content: flex-end;
+}
+
+.pos-app .pos-menu__actions-row .pos-menu__header-actions {
+  gap: 14px;
+}
+
+.pos-app .pos-menu__actions-row .pos-menu__history {
+  min-height: 48px;
+}
+
+.pos-app .pos-menu__quick-row {
+  min-height: 50px;
+  margin: 0 0 18px;
+}
+
+.pos-app .quick-add {
+  width: 100%;
+  gap: 12px;
+}
+
+.pos-app .quick-add > div {
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: 10px;
+  overflow: visible;
+}
+
+.pos-app .quick-add button {
+  min-height: 50px;
+  padding-inline: 15px;
+}
+
+.pos-app .category-bar {
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.pos-app .category-bar button {
+  min-height: 56px;
+}
+
+.pos-app .pos-menu__content {
+  padding: 4px 4px 18px;
+}
+
+@media (min-width: 901px) and (max-width: 1180px) {
+  .pos-app .menu-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .pos-app .pos-menu__actions-row {
+    justify-content: flex-end;
+  }
+}

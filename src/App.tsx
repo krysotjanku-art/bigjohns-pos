@@ -16,6 +16,7 @@ import { SettingsScreen } from "./components/SettingsScreen";
 import { MenuManagementScreen } from "./components/MenuManagementScreen";
 import { PinDialog } from "./components/PinDialog";
 import { SuspendedOrdersScreen } from "./components/SuspendedOrdersScreen";
+import "./main-pos-tablet-polish.css";
 import bigJohnsLogo from "./assets/bigjohns-oval-logo.png";
 import { changePin, loadPin } from "./adminPin";
 import { loadAppearance, resolveAppearance, saveAppearance, type Appearance } from "./appearance";
