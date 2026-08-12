@@ -52,6 +52,15 @@ html[data-accent="orange"] {
   --ui-accent-surface-dark: #4a3625;
 }
 
+html[data-accent="pink"] {
+  --ui-focus: #FF5FA2;
+  --ui-accent: #FF5FA2;
+  --ui-accent-hover: #FF79B4;
+  --ui-accent-pressed: #E94A91;
+  --ui-accent-surface: #fff0f6;
+  --ui-accent-surface-dark: #542b42;
+}
+
 html[data-theme="dark"] .pos-navigation__drawer button.is-active,
 html[data-theme="dark"] .category-bar button.active,
 html[data-theme="dark"] .settings-ui__appearance button.active,

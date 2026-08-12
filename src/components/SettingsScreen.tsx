@@ -23,6 +23,7 @@ const accentOptions: ReadonlyArray<{ value: Accent; label: string; icon: string 
   { value: "red", label: "Red", icon: "🔴" },
   { value: "purple", label: "Purple", icon: "🟣" },
   { value: "orange", label: "Orange", icon: "🟠" },
+  { value: "pink", label: "Pink", icon: "🩷" },
 ];
 
 export function SettingsScreen({ settings, appearance, accent, onAppearanceChange, onAccentChange, onChangePin, onSave, onBackToPos }: Props) {
