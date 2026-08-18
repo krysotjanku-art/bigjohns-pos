@@ -56,6 +56,21 @@
   padding: 4px 4px 18px;
 }
 
+/* Dotykačka landscape: retain the original compact 3-column POS layout. */
+@media (min-width: 721px) {
+  .pos-app .order-panel {
+    flex-basis: 36% !important;
+  }
+
+  .pos-app .menu-grid__tile {
+    flex-basis: calc((100% - 20px) / 3 - 14px) !important;
+  }
+
+  .pos-app .category-bar button {
+    flex: 0 0 calc((100% - 70px) / 8 - 8px) !important;
+  }
+}
+
 @media (min-width: 901px) and (max-width: 1180px) {
   .pos-app .menu-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
