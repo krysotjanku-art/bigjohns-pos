@@ -127,7 +127,9 @@ public class UsbEscPosPrinterPlugin extends Plugin {
         if (printerInterface == null || output == null || !connection.claimInterface(printerInterface, true)) { connection.close(); call.reject("USB rozhraní tiskárny není dostupné."); return; }
         byte[] init = new byte[] { 0x1B, 0x40, 0x1B, 0x74, 0x12 };
         byte[] receipt = content.getBytes(Charset.forName("CP852"));
-        byte[] finish = new byte[] { 0x0A, 0x0A, 0x0A, 0x1D, 0x56, 0x00 };
+        // The TypeScript receipt payload owns its top/bottom feeds so the footer stays
+        // on the same receipt. Keep a single final full cut for RONGTA ESC/POS printers.
+        byte[] finish = new byte[] { 0x1D, 0x56, 0x00 };
         boolean ok = write(connection, output, init) && write(connection, output, receipt) && write(connection, output, finish);
         connection.releaseInterface(printerInterface);
         connection.close();
