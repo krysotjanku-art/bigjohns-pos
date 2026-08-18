@@ -4,6 +4,7 @@ import './index.css'
 import './design-system.css'
 import './theme-contrast.css'
 import './page-title-spacing.css'
+import './legacy-webview.css'
 import './startup-error.css'
 import { StartupError, StartupErrorBoundary } from './StartupErrorBoundary.tsx'
 

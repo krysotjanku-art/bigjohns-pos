@@ -10,7 +10,7 @@ interface Props {
   onBackToPos: () => void;
 }
 
-const money = (amount: number) => new Intl.NumberFormat("cs-CZ", { style: "currency", currency: "CZK", maximumFractionDigits: 0 }).format(amount);
+const money = (amount: number) => new Intl.NumberFormat("cs-CZ", { style: "currency", currency: "CZK", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
 
 export function SuspendedOrdersScreen({ orders, onRestore, onDelete, onBackToPos }: Props) {
   return <section className="suspended-ui">

@@ -1,0 +1,41 @@
+/* Android 7.1 baseline: flex layouts first, without relying on CSS Grid or flex gap. */
+.settings-ui__fields,.menu-management-ui__cards,.daily-ui__grid,.overview-ui__grid,.backup-ui__grid,.daily-ui__sales,.overview-ui__sales,.menu-grid,.category-bar{display:flex!important;flex-wrap:wrap!important;margin:-7px!important}
+.settings-ui__fields>*{box-sizing:border-box;flex:1 1 240px;margin:7px!important;min-width:0}
+.menu-management-ui__cards>.menu-management-ui__card{box-sizing:border-box;flex:1 1 300px;margin:7px!important;min-width:0}
+.daily-ui__grid>article,.overview-ui__grid>article{box-sizing:border-box;flex:1 1 190px;margin:7px!important;min-width:0}
+.backup-ui__grid>article{box-sizing:border-box;flex:1 1 300px;margin:7px!important;min-width:0}
+.daily-ui__sales>span,.overview-ui__sales>span{box-sizing:border-box;flex:1 1 150px;margin:4px!important;min-width:0}
+.menu-grid__tile{box-sizing:border-box;flex:0 0 calc(33.333% - 14px);margin:7px!important;min-width:0}
+.category-bar button{box-sizing:border-box;flex:1 1 112px;margin:4px!important;min-width:0}
+.menu-management-ui__card{display:block!important}
+.menu-management-ui__card label{display:flex!important;align-items:center!important;padding:0!important;margin:0 0 10px!important;min-width:0}
+.menu-management-ui__card label input{flex:1 1 auto!important;min-width:0}
+.menu-management-ui__card label>span:first-child{display:block;flex:0 0 80px}
+.menu-management-ui__card label.menu-management-ui__favorite{display:flex!important}
+.menu-management-ui__card label.menu-management-ui__favorite input{flex:0 0 auto!important}
+.order-line{display:flex!important;align-items:center!important}
+.order-line__details{flex:1 1 auto!important}
+.order-line__controls{display:flex!important;flex:0 0 auto!important}
+.order-line__controls button{margin-left:6px}
+.order-panel__secondary-actions{display:flex!important}
+.order-panel__secondary-actions button{flex:1 1 50%!important}
+.order-panel__secondary-actions button+button{margin-left:10px!important}
+.order-panel__discount-summary,.order-panel__total-row,.order-panel__vat-row,.revenue-summary__table>div{display:flex!important;align-items:center!important}
+.order-panel__discount-summary>*:nth-child(even),.order-panel__total-row strong,.order-panel__vat-row small,.revenue-summary__table strong{margin-left:auto!important}
+.settings-ui,.menu-management-ui,.daily-ui,.overview-ui,.backup-ui,.history-ui{color:var(--theme-text)!important}
+.settings-ui label,.menu-management-ui label,.daily-ui h1,.overview-ui h1,.backup-ui h1,.history-ui h1{color:var(--theme-text)!important}
+.settings-ui input,.menu-management-ui input,.overview-ui input{background:var(--theme-input)!important;color:var(--theme-text)!important;border-color:var(--theme-border)!important}
+.settings-ui input::placeholder,.menu-management-ui input::placeholder,.overview-ui input::placeholder{color:var(--theme-muted)!important;opacity:1}
+.settings-ui button:disabled{opacity:.55!important;color:var(--theme-muted)!important}
+.category-bar__icon svg,.order-panel__heading-icon,.order-line__remove svg,.pos-menu__action-icon,.settings-ui__section-icon{display:block;width:20px;height:20px}
+.menu-management-ui__tab-icon,.menu-management-ui__heading-icon{display:inline-block;width:18px;height:18px;margin-right:7px;vertical-align:middle}.menu-management-ui__header h2{display:flex;align-items:center}
+.order-panel h2{display:flex;align-items:center}.order-panel__heading-icon{margin-right:9px}
+.settings-ui__accent h3{display:flex;align-items:center}.settings-ui__section-icon{margin-right:8px}
+.settings-ui__accent-dot{display:inline-block;width:14px;height:14px;border:1px solid rgba(255,255,255,.45);border-radius:50%}
+.settings-ui__accent-dot--blue{background:#5FA8FF}.settings-ui__accent-dot--green{background:#299d82}.settings-ui__accent-dot--red{background:#C84B5A}.settings-ui__accent-dot--purple{background:#8b5cf6}.settings-ui__accent-dot--orange{background:#d97706}.settings-ui__accent-dot--pink{background:#FF5FA2}
+.quick-add>span{display:inline-flex;align-items:center}.quick-add__icon{width:18px;height:18px;margin-right:7px}
+.pos-menu__history>span{display:inline-block;width:18px;height:18px;font-size:0;vertical-align:middle}
+.pos-menu__history:first-child>span{border-left:4px solid currentColor;border-right:4px solid currentColor}
+.pos-menu__history:last-child>span{border:2px solid currentColor;border-radius:2px;position:relative}
+.pos-menu__history:last-child>span:after{position:absolute;left:3px;right:3px;top:4px;height:2px;background:currentColor;box-shadow:0 4px 0 currentColor,0 8px 0 currentColor;content:""}
+@media (max-width:900px){.menu-grid__tile{flex-basis:calc(50% - 14px)}.category-bar button{flex-basis:calc(25% - 8px)}}
