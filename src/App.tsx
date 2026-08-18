@@ -20,7 +20,7 @@ import "./main-pos-tablet-polish.css";
 import "./accent-refresh.css";
 import bigJohnsLogo from "./assets/bigjohns-oval-logo.png";
 import { changePin, loadPin } from "./adminPin";
-import { loadAccent, loadAppearance, resolveAppearance, saveAccent, saveAppearance, type Accent, type Appearance } from "./appearance";
+import { loadAccent, loadAppearance, resolveAppearance, saveAccent, saveAppearance, subscribeToSystemAppearance, systemPrefersDark, type Accent, type Appearance } from "./appearance";
 import { pizzaPrices } from "./data/menu";
 import { ORDER_COUNTER_KEY, RECEIPT_COUNTER_KEY } from "./backup";
 import { calculateDailySummary, type DailySummary } from "./dailySummary";
@@ -56,7 +56,7 @@ function App() {
   const [pendingView,setPendingView]=useState<typeof view|null>(null);
   const [appearance,setAppearance]=useState<Appearance>(()=>loadAppearance(localStorage));
   const [accent,setAccent]=useState<Accent>(()=>loadAccent(localStorage));
-  const [systemDark,setSystemDark]=useState(()=>window.matchMedia("(prefers-color-scheme: dark)").matches);
+  const [systemDark,setSystemDark]=useState(()=>systemPrefersDark(typeof window.matchMedia === "function" ? window.matchMedia("(prefers-color-scheme: dark)") : undefined));
   const [discount,setDiscount]=useState<OrderDiscount|null>(null);
   const [discountOpen,setDiscountOpen]=useState(false);
   const [drawerOpen,setDrawerOpen]=useState(false);
@@ -70,7 +70,7 @@ function App() {
   useEffect(() => { const clearPrint = () => { setReceipt(null); setSummaryPrint(null); }; window.addEventListener("afterprint", clearPrint); return () => window.removeEventListener("afterprint", clearPrint); }, []);
   useEffect(()=>{document.documentElement.dataset.theme=theme;},[theme]);
   useEffect(()=>{document.documentElement.dataset.accent=accent;},[accent]);
-  useEffect(()=>{const query=window.matchMedia("(prefers-color-scheme: dark)"),change=(event:MediaQueryListEvent)=>setSystemDark(event.matches);query.addEventListener("change",change);return()=>query.removeEventListener("change",change)},[]);
+  useEffect(()=>subscribeToSystemAppearance(typeof window.matchMedia === "function" ? window.matchMedia("(prefers-color-scheme: dark)") : undefined,setSystemDark),[]);
   const refreshPrinterStatus=async()=>{setPrinter(await printerStatus())};
   useEffect(()=>{void refreshPrinterStatus()},[]);
   const addItem = (item: OrderItemInput) => { setReceipt(null); setOrder((current) => {if(!current.length)setDiscount(null);return addToOrder(current, item)}); };

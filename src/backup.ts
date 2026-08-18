@@ -10,7 +10,15 @@ export const PERSISTENT_POS_KEYS = [ORDER_HISTORY_KEY, RECEIPT_COUNTER_KEY, ORDE
 export interface PosBackup { version: 1; exportedAt: string; data: Record<(typeof PERSISTENT_POS_KEYS)[number], string | null>; }
 type StorageLike = Pick<Storage, "getItem" | "setItem" | "removeItem">;
 
-export const createBackup = (storage: Pick<Storage, "getItem">, exportedAt = new Date()): PosBackup => ({ version: 1, exportedAt: exportedAt.toISOString(), data: Object.fromEntries(PERSISTENT_POS_KEYS.map((key) => [key, storage.getItem(key)])) as PosBackup["data"] });
+export const createBackup = (storage: Pick<Storage, "getItem">, exportedAt = new Date()): PosBackup => ({
+  version: 1,
+  exportedAt: exportedAt.toISOString(),
+  // Avoid Object.fromEntries at backup time for older Android WebViews.
+  data: PERSISTENT_POS_KEYS.reduce((data, key) => {
+    data[key] = storage.getItem(key);
+    return data;
+  }, {} as PosBackup["data"]),
+});
 export const backupFilename = (date = new Date()) => `bigjohns-pos-backup-${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}-${String(date.getHours()).padStart(2, "0")}-${String(date.getMinutes()).padStart(2, "0")}.json`;
 
 const validCounter = (value: string | null) => value === null || /^\d+$/.test(value);

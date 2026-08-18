@@ -22,3 +22,26 @@ export const loadAccent = (storage: Pick<Storage, "getItem">): Accent => {
 export const saveAccent = (storage: Pick<Storage, "setItem">, accent: Accent) => storage.setItem(ACCENT_KEY, accent);
 
 export const resolveAppearance = (appearance: Appearance, systemDark: boolean) => appearance === "system" ? (systemDark ? "dark" : "light") : appearance;
+
+type LegacyMediaQueryList = MediaQueryList & {
+  addListener?: (listener: (event: MediaQueryListEvent) => void) => void;
+  removeListener?: (listener: (event: MediaQueryListEvent) => void) => void;
+};
+
+export const systemPrefersDark = (mediaQuery?: MediaQueryList) => mediaQuery?.matches ?? false;
+
+export const subscribeToSystemAppearance = (
+  mediaQuery: LegacyMediaQueryList | undefined,
+  onChange: (dark: boolean) => void,
+) => {
+  if (!mediaQuery) return () => undefined;
+
+  const listener = (event: MediaQueryListEvent) => onChange(event.matches);
+  if (typeof mediaQuery.addEventListener === "function") {
+    mediaQuery.addEventListener("change", listener);
+    return () => mediaQuery.removeEventListener?.("change", listener);
+  }
+
+  mediaQuery.addListener?.(listener);
+  return () => mediaQuery.removeListener?.(listener);
+};

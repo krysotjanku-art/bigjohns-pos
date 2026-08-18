@@ -1,0 +1,25 @@
+.startup-error {
+  display: grid;
+  place-content: center;
+  gap: 14px;
+  min-height: 100vh;
+  padding: 32px;
+  background: #171b21;
+  color: #f8fafc;
+  text-align: center;
+}
+
+.startup-error h1,
+.startup-error p {
+  margin: 0;
+}
+
+.startup-error h1 {
+  font-size: clamp(24px, 4vw, 36px);
+}
+
+.startup-error p {
+  max-width: 720px;
+  color: #cbd5e1;
+  overflow-wrap: anywhere;
+}
