@@ -9,6 +9,9 @@
 }
 
 .pos-app .pos-menu__header-actions {
+  display: flex !important;
+  align-items: center;
+  flex-wrap: nowrap;
   gap: 24px !important;
 }
 
