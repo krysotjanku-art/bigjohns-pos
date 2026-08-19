@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { receiptEscPosText } from "./usbEscPosPrinter";
+import { receiptEscPosText, testReceipt } from "./usbEscPosPrinter";
 import type { ReceiptSnapshot } from "./receiptSnapshot";
 
 const ESC = "\x1B";
@@ -39,5 +39,17 @@ describe("USB ESC/POS receipt", () => {
     expect(text).toContain(`${GS}B\x00`);
     expect(text).toContain(`${ESC}2${ESC}d\x05`);
     expect(text.lastIndexOf("www.bigjohnspizza.cz")).toBeLessThan(text.lastIndexOf(`${ESC}2${ESC}d\x05`));
+  });
+
+  it("prints a four-column ASCII VAT table for both customer and test receipts", () => {
+    const customerText = receiptEscPosText(receipt);
+    const testText = receiptEscPosText(testReceipt());
+
+    expect(customerText).toContain("+-------+--------------+--------------+--------------+");
+    expect(customerText).toContain("|Sazba");
+    expect(customerText).toContain("|CELKEM");
+    expect(testText).toContain("Margherita M");
+    expect(testText).toContain("Coca-Cola Zero");
+    expect(testText).toContain("|CELKEM");
   });
 });
