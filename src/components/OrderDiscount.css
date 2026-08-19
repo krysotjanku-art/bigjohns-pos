@@ -11,3 +11,5 @@
 .order-line__meta{gap:6px!important;min-width:0}
 .order-line__controls{display:flex!important;flex:0 0 116px!important;width:116px;min-width:116px;gap:4px!important}
 .order-line__controls button{flex:0 0 36px!important;width:36px!important;min-width:36px;min-height:40px;margin-left:0!important;padding:0!important}
+.order-line__remove{display:flex!important;align-items:center!important;justify-content:center!important;line-height:1!important}
+.order-line__remove svg{display:block!important;width:18px!important;height:18px!important;margin:0!important;transform:none!important}
