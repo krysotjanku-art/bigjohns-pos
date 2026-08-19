@@ -9,7 +9,7 @@
 }
 
 .pos-app .pos-menu__header-actions {
-  gap: 20px;
+  gap: 24px !important;
 }
 
 .pos-app .pos-menu__header-actions .pos-menu__history {
