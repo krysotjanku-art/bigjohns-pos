@@ -18,6 +18,7 @@ import { PinDialog } from "./components/PinDialog";
 import { SuspendedOrdersScreen } from "./components/SuspendedOrdersScreen";
 import "./main-pos-tablet-polish.css";
 import "./accent-refresh.css";
+import "./android-webview-compat.css";
 import bigJohnsLogo from "./assets/bigjohns-oval-logo.png";
 import { changePin, loadPin } from "./adminPin";
 import { loadAccent, loadAppearance, resolveAppearance, saveAccent, saveAppearance, subscribeToSystemAppearance, systemPrefersDark, type Accent, type Appearance } from "./appearance";
@@ -33,6 +34,11 @@ import { calculateOrderTotals, fixedDiscount, percentageDiscount, type OrderDisc
 import { addSuspendedOrder, createSuspendedOrder, loadSuspendedOrders, removeSuspendedOrder, restoreSuspendedOrder, saveSuspendedOrders, type SuspendedOrder } from "./suspendedOrders";
 import { isNativeUsbPrintingAvailable, printEscPosReceipt, printerStatus, testReceipt, type PrinterStatus } from "./usbEscPosPrinter";
 import type { Category, MenuItem, OrderItem, OrderItemInput, PizzaSize } from "./types/menu";
+
+// Set this before the first render so native-only CSS fallbacks never flash.
+if (typeof document !== "undefined" && isNativeUsbPrintingAvailable()) {
+  document.documentElement.dataset.platform = "android";
+}
 
 const localDateKey = (date: Date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 const nextReceiptNumber = () => { const next = Number(localStorage.getItem(RECEIPT_COUNTER_KEY) ?? 0) + 1; localStorage.setItem(RECEIPT_COUNTER_KEY, String(next)); return next; };

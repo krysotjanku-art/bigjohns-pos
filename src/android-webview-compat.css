@@ -1,0 +1,103 @@
+/*
+ * Android 7.1's WebView does not understand :is(...).  The main theme uses
+ * that selector as a modern convenience, so keep these explicit selectors as
+ * the native-app fallback.  They intentionally apply only in Capacitor.
+ */
+html[data-platform="android"] .pos-app .pos-menu__header-actions {
+  gap: 0 !important;
+}
+
+html[data-platform="android"] .pos-app .pos-menu__header-actions .pos-menu__history + .pos-menu__history {
+  margin-left: 14px !important;
+}
+
+html[data-platform="android"] .pos-app .quick-add > div {
+  gap: 0 !important;
+}
+
+html[data-platform="android"] .pos-app .quick-add > div > button + button {
+  margin-left: 10px !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .history-ui,
+html[data-platform="android"][data-theme="dark"] .daily-ui,
+html[data-platform="android"][data-theme="dark"] .overview-ui,
+html[data-platform="android"][data-theme="dark"] .backup-ui,
+html[data-platform="android"][data-theme="dark"] .settings-ui,
+html[data-platform="android"][data-theme="dark"] .menu-management-ui {
+  color: #f8fafc !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .history-ui h1,
+html[data-platform="android"][data-theme="dark"] .history-ui h2,
+html[data-platform="android"][data-theme="dark"] .daily-ui h1,
+html[data-platform="android"][data-theme="dark"] .daily-ui h2,
+html[data-platform="android"][data-theme="dark"] .overview-ui h1,
+html[data-platform="android"][data-theme="dark"] .overview-ui h2,
+html[data-platform="android"][data-theme="dark"] .revenue-summary h2 {
+  color: #f8fafc !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .history-ui__card,
+html[data-platform="android"][data-theme="dark"] .history-ui__detail,
+html[data-platform="android"][data-theme="dark"] .daily-ui__grid article,
+html[data-platform="android"][data-theme="dark"] .daily-ui__card,
+html[data-platform="android"][data-theme="dark"] .overview-ui__grid article,
+html[data-platform="android"][data-theme="dark"] .overview-ui__card,
+html[data-platform="android"][data-theme="dark"] .revenue-summary,
+html[data-platform="android"][data-theme="dark"] .backup-ui article,
+html[data-platform="android"][data-theme="dark"] .settings-ui article,
+html[data-platform="android"][data-theme="dark"] .menu-management-ui__card {
+  background: #22272f !important;
+  border-color: #3a424d !important;
+  box-shadow: none !important;
+  color: #f8fafc !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .history-ui small,
+html[data-platform="android"][data-theme="dark"] .daily-ui__grid small,
+html[data-platform="android"][data-theme="dark"] .overview-ui__grid small,
+html[data-platform="android"][data-theme="dark"] .backup-ui p,
+html[data-platform="android"][data-theme="dark"] .daily-ui__card p,
+html[data-platform="android"][data-theme="dark"] .overview-ui__card p {
+  color: #94a3b8 !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .history-ui__item,
+html[data-platform="android"][data-theme="dark"] .daily-ui__card > div,
+html[data-platform="android"][data-theme="dark"] .overview-ui__card > div,
+html[data-platform="android"][data-theme="dark"] .revenue-summary__table > div {
+  border-color: #353d47 !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .daily-ui button,
+html[data-platform="android"][data-theme="dark"] .overview-ui button,
+html[data-platform="android"][data-theme="dark"] .overview-ui__filters label,
+html[data-platform="android"][data-theme="dark"] .history-ui > button,
+html[data-platform="android"][data-theme="dark"] .history-ui__top button,
+html[data-platform="android"][data-theme="dark"] .history-ui__actions button {
+  background: #2b313a !important;
+  border-color: #3a424d !important;
+  color: #f8fafc !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .daily-ui__print {
+  background: var(--ui-accent) !important;
+  border-color: var(--ui-accent-hover) !important;
+  color: #ffffff !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .overview-ui input,
+html[data-platform="android"][data-theme="dark"] .settings-ui input,
+html[data-platform="android"][data-theme="dark"] .menu-management-ui input {
+  background: #252b34 !important;
+  border-color: #3a424d !important;
+  color: #f8fafc !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .overview-ui input::placeholder,
+html[data-platform="android"][data-theme="dark"] .settings-ui input::placeholder,
+html[data-platform="android"][data-theme="dark"] .menu-management-ui input::placeholder {
+  color: #94a3b8 !important;
+  opacity: 1 !important;
+}
