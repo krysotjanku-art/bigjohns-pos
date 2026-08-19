@@ -4,3 +4,10 @@
 .order-panel__secondary-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 0 10px}.order-panel__secondary-actions .order-panel__discount,.order-panel__secondary-actions .order-panel__suspend{width:100%;margin:0!important}.order-panel__secondary-actions .order-panel__suspend{min-height:44px!important}
 .order-panel footer .order-panel__total{grid-template-columns:minmax(0,1fr) auto;justify-items:initial!important;align-items:baseline;gap:2px 14px}.order-panel footer .order-panel__total span{grid-column:1}.order-panel footer .order-panel__total strong{grid-column:2;justify-self:end}.order-panel footer .order-panel__total small{grid-column:2;justify-self:end}
 .order-panel footer .order-panel__total{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:none;justify-content:initial}.order-panel__total-row,.order-panel__vat-row{display:grid!important;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px}.order-panel__total-row span{justify-self:start;font-size:30px!important;font-weight:500}.order-panel__total-row strong{justify-self:end;font-weight:700}.order-panel__vat-row small{justify-self:end}
+
+/* Keep every order-line control inside the fixed tablet order panel. */
+.order-line{display:flex!important;align-items:center!important;gap:8px!important;min-width:0}
+.order-line__details{flex:1 1 0!important;min-width:0!important}
+.order-line__meta{gap:6px!important;min-width:0}
+.order-line__controls{display:flex!important;flex:0 0 116px!important;width:116px;min-width:116px;gap:4px!important}
+.order-line__controls button{flex:0 0 36px!important;width:36px!important;min-width:36px;min-height:40px;margin-left:0!important;padding:0!important}

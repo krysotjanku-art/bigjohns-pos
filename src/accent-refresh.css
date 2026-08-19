@@ -104,14 +104,14 @@ html[data-theme="light"] .order-panel footer div strong {
 }
 
 .order-line__increase {
-  border-color: var(--ui-accent) !important;
-  background: #47272d !important;
-  color: #ffe5e8 !important;
+  border-color: #3ea77f !important;
+  background: #1f5148 !important;
+  color: #fff !important;
 }
 
 .order-line__increase:hover {
-  border-color: var(--ui-accent-hover) !important;
-  background: #5a3037 !important;
+  border-color: #58bd98 !important;
+  background: #276553 !important;
 }
 
 .order-panel footer > button:last-child {
