@@ -1,7 +1,7 @@
 /* Main POS only: preserve touch targets while giving products most of the screen. */
 .pos-app .pos-menu__header {
   min-height: 48px;
-  margin-bottom: 6px;
+  margin: -8px 0 14px;
 }
 
 .pos-app .pos-menu__header h1 {
@@ -9,7 +9,7 @@
 }
 
 .pos-app .pos-menu__header-actions {
-  gap: 12px;
+  gap: 20px;
 }
 
 .pos-app .pos-menu__header-actions .pos-menu__history {
@@ -46,6 +46,16 @@
 .pos-app .category-bar button {
   min-height: 52px;
 }
+
+/* Locally bundled SVG category icons: colours do not depend on emoji fonts. */
+.pos-app .category-bar button:nth-child(1) .category-bar__icon { color: #ef6b58; }
+.pos-app .category-bar button:nth-child(2) .category-bar__icon { color: #e99a4b; }
+.pos-app .category-bar button:nth-child(3) .category-bar__icon { color: #e46b88; }
+.pos-app .category-bar button:nth-child(4) .category-bar__icon { color: #b77a52; }
+.pos-app .category-bar button:nth-child(5) .category-bar__icon { color: #d7a96b; }
+.pos-app .category-bar button:nth-child(6) .category-bar__icon { color: #a779d9; }
+.pos-app .category-bar button:nth-child(7) .category-bar__icon { color: #c68b5a; }
+.pos-app .category-bar button:nth-child(8) .category-bar__icon { color: #6fa8ee; }
 
 .pos-app .pos-menu__content {
   padding: 0 4px 18px;
