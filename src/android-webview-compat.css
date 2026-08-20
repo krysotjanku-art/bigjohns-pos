@@ -96,7 +96,7 @@ html[data-platform="android"][data-theme="dark"] .overview-ui,
 html[data-platform="android"][data-theme="dark"] .backup-ui,
 html[data-platform="android"][data-theme="dark"] .settings-ui,
 html[data-platform="android"][data-theme="dark"] .menu-management-ui {
-  color: #f8fafc !important;
+  color: var(--theme-text) !important;
 }
 
 html[data-platform="android"][data-theme="dark"] .history-ui h1,
@@ -106,7 +106,7 @@ html[data-platform="android"][data-theme="dark"] .daily-ui h2,
 html[data-platform="android"][data-theme="dark"] .overview-ui h1,
 html[data-platform="android"][data-theme="dark"] .overview-ui h2,
 html[data-platform="android"][data-theme="dark"] .revenue-summary h2 {
-  color: #f8fafc !important;
+  color: var(--theme-text) !important;
 }
 
 html[data-platform="android"][data-theme="dark"] .history-ui__card,
@@ -119,10 +119,10 @@ html[data-platform="android"][data-theme="dark"] .revenue-summary,
 html[data-platform="android"][data-theme="dark"] .backup-ui article,
 html[data-platform="android"][data-theme="dark"] .settings-ui article,
 html[data-platform="android"][data-theme="dark"] .menu-management-ui__card {
-  background: #22272f !important;
-  border-color: #3a424d !important;
+  background: var(--theme-surface) !important;
+  border-color: var(--theme-border) !important;
   box-shadow: none !important;
-  color: #f8fafc !important;
+  color: var(--theme-text) !important;
 }
 
 html[data-platform="android"][data-theme="dark"] .history-ui small,
@@ -131,14 +131,14 @@ html[data-platform="android"][data-theme="dark"] .overview-ui__grid small,
 html[data-platform="android"][data-theme="dark"] .backup-ui p,
 html[data-platform="android"][data-theme="dark"] .daily-ui__card p,
 html[data-platform="android"][data-theme="dark"] .overview-ui__card p {
-  color: #94a3b8 !important;
+  color: var(--theme-muted) !important;
 }
 
 html[data-platform="android"][data-theme="dark"] .history-ui__item,
 html[data-platform="android"][data-theme="dark"] .daily-ui__card > div,
 html[data-platform="android"][data-theme="dark"] .overview-ui__card > div,
 html[data-platform="android"][data-theme="dark"] .revenue-summary__table > div {
-  border-color: #353d47 !important;
+  border-color: var(--theme-line) !important;
 }
 
 html[data-platform="android"][data-theme="dark"] .daily-ui button,
@@ -147,9 +147,9 @@ html[data-platform="android"][data-theme="dark"] .overview-ui__filters label,
 html[data-platform="android"][data-theme="dark"] .history-ui > button,
 html[data-platform="android"][data-theme="dark"] .history-ui__top button,
 html[data-platform="android"][data-theme="dark"] .history-ui__actions button {
-  background: #2b313a !important;
-  border-color: #3a424d !important;
-  color: #f8fafc !important;
+  background: var(--theme-surface-secondary) !important;
+  border-color: var(--theme-border) !important;
+  color: var(--theme-text) !important;
 }
 
 html[data-platform="android"][data-theme="dark"] .daily-ui__print {
@@ -170,15 +170,15 @@ html[data-platform="android"][data-theme="dark"] .history-ui__actions .danger {
 html[data-platform="android"][data-theme="dark"] .overview-ui input,
 html[data-platform="android"][data-theme="dark"] .settings-ui input,
 html[data-platform="android"][data-theme="dark"] .menu-management-ui input {
-  background: #252b34 !important;
-  border-color: #3a424d !important;
-  color: #f8fafc !important;
+  background: var(--theme-input) !important;
+  border-color: var(--theme-border) !important;
+  color: var(--theme-text) !important;
 }
 
 html[data-platform="android"][data-theme="dark"] .overview-ui input::placeholder,
 html[data-platform="android"][data-theme="dark"] .settings-ui input::placeholder,
 html[data-platform="android"][data-theme="dark"] .menu-management-ui input::placeholder {
-  color: #94a3b8 !important;
+  color: var(--theme-muted) !important;
   opacity: 1 !important;
 }
 
@@ -220,9 +220,9 @@ html[data-platform="android"][data-theme="dark"] .menu-management-ui__tabs butto
 html[data-platform="android"][data-theme="dark"] .menu-management-ui__header button {
   -webkit-appearance: none !important;
   appearance: none !important;
-  background: #2b313a !important;
-  border-color: #3a424d !important;
-  color: #f8fafc !important;
+  background: var(--theme-surface-secondary) !important;
+  border-color: var(--theme-border) !important;
+  color: var(--theme-text) !important;
 }
 
 html[data-platform="android"][data-theme="dark"] .menu-management-ui__tabs button.active {
@@ -240,22 +240,22 @@ html[data-platform="android"][data-theme="dark"] .settings-ui input:not([type="c
 
 /* The desktop theme uses :is(...), unsupported by the tablet WebView. */
 html[data-platform="android"][data-theme="dark"] .pizza-modal {
-  background: #22272f !important;
-  color: #f8fafc !important;
+  background: var(--theme-surface) !important;
+  color: var(--theme-text) !important;
   box-shadow: 0 20px 55px rgba(0, 0, 0, 0.4) !important;
 }
 
 html[data-platform="android"][data-theme="dark"] .pizza-modal p {
-  color: #94a3b8 !important;
+  color: var(--theme-muted) !important;
 }
 
 html[data-platform="android"][data-theme="dark"] .pizza-modal__close,
 html[data-platform="android"][data-theme="dark"] .pizza-modal__sizes button {
   -webkit-appearance: none !important;
   appearance: none !important;
-  background: #2b313a !important;
-  border-color: #3a424d !important;
-  color: #f8fafc !important;
+  background: var(--theme-surface-secondary) !important;
+  border-color: var(--theme-border) !important;
+  color: var(--theme-text) !important;
 }
 
 html[data-platform="android"][data-theme="dark"] .pizza-modal__sizes button strong {
@@ -310,17 +310,17 @@ html[data-platform="android"] .settings-ui__actions > button {
 html[data-platform="android"][data-theme="dark"] .settings-ui button {
   -webkit-appearance: none !important;
   appearance: none !important;
-  background-color: #2b313a !important;
-  border: 1px solid #3a424d !important;
+  background-color: var(--theme-surface-secondary) !important;
+  border: 1px solid var(--theme-border) !important;
   border-radius: 10px !important;
-  color: #f8fafc !important;
+  color: var(--theme-text) !important;
 }
 
 html[data-platform="android"][data-theme="dark"] .settings-ui__appearance button.active,
 html[data-platform="android"][data-theme="dark"] .settings-ui__accent button.active {
   background-color: var(--ui-accent-surface-dark) !important;
   border-color: var(--ui-accent) !important;
-  color: #f8fafc !important;
+  color: var(--theme-text) !important;
 }
 
 html[data-platform="android"][data-theme="dark"] .settings-ui__actions button:first-child {
@@ -336,9 +336,9 @@ html[data-platform="android"][data-theme="dark"] .settings-ui .danger {
 }
 
 html[data-platform="android"][data-theme="dark"] .settings-ui__printer p {
-  background-color: #252b34 !important;
-  border: 1px solid #3a424d !important;
-  color: #f8fafc !important;
+  background-color: var(--theme-input) !important;
+  border: 1px solid var(--theme-border) !important;
+  color: var(--theme-text) !important;
 }
 
 html[data-platform="android"][data-theme="dark"] .settings-ui__printer .is-ready {
@@ -361,4 +361,19 @@ html[data-platform="android"][data-theme="dark"] .daily-ui button.daily-ui__prin
   background-color: var(--ui-accent) !important;
   border-color: var(--ui-accent-hover) !important;
   color: #ffffff !important;
+}
+
+/* Keep the shared navigation control on the same token-driven treatment as
+   desktop while preventing Android's native button skin from replacing it. */
+html[data-platform="android"] .back-to-pos-button {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-color: var(--ui-accent-surface-dark) !important;
+  border-color: var(--ui-accent) !important;
+  color: #ffffff !important;
+}
+
+html[data-platform="android"] .back-to-pos-button:active {
+  background-color: var(--ui-accent-pressed) !important;
+  border-color: var(--ui-accent-pressed) !important;
 }
