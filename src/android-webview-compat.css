@@ -447,19 +447,26 @@ html[data-platform="android"][data-theme="light"] .quick-add button strong {
   color: var(--ui-accent) !important;
 }
 
-/* Explicit duplicate for Android 7.1: retain the shared category tokens even
-   when the WebView skips modern theme selectors. */
-html[data-platform="android"] .category-bar button {
+/* Explicit light-mode duplicate for Android 7.1. Dark mode intentionally
+   retains the pre-existing POS category design. */
+html[data-platform="android"][data-theme="light"] .category-bar button {
   -webkit-appearance: none !important;
   appearance: none !important;
-  background-color: #5b6470 !important;
-  border-color: #747e8b !important;
-  color: #ffffff !important;
+  background-color: rgba(var(--ui-accent-rgb), .10) !important;
+  border-color: rgba(var(--ui-accent-rgb), .22) !important;
+  color: var(--theme-text) !important;
 }
 
-html[data-platform="android"][data-theme="light"] .category-bar button.active,
-html[data-platform="android"][data-theme="dark"] .category-bar button.active {
-  background-color: var(--ui-accent) !important;
-  border-color: var(--ui-accent-hover) !important;
-  color: #ffffff !important;
+html[data-platform="android"][data-theme="light"] .category-bar button.active {
+  background-color: rgba(var(--ui-accent-rgb), .30) !important;
+  border-color: rgba(var(--ui-accent-rgb), .60) !important;
+  color: var(--theme-text) !important;
+}
+
+html[data-platform="android"][data-theme="light"] .pos-menu__history {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-color: rgba(var(--ui-accent-rgb), .18) !important;
+  border-color: rgba(var(--ui-accent-rgb), .38) !important;
+  color: var(--theme-text) !important;
 }

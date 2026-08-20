@@ -1,6 +1,7 @@
 :root {
   --ui-focus: #C84B5A;
   --ui-accent: #C84B5A;
+  --ui-accent-rgb: 200, 75, 90;
   --ui-accent-hover: #D45D6A;
   --ui-accent-pressed: #B13F4D;
   --ui-accent-surface: #fbedef;
@@ -10,6 +11,7 @@
 html[data-accent="blue"] {
   --ui-focus: #5FA8FF;
   --ui-accent: #5FA8FF;
+  --ui-accent-rgb: 95, 168, 255;
   --ui-accent-hover: #7BB8FF;
   --ui-accent-pressed: #4A96F2;
   --ui-accent-surface: #eaf3ff;
@@ -19,6 +21,7 @@ html[data-accent="blue"] {
 html[data-accent="green"] {
   --ui-focus: #4E9B7E;
   --ui-accent: #4E9B7E;
+  --ui-accent-rgb: 78, 155, 126;
   --ui-accent-hover: #63AE90;
   --ui-accent-pressed: #3D8269;
   --ui-accent-surface: #e8f5ef;
@@ -28,6 +31,7 @@ html[data-accent="green"] {
 html[data-accent="red"] {
   --ui-focus: #C84B5A;
   --ui-accent: #C84B5A;
+  --ui-accent-rgb: 200, 75, 90;
   --ui-accent-hover: #D45D6A;
   --ui-accent-pressed: #B13F4D;
   --ui-accent-surface: #fbedef;
@@ -37,6 +41,7 @@ html[data-accent="red"] {
 html[data-accent="purple"] {
   --ui-focus: #8B6CC7;
   --ui-accent: #8B6CC7;
+  --ui-accent-rgb: 139, 108, 199;
   --ui-accent-hover: #A080D7;
   --ui-accent-pressed: #7457AF;
   --ui-accent-surface: #f2edfb;
@@ -46,6 +51,7 @@ html[data-accent="purple"] {
 html[data-accent="orange"] {
   --ui-focus: #C9844B;
   --ui-accent: #C9844B;
+  --ui-accent-rgb: 201, 132, 75;
   --ui-accent-hover: #D99A63;
   --ui-accent-pressed: #B16F3A;
   --ui-accent-surface: #fcf1e7;
@@ -55,6 +61,7 @@ html[data-accent="orange"] {
 html[data-accent="pink"] {
   --ui-focus: #FF5FA2;
   --ui-accent: #FF5FA2;
+  --ui-accent-rgb: 255, 95, 162;
   --ui-accent-hover: #FF79B4;
   --ui-accent-pressed: #E94A91;
   --ui-accent-surface: #fff0f6;
@@ -171,17 +178,22 @@ html[data-theme="dark"] .pizza-modal__sizes button:focus-visible {
   background: var(--ui-accent-surface-dark) !important;
 }
 
-/* Categories have one neutral base in both themes. Only the selected
-   category is allowed to carry the user's current accent colour. */
-.category-bar button {
-  background-color: #5b6470 !important;
-  border-color: #747e8b !important;
-  color: #ffffff !important;
+/* Light POS controls use the selected accent as a soft tint. RGB components
+   keep this compatible with the Android 7.1 WebView without color-mix(). */
+html[data-theme="light"] .category-bar button {
+  background-color: rgba(var(--ui-accent-rgb), .10) !important;
+  border-color: rgba(var(--ui-accent-rgb), .22) !important;
+  color: var(--theme-text) !important;
 }
 
-html[data-theme="light"] .category-bar button.active,
-html[data-theme="dark"] .category-bar button.active {
-  background-color: var(--ui-accent) !important;
-  border-color: var(--ui-accent-hover) !important;
-  color: #ffffff !important;
+html[data-theme="light"] .category-bar button.active {
+  background-color: rgba(var(--ui-accent-rgb), .30) !important;
+  border-color: rgba(var(--ui-accent-rgb), .60) !important;
+  color: var(--theme-text) !important;
+}
+
+html[data-theme="light"] .pos-menu__history {
+  background-color: rgba(var(--ui-accent-rgb), .18) !important;
+  border-color: rgba(var(--ui-accent-rgb), .38) !important;
+  color: var(--theme-text) !important;
 }
