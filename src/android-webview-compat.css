@@ -158,6 +158,15 @@ html[data-platform="android"][data-theme="dark"] .daily-ui__print {
   color: #ffffff !important;
 }
 
+html[data-platform="android"][data-theme="dark"] .history-ui__actions .danger {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background: #40282c !important;
+  border-color: #75434b !important;
+  border-radius: 10px !important;
+  color: #ffb5b5 !important;
+}
+
 html[data-platform="android"][data-theme="dark"] .overview-ui input,
 html[data-platform="android"][data-theme="dark"] .settings-ui input,
 html[data-platform="android"][data-theme="dark"] .menu-management-ui input {

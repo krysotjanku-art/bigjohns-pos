@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { receiptEscPosText, testReceipt } from "./usbEscPosPrinter";
+import { dailySummaryEscPosText, receiptEscPosText, testReceipt } from "./usbEscPosPrinter";
 import type { ReceiptSnapshot } from "./receiptSnapshot";
 
 const ESC = "\x1B";
@@ -51,5 +51,18 @@ describe("USB ESC/POS receipt", () => {
     expect(testText).toContain("Margherita M");
     expect(testText).toContain("Coca-Cola Zero");
     expect(testText).toContain("|CELKEM");
+  });
+
+  it("formats the daily report as one native ESC/POS receipt", () => {
+    const text = dailySummaryEscPosText({
+      orderCount: 3, grossRevenue: 600, cancelledOrderCount: 1, cancelledValue: 100, netRevenue: 500,
+      vat12: 24, vat21: 42, revenueWithoutVat: 434, totalVat: 66, revenueIncludingVat: 500,
+      pizzas: 2, sides: 1, drinks: 2, coffees: 0, toppings: 0, boxes: 1, deliveries: 0, bestSellingPizza: null,
+    }, new Date("2026-08-20T10:30:00"));
+
+    expect(text).toContain("DENN");
+    expect(text).toContain("Po");
+    expect(text).toContain("PRODEJE");
+    expect(text).toContain(`${ESC}d\x05`);
   });
 });

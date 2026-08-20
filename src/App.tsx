@@ -32,7 +32,7 @@ import { addToOrder, orderItemKey, removeOrderItem } from "./order";
 import { createReceiptSnapshot, type ReceiptSnapshot } from "./receiptSnapshot";
 import { calculateOrderTotals, fixedDiscount, percentageDiscount, type OrderDiscount } from "./discount";
 import { addSuspendedOrder, createSuspendedOrder, loadSuspendedOrders, removeSuspendedOrder, restoreSuspendedOrder, saveSuspendedOrders, type SuspendedOrder } from "./suspendedOrders";
-import { isNativeUsbPrintingAvailable, printEscPosReceipt, printerStatus, testReceipt, type PrinterStatus } from "./usbEscPosPrinter";
+import { isNativeUsbPrintingAvailable, printEscPosDailySummary, printEscPosReceipt, printerStatus, testReceipt, type PrinterStatus } from "./usbEscPosPrinter";
 import type { Category, MenuItem, OrderItem, OrderItemInput, PizzaSize } from "./types/menu";
 
 // Set this before the first render so native-only CSS fallbacks never flash.
@@ -97,13 +97,34 @@ function App() {
       void printEscPosReceipt(currentOrderReceipt, settings.company).then(refreshPrinterStatus).catch(async () => { await refreshPrinterStatus(); });
     } else requestAnimationFrame(() => window.print());
   };
-  const printCopy = (completedOrder: CompletedOrder) => {
+  const reportPrintError = async (reason: unknown) => {
+    await refreshPrinterStatus();
+    const message = reason instanceof Error ? reason.message : String(reason);
+    window.alert(`Tisk se nepodařil. ${message}`);
+  };
+  const printCopy = async (completedOrder: CompletedOrder) => {
+    const copy = receiptFromCompletedOrder(completedOrder);
     setSummaryPrint(null);
-    flushSync(() => setReceipt(receiptFromCompletedOrder(completedOrder)));
+    if (isNativeUsbPrintingAvailable()) {
+      try {
+        await printEscPosReceipt(copy, settings.company);
+        await refreshPrinterStatus();
+      } catch (reason) { await reportPrintError(reason); }
+      return;
+    }
+    flushSync(() => setReceipt(copy));
     requestAnimationFrame(() => window.print());
   };
-  const printDailySummary = () => {
-    flushSync(() => { setReceipt(null); setSummaryPrint({ summary: dailySummary, issuedAt: new Date() }); });
+  const printDailySummary = async () => {
+    const issuedAt = new Date();
+    if (isNativeUsbPrintingAvailable()) {
+      try {
+        await printEscPosDailySummary(dailySummary, issuedAt, settings.company);
+        await refreshPrinterStatus();
+      } catch (reason) { await reportPrintError(reason); }
+      return;
+    }
+    flushSync(() => { setReceipt(null); setSummaryPrint({ summary: dailySummary, issuedAt }); });
     requestAnimationFrame(() => window.print());
   };
   const cancelOrder = (completedOrder: CompletedOrder) => {

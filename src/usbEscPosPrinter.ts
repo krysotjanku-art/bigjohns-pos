@@ -3,6 +3,7 @@ import { calculateVatBreakdown, type ReceiptSnapshot } from "./receiptSnapshot";
 import { formatDateTime } from "./dateFormat";
 import { paymentMethodLabel } from "./paymentMethod";
 import { defaultSettings, type CompanySettings } from "./settings";
+import type { DailySummary } from "./dailySummary";
 import type { OrderItem } from "./types/menu";
 
 export interface PrinterStatus {
@@ -140,6 +141,64 @@ export const printerStatus = async (): Promise<PrinterStatus> => {
 export const printEscPosReceipt = async (receipt: ReceiptSnapshot, company?: CompanySettings) => {
   if (!isNativeUsbPrintingAvailable()) return false;
   await nativePrinter.print({ content: receiptEscPosText(receipt, company) });
+  return true;
+};
+
+const vatBase = (vat: number, rate: number) => vat * 100 / rate;
+
+/** Uses the same native ESC/POS transport, feed, and final cut as customer receipts. */
+export const dailySummaryEscPosText = (summary: DailySummary, issuedAt: Date, company: CompanySettings = defaultSettings.company) => {
+  const reducedBase = vatBase(summary.vat12, 12);
+  const standardBase = vatBase(summary.vat21, 21);
+
+  return [
+    lineHeight(32),
+    feed(4),
+    align(1),
+    bold(true), size(2, 1), `${company.companyName}\n`, size(1, 1), bold(false),
+    ...companyLines(company).map((value) => `${value}\n`),
+    `${line}\n`,
+    bold(true), "DENNÍ PŘEHLED\n", bold(false),
+    align(0),
+    `Datum: ${formatDateTime(issuedAt).slice(0, 10)}\n`,
+    `Vystaveno: ${formatDateTime(issuedAt)}\n`,
+    `${line}\n`,
+    `Počet objednávek: ${summary.orderCount}\n`,
+    `${row("Tržba celkem", money(summary.grossRevenue))}\n`,
+    `Stornované objednávky: ${summary.cancelledOrderCount}\n`,
+    `${row("Hodnota storen", money(summary.cancelledValue))}\n`,
+    `${line}\n`,
+    bold(true), `${row("TRŽBA PO ODEČTENÍ STOREN", money(summary.netRevenue))}\n`, bold(false),
+    "\nPřehled tržeb\n",
+    `${row("Bez DPH", money(summary.revenueWithoutVat))}\n`,
+    `${row("DPH", money(summary.totalVat))}\n`,
+    bold(true), `${row("Včetně DPH", money(summary.revenueIncludingVat))}\n`, bold(false),
+    "\nDPH\n",
+    `${row("Základ 12 %", tableMoney(reducedBase))}\n`,
+    `${row("DPH 12 %", tableMoney(summary.vat12))}\n`,
+    `${row("Základ 21 %", tableMoney(standardBase))}\n`,
+    `${row("DPH 21 %", tableMoney(summary.vat21))}\n`,
+    `${line}\n`,
+    "PRODEJE\n",
+    `Pizzy: ${summary.pizzas}\n`,
+    `Přílohy: ${summary.sides}\n`,
+    `Nápoje: ${summary.drinks}\n`,
+    `Káva: ${summary.coffees}\n`,
+    `Toppingy: ${summary.toppings}\n`,
+    `Krabice: ${summary.boxes}\n`,
+    `Rozvozy: ${summary.deliveries}\n`,
+    `${line}\n`,
+    align(1),
+    "Děkujeme za návštěvu!\n",
+    `${company.web}\n`,
+    defaultLineHeight,
+    feed(5),
+  ].join("");
+};
+
+export const printEscPosDailySummary = async (summary: DailySummary, issuedAt: Date, company?: CompanySettings) => {
+  if (!isNativeUsbPrintingAvailable()) return false;
+  await nativePrinter.print({ content: dailySummaryEscPosText(summary, issuedAt, company) });
   return true;
 };
 
