@@ -446,3 +446,20 @@ html[data-platform="android"][data-theme="light"] .quick-add button {
 html[data-platform="android"][data-theme="light"] .quick-add button strong {
   color: var(--ui-accent) !important;
 }
+
+/* Explicit duplicate for Android 7.1: retain the shared category tokens even
+   when the WebView skips modern theme selectors. */
+html[data-platform="android"] .category-bar button {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-color: #5b6470 !important;
+  border-color: #747e8b !important;
+  color: #ffffff !important;
+}
+
+html[data-platform="android"][data-theme="light"] .category-bar button.active,
+html[data-platform="android"][data-theme="dark"] .category-bar button.active {
+  background-color: var(--ui-accent) !important;
+  border-color: var(--ui-accent-hover) !important;
+  color: #ffffff !important;
+}
