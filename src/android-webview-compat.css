@@ -398,3 +398,51 @@ html[data-platform="android"] .history-ui__actions button + button {
 html[data-platform="android"] .order-line__controls {
   margin-left: 20px !important;
 }
+
+/* The tablet WebView skips the shared light :is(...) rules. Give the POS
+   explicit light surfaces and foregrounds without changing the dark theme. */
+html[data-platform="android"][data-theme="light"] .order-panel {
+  background-color: var(--theme-surface) !important;
+  border-color: var(--theme-border) !important;
+  color: var(--theme-text) !important;
+}
+
+html[data-platform="android"][data-theme="light"] .order-line {
+  border-color: var(--theme-line) !important;
+}
+
+html[data-platform="android"][data-theme="light"] .order-line__name,
+html[data-platform="android"][data-theme="light"] .order-line__meta strong {
+  color: var(--theme-text) !important;
+}
+
+html[data-platform="android"][data-theme="light"] .order-line__meta,
+html[data-platform="android"][data-theme="light"] .order-panel footer small {
+  color: var(--theme-muted) !important;
+}
+
+html[data-platform="android"][data-theme="light"] .order-line__controls button:first-child,
+html[data-platform="android"][data-theme="light"] .order-panel__discount,
+html[data-platform="android"][data-theme="light"] .order-panel__suspend,
+html[data-platform="android"][data-theme="light"] .pos-menu__history {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-color: var(--theme-surface-secondary) !important;
+  border-color: var(--theme-border) !important;
+  border-radius: var(--ui-radius) !important;
+  color: var(--theme-text) !important;
+}
+
+/* Favourite products are shortcuts, never selected/accent buttons. */
+html[data-platform="android"][data-theme="light"] .quick-add button {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-color: var(--theme-surface) !important;
+  border-color: var(--theme-border) !important;
+  border-radius: 8px !important;
+  color: var(--theme-text) !important;
+}
+
+html[data-platform="android"][data-theme="light"] .quick-add button strong {
+  color: var(--ui-accent) !important;
+}
