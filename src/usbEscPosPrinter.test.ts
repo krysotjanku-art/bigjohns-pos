@@ -63,6 +63,6 @@ describe("USB ESC/POS receipt", () => {
     expect(text).toContain("DENN");
     expect(text).toContain("Po");
     expect(text).toContain("PRODEJE");
-    expect(text).toContain(`${ESC}d\x05`);
+    expect(text).toContain(`${ESC}d\x07`);
   });
 });

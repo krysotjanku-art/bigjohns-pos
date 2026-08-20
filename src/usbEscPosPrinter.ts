@@ -192,7 +192,9 @@ export const dailySummaryEscPosText = (summary: DailySummary, issuedAt: Date, co
     "Děkujeme za návštěvu!\n",
     `${company.web}\n`,
     defaultLineHeight,
-    feed(5),
+    // A daily report is longer than a customer receipt. Leave enough stock in
+    // front of the cutter for every sales line and the footer to clear it.
+    feed(7),
   ].join("");
 };
 

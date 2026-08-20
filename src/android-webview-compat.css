@@ -289,3 +289,76 @@ html[data-platform="android"] .pos-app .menu-grid__tile:focus-visible {
   border-color: var(--ui-accent) !important;
   box-shadow: inset 0 0 0 2px var(--ui-accent) !important;
 }
+
+/* Explicit Android Settings controls: the old WebView otherwise restores its
+   light native button skin and does not apply flex gap reliably. */
+html[data-platform="android"] .settings-ui__appearance,
+html[data-platform="android"] .settings-ui__accent > div,
+html[data-platform="android"] .settings-ui__printer > div,
+html[data-platform="android"] .settings-ui__actions {
+  gap: 0 !important;
+  flex-wrap: wrap !important;
+}
+
+html[data-platform="android"] .settings-ui__appearance > button,
+html[data-platform="android"] .settings-ui__accent > div > button,
+html[data-platform="android"] .settings-ui__printer > div > button,
+html[data-platform="android"] .settings-ui__actions > button {
+  margin: 0 14px 14px 0 !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .settings-ui button {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-color: #2b313a !important;
+  border: 1px solid #3a424d !important;
+  border-radius: 10px !important;
+  color: #f8fafc !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .settings-ui__appearance button.active,
+html[data-platform="android"][data-theme="dark"] .settings-ui__accent button.active {
+  background-color: var(--ui-accent-surface-dark) !important;
+  border-color: var(--ui-accent) !important;
+  color: #f8fafc !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .settings-ui__actions button:first-child {
+  background-color: var(--ui-accent) !important;
+  border-color: var(--ui-accent-hover) !important;
+  color: #ffffff !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .settings-ui .danger {
+  background-color: #40282c !important;
+  border-color: #75434b !important;
+  color: #ffb5b5 !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .settings-ui__printer p {
+  background-color: #252b34 !important;
+  border: 1px solid #3a424d !important;
+  color: #f8fafc !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .settings-ui__printer .is-ready {
+  background-color: #1f4239 !important;
+  border-color: #2e7664 !important;
+  color: #d7fff3 !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .settings-ui__printer .is-warning {
+  background-color: #443821 !important;
+  border-color: #7d6632 !important;
+  color: #ffedbd !important;
+}
+
+/* This comes after the generic daily button rule above, whose specificity
+   otherwise wins over the report action on Android. */
+html[data-platform="android"][data-theme="dark"] .daily-ui button.daily-ui__print {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-color: var(--ui-accent) !important;
+  border-color: var(--ui-accent-hover) !important;
+  color: #ffffff !important;
+}

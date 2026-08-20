@@ -130,7 +130,14 @@ public class UsbEscPosPrinterPlugin extends Plugin {
         // The TypeScript receipt payload owns its top/bottom feeds so the footer stays
         // on the same receipt. Keep a single final full cut for RONGTA ESC/POS printers.
         byte[] finish = new byte[] { 0x1D, 0x56, 0x00 };
-        boolean ok = write(connection, output, init) && write(connection, output, receipt) && write(connection, output, finish);
+        // Send one ordered ESC/POS stream.  Separate USB transfers allowed a
+        // long daily report to reach the cutter command before its final feed
+        // had drained on some RP80 printers.
+        byte[] payload = new byte[init.length + receipt.length + finish.length];
+        System.arraycopy(init, 0, payload, 0, init.length);
+        System.arraycopy(receipt, 0, payload, init.length, receipt.length);
+        System.arraycopy(finish, 0, payload, init.length + receipt.length, finish.length);
+        boolean ok = write(connection, output, payload);
         connection.releaseInterface(printerInterface);
         connection.close();
         if (!ok) { call.reject("Tiskárna nepřijala data účtenky."); return; }
