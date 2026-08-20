@@ -368,14 +368,6 @@ html[data-platform="android"][data-theme="dark"] .daily-ui button.daily-ui__prin
 html[data-platform="android"] .back-to-pos-button {
   -webkit-appearance: none !important;
   appearance: none !important;
-  background-color: var(--ui-accent-surface-dark) !important;
-  border-color: var(--ui-accent) !important;
-  color: #ffffff !important;
-}
-
-html[data-platform="android"] .back-to-pos-button:active {
-  background-color: var(--ui-accent-pressed) !important;
-  border-color: var(--ui-accent-pressed) !important;
 }
 
 /* Android 7.1 ignores flex gap in this toolbar.  These are real margins
@@ -427,8 +419,8 @@ html[data-platform="android"][data-theme="light"] .order-panel__suspend,
 html[data-platform="android"][data-theme="light"] .pos-menu__history {
   -webkit-appearance: none !important;
   appearance: none !important;
-  background-color: var(--theme-surface-secondary) !important;
-  border-color: var(--theme-border) !important;
+  background-color: #e3e7ec !important;
+  border-color: #c9d0d9 !important;
   border-radius: var(--ui-radius) !important;
   color: var(--theme-text) !important;
 }
@@ -447,13 +439,19 @@ html[data-platform="android"][data-theme="light"] .quick-add button strong {
   color: var(--ui-accent) !important;
 }
 
+html[data-platform="android"][data-theme="light"] .order-line__remove {
+  background-color: #f8e8e9 !important;
+  border-color: #dca3aa !important;
+  color: #a33b3b !important;
+}
+
 /* Explicit light-mode duplicate for Android 7.1. Dark mode intentionally
    retains the pre-existing POS category design. */
 html[data-platform="android"][data-theme="light"] .category-bar button {
   -webkit-appearance: none !important;
   appearance: none !important;
-  background-color: rgba(var(--ui-accent-rgb), .10) !important;
-  border-color: rgba(var(--ui-accent-rgb), .22) !important;
+  background-color: #e3e7ec !important;
+  border-color: #c9d0d9 !important;
   color: var(--theme-text) !important;
 }
 
@@ -469,4 +467,47 @@ html[data-platform="android"][data-theme="light"] .pos-menu__history {
   background-color: rgba(var(--ui-accent-rgb), .18) !important;
   border-color: rgba(var(--ui-accent-rgb), .38) !important;
   color: var(--theme-text) !important;
+}
+
+/* Android's old WebView needs an explicit light control skin, but it uses the
+   same theme/accent tokens as desktop rather than a separate palette. */
+html[data-platform="android"][data-theme="light"] .settings-ui button {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-color: var(--theme-surface-secondary) !important;
+  border-color: var(--theme-border) !important;
+  color: var(--theme-text) !important;
+}
+
+html[data-platform="android"][data-theme="light"] .settings-ui__appearance button.active,
+html[data-platform="android"][data-theme="light"] .settings-ui__accent button.active {
+  background-color: rgba(var(--ui-accent-rgb), .30) !important;
+  border-color: rgba(var(--ui-accent-rgb), .60) !important;
+  color: var(--theme-text) !important;
+}
+
+html[data-platform="android"][data-theme="light"] .settings-ui__actions button:first-child,
+html[data-platform="android"][data-theme="light"] .daily-ui button.daily-ui__print {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-color: var(--ui-accent) !important;
+  border-color: var(--ui-accent-hover) !important;
+  color: #ffffff !important;
+}
+
+html[data-platform="android"] .history-ui__back-secondary,
+html[data-platform="android"] .pos-menu__history,
+html[data-platform="android"] .order-panel__discount,
+html[data-platform="android"] .order-panel__suspend {
+  background-color: rgba(var(--ui-accent-rgb), .18) !important;
+  border-color: rgba(var(--ui-accent-rgb), .38) !important;
+  color: var(--theme-text) !important;
+}
+
+html[data-platform="android"] .history-ui__actions .danger {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-color: var(--theme-danger-bg) !important;
+  border-color: #75434b !important;
+  color: var(--theme-danger) !important;
 }

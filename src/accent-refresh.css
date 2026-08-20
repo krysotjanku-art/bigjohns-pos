@@ -181,8 +181,8 @@ html[data-theme="dark"] .pizza-modal__sizes button:focus-visible {
 /* Light POS controls use the selected accent as a soft tint. RGB components
    keep this compatible with the Android 7.1 WebView without color-mix(). */
 html[data-theme="light"] .category-bar button {
-  background-color: rgba(var(--ui-accent-rgb), .10) !important;
-  border-color: rgba(var(--ui-accent-rgb), .22) !important;
+  background-color: #e3e7ec !important;
+  border-color: #c9d0d9 !important;
   color: var(--theme-text) !important;
 }
 
@@ -192,8 +192,44 @@ html[data-theme="light"] .category-bar button.active {
   color: var(--theme-text) !important;
 }
 
-html[data-theme="light"] .pos-menu__history {
+html[data-theme="light"] .quick-add {
+  color: var(--theme-text) !important;
+}
+
+html[data-theme="light"] .quick-add button {
+  background-color: var(--theme-surface) !important;
+  border-color: var(--theme-border) !important;
+  color: var(--theme-text) !important;
+}
+
+html[data-theme="light"] .order-line__controls button:first-child {
+  background-color: #e3e7ec !important;
+  border-color: #c9d0d9 !important;
+  color: var(--theme-text) !important;
+}
+
+html[data-theme="light"] .order-line__remove {
+  background-color: #f8e8e9 !important;
+  border-color: #dca3aa !important;
+  color: #a33b3b !important;
+}
+
+/* Important secondary controls use the current accent in both themes. */
+.pos-menu__history,
+.order-panel__discount,
+.order-panel__suspend,
+.back-to-pos-button,
+.history-ui__back-secondary {
   background-color: rgba(var(--ui-accent-rgb), .18) !important;
   border-color: rgba(var(--ui-accent-rgb), .38) !important;
   color: var(--theme-text) !important;
+}
+
+.pos-menu__history:hover,
+.order-panel__discount:hover,
+.order-panel__suspend:hover:not(:disabled),
+.back-to-pos-button:hover,
+.history-ui__back-secondary:hover {
+  background-color: rgba(var(--ui-accent-rgb), .28) !important;
+  border-color: rgba(var(--ui-accent-rgb), .55) !important;
 }
