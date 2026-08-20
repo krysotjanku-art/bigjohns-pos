@@ -377,3 +377,24 @@ html[data-platform="android"] .back-to-pos-button:active {
   background-color: var(--ui-accent-pressed) !important;
   border-color: var(--ui-accent-pressed) !important;
 }
+
+/* Android 7.1 ignores flex gap in this toolbar.  These are real margins
+   between the separate controls, not padding inside either button. */
+html[data-platform="android"] .history-ui__top,
+html[data-platform="android"] .history-ui__actions {
+  align-items: center !important;
+  gap: 0 !important;
+}
+
+html[data-platform="android"] .history-ui__back-secondary {
+  margin-left: 22px !important;
+}
+
+html[data-platform="android"] .history-ui__actions button + button {
+  margin-left: 14px !important;
+}
+
+/* Reserve a physical separation from the price to the control group. */
+html[data-platform="android"] .order-line__controls {
+  margin-left: 20px !important;
+}
