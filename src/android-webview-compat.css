@@ -253,8 +253,8 @@ html[data-platform="android"][data-theme="dark"] .pizza-modal__close,
 html[data-platform="android"][data-theme="dark"] .pizza-modal__sizes button {
   -webkit-appearance: none !important;
   appearance: none !important;
-  background: var(--theme-surface-secondary) !important;
-  border-color: var(--theme-border) !important;
+  background: var(--ui-category-button-bg) !important;
+  border-color: var(--ui-category-button-border) !important;
   color: var(--theme-text) !important;
 }
 
@@ -450,8 +450,8 @@ html[data-platform="android"][data-theme="light"] .order-line__remove {
 html[data-platform="android"][data-theme="light"] .category-bar button {
   -webkit-appearance: none !important;
   appearance: none !important;
-  background-color: #e3e7ec !important;
-  border-color: #c9d0d9 !important;
+  background-color: var(--ui-category-button-bg) !important;
+  border-color: var(--ui-category-button-border) !important;
   color: var(--theme-text) !important;
 }
 

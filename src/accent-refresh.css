@@ -10,6 +10,8 @@
   --ui-accent-pressed: #B13F4D;
   --ui-accent-surface: #fbedef;
   --ui-accent-surface-dark: #47272d;
+  --ui-category-button-bg: #252a31;
+  --ui-category-button-border: #393f49;
 }
 
 html[data-accent="blue"] {
@@ -150,6 +152,11 @@ html[data-accent="white"][data-theme="dark"] {
   --ui-accent-ink: #f8fafc;
 }
 
+.category-bar button {
+  background: var(--ui-category-button-bg) !important;
+  border-color: var(--ui-category-button-border) !important;
+}
+
 html[data-theme="dark"] .pos-navigation__drawer button.is-active,
 html[data-theme="dark"] .category-bar button.active,
 html[data-theme="dark"] .settings-ui__appearance button.active,
@@ -159,6 +166,14 @@ html[data-theme="dark"] .discount-modal__tabs .active {
   border-color: var(--ui-accent-border) !important;
   background: var(--ui-accent-surface-dark) !important;
   background-color: var(--ui-accent-surface-dark) !important;
+  color: var(--theme-text) !important;
+}
+
+/* Categories and pizza-size choices deliberately share one inactive control
+   surface, so the modal stays visually tied to the cashier controls. */
+.pizza-modal__sizes button {
+  background: var(--ui-category-button-bg) !important;
+  border-color: var(--ui-category-button-border) !important;
   color: var(--theme-text) !important;
 }
 
@@ -263,9 +278,14 @@ html[data-theme="dark"] .pizza-modal__sizes button:focus-visible {
 /* Light POS controls use the selected accent as a soft tint. RGB components
    keep this compatible with the Android 7.1 WebView without color-mix(). */
 html[data-theme="light"] .category-bar button {
-  background-color: #e3e7ec !important;
-  border-color: #c9d0d9 !important;
+  background-color: var(--ui-category-button-bg) !important;
+  border-color: var(--ui-category-button-border) !important;
   color: var(--theme-text) !important;
+}
+
+html[data-theme="light"] {
+  --ui-category-button-bg: #e3e7ec;
+  --ui-category-button-border: #c9d0d9;
 }
 
 html[data-theme="light"] .category-bar button.active {
