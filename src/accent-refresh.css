@@ -207,6 +207,16 @@ html[data-theme="light"] .order-panel footer div strong {
   border-color: var(--ui-accent-hover) !important;
 }
 
+/* The product grid lives in a vertically clipped scroll area.  Keep the
+   persistent keyboard/tap focus treatment inside each rounded tile so the
+   first row cannot lose its top edge at that scroll boundary. */
+.pos-app .menu-grid__tile:focus,
+.pos-app .menu-grid__tile:focus-visible {
+  outline: none !important;
+  border-color: var(--ui-accent-border) !important;
+  box-shadow: inset 0 0 0 2px rgba(var(--ui-accent-tint-rgb), .75) !important;
+}
+
 .order-line__increase {
   border-color: #3ea77f !important;
   background: #1f5148 !important;
