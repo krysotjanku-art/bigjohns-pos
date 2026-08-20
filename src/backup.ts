@@ -27,7 +27,7 @@ const validHistory = (value: string | null) => { if (value === null) return true
 const validPinValue = (value: string | null) => value === null || validPin(value);
 const validSuspendedOrders = (value: string | null) => { if (value === null) return true; try { return Array.isArray(JSON.parse(value)); } catch { return false; } };
 const validAppearance = (value: string | null) => value === null || value === "light" || value === "dark" || value === "system";
-const validAccent = (value: string | null) => value === null || value === "blue" || value === "green" || value === "red" || value === "purple" || value === "orange" || value === "pink";
+const validAccent = (value: string | null) => value === null || value === "blue" || value === "green" || value === "red" || value === "purple" || value === "orange" || value === "pink" || value === "black" || value === "white" || value === "gray";
 
 export const parseBackup = (text: string): PosBackup | null => {
   try {

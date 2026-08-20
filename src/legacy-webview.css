@@ -32,7 +32,7 @@
 .order-panel h2{display:flex;align-items:center}.order-panel__heading-icon{margin-right:9px}
 .settings-ui__accent h3{display:flex;align-items:center}.settings-ui__section-icon{margin-right:8px}
 .settings-ui__accent-dot{display:inline-block;width:14px;height:14px;border:1px solid rgba(255,255,255,.45);border-radius:50%}
-.settings-ui__accent-dot--blue{background:#5FA8FF}.settings-ui__accent-dot--green{background:#299d82}.settings-ui__accent-dot--red{background:#C84B5A}.settings-ui__accent-dot--purple{background:#8b5cf6}.settings-ui__accent-dot--orange{background:#d97706}.settings-ui__accent-dot--pink{background:#FF5FA2}
+.settings-ui__accent-dot--blue{background:#5FA8FF}.settings-ui__accent-dot--green{background:#299d82}.settings-ui__accent-dot--red{background:#C84B5A}.settings-ui__accent-dot--purple{background:#8b5cf6}.settings-ui__accent-dot--orange{background:#d97706}.settings-ui__accent-dot--pink{background:#FF5FA2}.settings-ui__accent-dot--black{background:#111827}.settings-ui__accent-dot--white{background:#fff;border-color:#64748b}.settings-ui__accent-dot--gray{background:#64748b}
 .quick-add>span{display:inline-flex;align-items:center}.quick-add__icon{width:18px;height:18px;margin-right:7px}
 .pos-menu__history>span{display:inline-block;width:18px;height:18px;font-size:0;vertical-align:middle}
 .pos-menu__history:first-child>span{border-left:4px solid currentColor;border-right:4px solid currentColor}

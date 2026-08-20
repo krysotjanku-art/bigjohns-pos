@@ -2,10 +2,10 @@ export const APPEARANCE_KEY = "bigjohns.appearance";
 export const ACCENT_KEY = "bigjohns.accent";
 
 export type Appearance = "light" | "dark" | "system";
-export type Accent = "blue" | "green" | "red" | "purple" | "orange" | "pink";
+export type Accent = "blue" | "green" | "red" | "purple" | "orange" | "pink" | "black" | "white" | "gray";
 
 const appearances: readonly Appearance[] = ["light", "dark", "system"];
-const accents: readonly Accent[] = ["blue", "green", "red", "purple", "orange", "pink"];
+const accents: readonly Accent[] = ["blue", "green", "red", "purple", "orange", "pink", "black", "white", "gray"];
 
 export const loadAppearance = (storage: Pick<Storage, "getItem">): Appearance => {
   const value = storage.getItem(APPEARANCE_KEY);

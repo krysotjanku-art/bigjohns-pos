@@ -2,6 +2,10 @@
   --ui-focus: #C84B5A;
   --ui-accent: #C84B5A;
   --ui-accent-rgb: 200, 75, 90;
+  --ui-accent-tint-rgb: 200, 75, 90;
+  --ui-accent-ink: #C84B5A;
+  --ui-accent-text: #ffffff;
+  --ui-accent-border: #C84B5A;
   --ui-accent-hover: #D45D6A;
   --ui-accent-pressed: #B13F4D;
   --ui-accent-surface: #fbedef;
@@ -12,6 +16,10 @@ html[data-accent="blue"] {
   --ui-focus: #5FA8FF;
   --ui-accent: #5FA8FF;
   --ui-accent-rgb: 95, 168, 255;
+  --ui-accent-tint-rgb: 95, 168, 255;
+  --ui-accent-ink: #5FA8FF;
+  --ui-accent-text: #ffffff;
+  --ui-accent-border: #5FA8FF;
   --ui-accent-hover: #7BB8FF;
   --ui-accent-pressed: #4A96F2;
   --ui-accent-surface: #eaf3ff;
@@ -22,6 +30,10 @@ html[data-accent="green"] {
   --ui-focus: #4E9B7E;
   --ui-accent: #4E9B7E;
   --ui-accent-rgb: 78, 155, 126;
+  --ui-accent-tint-rgb: 78, 155, 126;
+  --ui-accent-ink: #4E9B7E;
+  --ui-accent-text: #ffffff;
+  --ui-accent-border: #4E9B7E;
   --ui-accent-hover: #63AE90;
   --ui-accent-pressed: #3D8269;
   --ui-accent-surface: #e8f5ef;
@@ -32,6 +44,10 @@ html[data-accent="red"] {
   --ui-focus: #C84B5A;
   --ui-accent: #C84B5A;
   --ui-accent-rgb: 200, 75, 90;
+  --ui-accent-tint-rgb: 200, 75, 90;
+  --ui-accent-ink: #C84B5A;
+  --ui-accent-text: #ffffff;
+  --ui-accent-border: #C84B5A;
   --ui-accent-hover: #D45D6A;
   --ui-accent-pressed: #B13F4D;
   --ui-accent-surface: #fbedef;
@@ -42,6 +58,10 @@ html[data-accent="purple"] {
   --ui-focus: #8B6CC7;
   --ui-accent: #8B6CC7;
   --ui-accent-rgb: 139, 108, 199;
+  --ui-accent-tint-rgb: 139, 108, 199;
+  --ui-accent-ink: #8B6CC7;
+  --ui-accent-text: #ffffff;
+  --ui-accent-border: #8B6CC7;
   --ui-accent-hover: #A080D7;
   --ui-accent-pressed: #7457AF;
   --ui-accent-surface: #f2edfb;
@@ -52,6 +72,10 @@ html[data-accent="orange"] {
   --ui-focus: #C9844B;
   --ui-accent: #C9844B;
   --ui-accent-rgb: 201, 132, 75;
+  --ui-accent-tint-rgb: 201, 132, 75;
+  --ui-accent-ink: #C9844B;
+  --ui-accent-text: #ffffff;
+  --ui-accent-border: #C9844B;
   --ui-accent-hover: #D99A63;
   --ui-accent-pressed: #B16F3A;
   --ui-accent-surface: #fcf1e7;
@@ -62,10 +86,68 @@ html[data-accent="pink"] {
   --ui-focus: #FF5FA2;
   --ui-accent: #FF5FA2;
   --ui-accent-rgb: 255, 95, 162;
+  --ui-accent-tint-rgb: 255, 95, 162;
+  --ui-accent-ink: #FF5FA2;
+  --ui-accent-text: #ffffff;
+  --ui-accent-border: #FF5FA2;
   --ui-accent-hover: #FF79B4;
   --ui-accent-pressed: #E94A91;
   --ui-accent-surface: #fff0f6;
   --ui-accent-surface-dark: #542b42;
+}
+
+html[data-accent="black"] {
+  --ui-focus: #111827;
+  --ui-accent: #111827;
+  --ui-accent-rgb: 17, 24, 39;
+  --ui-accent-tint-rgb: 17, 24, 39;
+  --ui-accent-ink: #111827;
+  --ui-accent-text: #ffffff;
+  --ui-accent-border: #475569;
+  --ui-accent-hover: #1f2937;
+  --ui-accent-pressed: #030712;
+  --ui-accent-surface: #e5e7eb;
+  --ui-accent-surface-dark: #263241;
+}
+
+html[data-accent="white"] {
+  --ui-focus: #f8fafc;
+  --ui-accent: #f8fafc;
+  --ui-accent-rgb: 248, 250, 252;
+  --ui-accent-tint-rgb: 226, 232, 240;
+  --ui-accent-ink: #64748b;
+  --ui-accent-text: #111827;
+  --ui-accent-border: #94a3b8;
+  --ui-accent-hover: #ffffff;
+  --ui-accent-pressed: #e2e8f0;
+  --ui-accent-surface: #f1f5f9;
+  --ui-accent-surface-dark: #475569;
+}
+
+html[data-accent="gray"] {
+  --ui-focus: #64748b;
+  --ui-accent: #64748b;
+  --ui-accent-rgb: 100, 116, 139;
+  --ui-accent-tint-rgb: 100, 116, 139;
+  --ui-accent-ink: #64748b;
+  --ui-accent-text: #ffffff;
+  --ui-accent-border: #64748b;
+  --ui-accent-hover: #7b8799;
+  --ui-accent-pressed: #475569;
+  --ui-accent-surface: #e2e8f0;
+  --ui-accent-surface-dark: #334155;
+}
+
+html[data-accent="black"][data-theme="dark"] {
+  --ui-accent-tint-rgb: 100, 116, 139;
+  --ui-accent-border: #94a3b8;
+  --ui-accent-ink: #cbd5e1;
+}
+
+html[data-accent="white"][data-theme="dark"] {
+  --ui-accent-tint-rgb: 248, 250, 252;
+  --ui-accent-border: #f8fafc;
+  --ui-accent-ink: #f8fafc;
 }
 
 html[data-theme="dark"] .pos-navigation__drawer button.is-active,
@@ -74,10 +156,10 @@ html[data-theme="dark"] .settings-ui__appearance button.active,
 html[data-theme="dark"] .settings-ui__accent button.active,
 html[data-theme="dark"] .menu-management-ui__tabs button.active,
 html[data-theme="dark"] .discount-modal__tabs .active {
-  border-color: var(--ui-accent) !important;
+  border-color: var(--ui-accent-border) !important;
   background: var(--ui-accent-surface-dark) !important;
   background-color: var(--ui-accent-surface-dark) !important;
-  color: #ffe5e8 !important;
+  color: var(--theme-text) !important;
 }
 
 html[data-theme="light"] .category-bar button.active,
@@ -85,15 +167,15 @@ html[data-theme="light"] .settings-ui__appearance button.active,
 html[data-theme="light"] .settings-ui__accent button.active,
 html[data-theme="light"] .menu-management-ui__tabs button.active,
 html[data-theme="light"] .discount-modal__tabs .active {
-  border-color: var(--ui-accent) !important;
+  border-color: var(--ui-accent-border) !important;
   background: var(--ui-accent-surface) !important;
   background-color: var(--ui-accent-surface) !important;
-  color: #963745 !important;
+  color: var(--theme-text) !important;
 }
 
 .pos-menu__search:focus {
-  border-color: var(--ui-accent) !important;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-accent) 22%, transparent) !important;
+  border-color: var(--ui-accent-border) !important;
+  box-shadow: 0 0 0 3px rgba(var(--ui-accent-tint-rgb), .22) !important;
 }
 
 .pos-app .menu-grid__tile strong,
@@ -102,7 +184,7 @@ html[data-theme="light"] .discount-modal__tabs .active {
 .quick-add button strong,
 .order-panel footer .order-panel__total strong,
 html[data-theme="light"] .order-panel footer div strong {
-  color: var(--ui-accent) !important;
+  color: var(--ui-accent-ink) !important;
 }
 
 .quick-add button:hover,
@@ -138,9 +220,9 @@ html[data-theme="light"] .order-panel footer div strong {
 .pin-dialog__actions button:last-child,
 .backup-ui article button,
 .daily-ui__print {
-  border-color: var(--ui-accent) !important;
+  border-color: var(--ui-accent-border) !important;
   background: var(--ui-accent) !important;
-  color: #fff !important;
+  color: var(--ui-accent-text) !important;
 }
 
 .discount-modal__tabs .active:hover,
@@ -162,14 +244,14 @@ html[data-theme="light"] .order-panel footer div strong {
 }
 
 .suspended-ui__actions button:first-child {
-  border-color: var(--ui-accent) !important;
+  border-color: var(--ui-accent-border) !important;
   background: #47272d !important;
   color: #ffe5e8 !important;
 }
 
 .pizza-modal__sizes button:hover,
 .pizza-modal__sizes button:focus-visible {
-  border-color: var(--ui-accent) !important;
+  border-color: var(--ui-accent-border) !important;
   background: var(--ui-accent-surface) !important;
 }
 
@@ -187,8 +269,8 @@ html[data-theme="light"] .category-bar button {
 }
 
 html[data-theme="light"] .category-bar button.active {
-  background-color: rgba(var(--ui-accent-rgb), .30) !important;
-  border-color: rgba(var(--ui-accent-rgb), .60) !important;
+  background-color: rgba(var(--ui-accent-tint-rgb), .30) !important;
+  border-color: rgba(var(--ui-accent-tint-rgb), .60) !important;
   color: var(--theme-text) !important;
 }
 
@@ -220,8 +302,8 @@ html[data-theme="light"] .order-line__remove {
 .order-panel__suspend,
 .back-to-pos-button,
 .history-ui__back-secondary {
-  background-color: rgba(var(--ui-accent-rgb), .18) !important;
-  border-color: rgba(var(--ui-accent-rgb), .38) !important;
+  background-color: rgba(var(--ui-accent-tint-rgb), .18) !important;
+  border-color: rgba(var(--ui-accent-tint-rgb), .38) !important;
   color: var(--theme-text) !important;
 }
 
@@ -230,6 +312,6 @@ html[data-theme="light"] .order-line__remove {
 .order-panel__suspend:hover:not(:disabled),
 .back-to-pos-button:hover,
 .history-ui__back-secondary:hover {
-  background-color: rgba(var(--ui-accent-rgb), .28) !important;
-  border-color: rgba(var(--ui-accent-rgb), .55) !important;
+  background-color: rgba(var(--ui-accent-tint-rgb), .28) !important;
+  border-color: rgba(var(--ui-accent-tint-rgb), .55) !important;
 }

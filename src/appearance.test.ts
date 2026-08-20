@@ -10,12 +10,14 @@ describe("appearance", () => {
     expect(loadAppearance(storage)).toBe("dark");
   });
 
-  it("persists a selected accent and defaults invalid values to red", () => {
-    const store = new Map<string, string>();
-    const storage = { getItem: (key: string) => store.get(key) ?? null, setItem: (key: string, value: string) => store.set(key, value) };
-    saveAccent(storage, "pink");
-    expect(store.get(ACCENT_KEY)).toBe("pink");
-    expect(loadAccent(storage)).toBe("pink");
+  it("persists the additional neutral accents and defaults invalid values to red", () => {
+    for (const accent of ["black", "white", "gray"] as const) {
+      const store = new Map<string, string>();
+      const storage = { getItem: (key: string) => store.get(key) ?? null, setItem: (key: string, value: string) => store.set(key, value) };
+      saveAccent(storage, accent);
+      expect(store.get(ACCENT_KEY)).toBe(accent);
+      expect(loadAccent(storage)).toBe(accent);
+    }
     expect(loadAccent({ getItem: () => "invalid" })).toBe("red");
   });
 

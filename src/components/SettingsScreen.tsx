@@ -9,7 +9,7 @@ import "./SettingsScreen.css";
 
 interface Props { settings: PosSettings; appearance: Appearance; accent: Accent; onAppearanceChange: (appearance: Appearance) => void; onAccentChange: (accent: Accent) => void; printerStatus: PrinterStatus; onRefreshPrinterStatus: () => void; onPrintTest: () => void; onChangePin: (current: string, next: string, confirm: string) => string | null; onSave: (settings: PosSettings) => void; onBackToPos: () => void; }
 const groups = [["Káva", 201, 208], ["Toppingy", 401, 406], ["Krabice", 501, 503], ["Rozvoz", 601, 604]] as const;
-const accentOptions: ReadonlyArray<{ value: Accent; label: string }> = [{ value: "blue", label: "Blue" }, { value: "green", label: "Green" }, { value: "red", label: "Red" }, { value: "purple", label: "Purple" }, { value: "orange", label: "Orange" }, { value: "pink", label: "Pink" }];
+const accentOptions: ReadonlyArray<{ value: Accent; label: string }> = [{ value: "blue", label: "Blue" }, { value: "green", label: "Green" }, { value: "red", label: "Red" }, { value: "purple", label: "Purple" }, { value: "orange", label: "Orange" }, { value: "pink", label: "Pink" }, { value: "black", label: "Black" }, { value: "white", label: "White" }, { value: "gray", label: "Gray" }];
 
 export function SettingsScreen({ settings, appearance, accent, printerStatus, onRefreshPrinterStatus, onPrintTest, onAppearanceChange, onAccentChange, onChangePin, onSave, onBackToPos }: Props) {
   const [draft, setDraft] = useState(settings); const [error, setError] = useState(""); const [pin, setPin] = useState({ current: "", next: "", confirm: "" }); const [pinMessage, setPinMessage] = useState("");

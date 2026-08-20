@@ -154,8 +154,8 @@ html[data-platform="android"][data-theme="dark"] .history-ui__actions button {
 
 html[data-platform="android"][data-theme="dark"] .daily-ui__print {
   background: var(--ui-accent) !important;
-  border-color: var(--ui-accent-hover) !important;
-  color: #ffffff !important;
+  border-color: var(--ui-accent-border) !important;
+  color: var(--ui-accent-text) !important;
 }
 
 html[data-platform="android"][data-theme="dark"] .history-ui__actions .danger {
@@ -227,7 +227,7 @@ html[data-platform="android"][data-theme="dark"] .menu-management-ui__header but
 
 html[data-platform="android"][data-theme="dark"] .menu-management-ui__tabs button.active {
   background: var(--ui-accent-surface-dark) !important;
-  border-color: var(--ui-accent) !important;
+  border-color: var(--ui-accent-border) !important;
   color: #f8fafc !important;
 }
 
@@ -259,13 +259,13 @@ html[data-platform="android"][data-theme="dark"] .pizza-modal__sizes button {
 }
 
 html[data-platform="android"][data-theme="dark"] .pizza-modal__sizes button strong {
-  color: var(--ui-accent) !important;
+  color: var(--ui-accent-ink) !important;
 }
 
 html[data-platform="android"][data-theme="dark"] .pizza-modal__sizes button:hover,
 html[data-platform="android"][data-theme="dark"] .pizza-modal__sizes button:focus {
   background: var(--ui-accent-surface-dark) !important;
-  border-color: var(--ui-accent) !important;
+  border-color: var(--ui-accent-border) !important;
 }
 
 /* Replace Android's rectangular default focus cue with the app's rounded accent ring. */
@@ -279,15 +279,15 @@ html[data-platform="android"] button:focus-visible,
 html[data-platform="android"] input:focus,
 html[data-platform="android"] input:focus-visible {
   outline: none !important;
-  box-shadow: 0 0 0 2px var(--ui-accent) !important;
+  box-shadow: 0 0 0 2px rgba(var(--ui-accent-tint-rgb), .75) !important;
 }
 
 /* The menu grid scrolls, so an outside focus shadow is clipped on its first row. */
 html[data-platform="android"] .pos-app .menu-grid__tile:focus,
 html[data-platform="android"] .pos-app .menu-grid__tile:focus-visible {
   outline: none !important;
-  border-color: var(--ui-accent) !important;
-  box-shadow: inset 0 0 0 2px var(--ui-accent) !important;
+  border-color: var(--ui-accent-border) !important;
+  box-shadow: inset 0 0 0 2px rgba(var(--ui-accent-tint-rgb), .75) !important;
 }
 
 /* Explicit Android Settings controls: the old WebView otherwise restores its
@@ -319,14 +319,14 @@ html[data-platform="android"][data-theme="dark"] .settings-ui button {
 html[data-platform="android"][data-theme="dark"] .settings-ui__appearance button.active,
 html[data-platform="android"][data-theme="dark"] .settings-ui__accent button.active {
   background-color: var(--ui-accent-surface-dark) !important;
-  border-color: var(--ui-accent) !important;
+  border-color: var(--ui-accent-border) !important;
   color: var(--theme-text) !important;
 }
 
 html[data-platform="android"][data-theme="dark"] .settings-ui__actions button:first-child {
   background-color: var(--ui-accent) !important;
-  border-color: var(--ui-accent-hover) !important;
-  color: #ffffff !important;
+  border-color: var(--ui-accent-border) !important;
+  color: var(--ui-accent-text) !important;
 }
 
 html[data-platform="android"][data-theme="dark"] .settings-ui .danger {
@@ -359,8 +359,8 @@ html[data-platform="android"][data-theme="dark"] .daily-ui button.daily-ui__prin
   -webkit-appearance: none !important;
   appearance: none !important;
   background-color: var(--ui-accent) !important;
-  border-color: var(--ui-accent-hover) !important;
-  color: #ffffff !important;
+  border-color: var(--ui-accent-border) !important;
+  color: var(--ui-accent-text) !important;
 }
 
 /* Keep the shared navigation control on the same token-driven treatment as
@@ -436,7 +436,7 @@ html[data-platform="android"][data-theme="light"] .quick-add button {
 }
 
 html[data-platform="android"][data-theme="light"] .quick-add button strong {
-  color: var(--ui-accent) !important;
+  color: var(--ui-accent-ink) !important;
 }
 
 html[data-platform="android"][data-theme="light"] .order-line__remove {
@@ -456,16 +456,16 @@ html[data-platform="android"][data-theme="light"] .category-bar button {
 }
 
 html[data-platform="android"][data-theme="light"] .category-bar button.active {
-  background-color: rgba(var(--ui-accent-rgb), .30) !important;
-  border-color: rgba(var(--ui-accent-rgb), .60) !important;
+  background-color: rgba(var(--ui-accent-tint-rgb), .30) !important;
+  border-color: rgba(var(--ui-accent-tint-rgb), .60) !important;
   color: var(--theme-text) !important;
 }
 
 html[data-platform="android"][data-theme="light"] .pos-menu__history {
   -webkit-appearance: none !important;
   appearance: none !important;
-  background-color: rgba(var(--ui-accent-rgb), .18) !important;
-  border-color: rgba(var(--ui-accent-rgb), .38) !important;
+  background-color: rgba(var(--ui-accent-tint-rgb), .18) !important;
+  border-color: rgba(var(--ui-accent-tint-rgb), .38) !important;
   color: var(--theme-text) !important;
 }
 
@@ -481,8 +481,8 @@ html[data-platform="android"][data-theme="light"] .settings-ui button {
 
 html[data-platform="android"][data-theme="light"] .settings-ui__appearance button.active,
 html[data-platform="android"][data-theme="light"] .settings-ui__accent button.active {
-  background-color: rgba(var(--ui-accent-rgb), .30) !important;
-  border-color: rgba(var(--ui-accent-rgb), .60) !important;
+  background-color: rgba(var(--ui-accent-tint-rgb), .30) !important;
+  border-color: var(--ui-accent-border) !important;
   color: var(--theme-text) !important;
 }
 
@@ -491,16 +491,16 @@ html[data-platform="android"][data-theme="light"] .daily-ui button.daily-ui__pri
   -webkit-appearance: none !important;
   appearance: none !important;
   background-color: var(--ui-accent) !important;
-  border-color: var(--ui-accent-hover) !important;
-  color: #ffffff !important;
+  border-color: var(--ui-accent-border) !important;
+  color: var(--ui-accent-text) !important;
 }
 
 html[data-platform="android"] .history-ui__back-secondary,
 html[data-platform="android"] .pos-menu__history,
 html[data-platform="android"] .order-panel__discount,
 html[data-platform="android"] .order-panel__suspend {
-  background-color: rgba(var(--ui-accent-rgb), .18) !important;
-  border-color: rgba(var(--ui-accent-rgb), .38) !important;
+  background-color: rgba(var(--ui-accent-tint-rgb), .18) !important;
+  border-color: rgba(var(--ui-accent-tint-rgb), .38) !important;
   color: var(--theme-text) !important;
 }
 
