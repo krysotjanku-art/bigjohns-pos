@@ -7,6 +7,28 @@ html[data-platform="android"] .pos-app .pos-menu__header-actions {
   gap: 0 !important;
 }
 
+/* Grid placement stacks the three bars in the Android 7.1 WebView. */
+html[data-platform="android"] .pos-navigation__toggle {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0 !important;
+}
+
+html[data-platform="android"] .pos-navigation__toggle span {
+  display: block !important;
+  flex: 0 0 2px !important;
+  width: 18px !important;
+  height: 2px !important;
+  margin: 0 !important;
+  background: currentColor !important;
+}
+
+html[data-platform="android"] .pos-navigation__toggle span + span {
+  margin-top: 4px !important;
+}
+
 html[data-platform="android"] .pos-app .pos-menu__header-actions .pos-menu__history + .pos-menu__history {
   margin-left: 14px !important;
 }
@@ -205,4 +227,48 @@ html[data-platform="android"][data-theme="dark"] .overview-ui input:not([type="c
 html[data-platform="android"][data-theme="dark"] .settings-ui input:not([type="checkbox"]) {
   -webkit-appearance: none !important;
   appearance: none !important;
+}
+
+/* The desktop theme uses :is(...), unsupported by the tablet WebView. */
+html[data-platform="android"][data-theme="dark"] .pizza-modal {
+  background: #22272f !important;
+  color: #f8fafc !important;
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.4) !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .pizza-modal p {
+  color: #94a3b8 !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .pizza-modal__close,
+html[data-platform="android"][data-theme="dark"] .pizza-modal__sizes button {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background: #2b313a !important;
+  border-color: #3a424d !important;
+  color: #f8fafc !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .pizza-modal__sizes button strong {
+  color: var(--ui-accent) !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .pizza-modal__sizes button:hover,
+html[data-platform="android"][data-theme="dark"] .pizza-modal__sizes button:focus {
+  background: var(--ui-accent-surface-dark) !important;
+  border-color: var(--ui-accent) !important;
+}
+
+/* Replace Android's rectangular default focus cue with the app's rounded accent ring. */
+html[data-platform="android"] button,
+html[data-platform="android"] input {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html[data-platform="android"] button:focus,
+html[data-platform="android"] button:focus-visible,
+html[data-platform="android"] input:focus,
+html[data-platform="android"] input:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 2px var(--ui-accent) !important;
 }
