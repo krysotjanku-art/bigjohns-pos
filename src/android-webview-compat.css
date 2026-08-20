@@ -282,14 +282,6 @@ html[data-platform="android"] input:focus-visible {
   box-shadow: 0 0 0 2px rgba(var(--ui-accent-tint-rgb), .75) !important;
 }
 
-/* The menu grid scrolls, so an outside focus shadow is clipped on its first row. */
-html[data-platform="android"] .pos-app .menu-grid__tile:focus,
-html[data-platform="android"] .pos-app .menu-grid__tile:focus-visible {
-  outline: none !important;
-  border-color: var(--ui-accent-border) !important;
-  box-shadow: inset 0 0 0 2px rgba(var(--ui-accent-tint-rgb), .75) !important;
-}
-
 /* Explicit Android Settings controls: the old WebView otherwise restores its
    light native button skin and does not apply flex gap reliably. */
 html[data-platform="android"] .settings-ui__appearance,
