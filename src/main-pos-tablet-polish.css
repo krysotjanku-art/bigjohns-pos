@@ -61,7 +61,7 @@
 .pos-app .category-bar button:nth-child(8) .category-bar__icon { color: #6fa8ee; }
 
 .pos-app .pos-menu__content {
-  padding: 0 4px 18px;
+  padding: 2px 4px 18px;
 }
 
 /* Dotykačka landscape: retain the original compact 3-column POS layout. */

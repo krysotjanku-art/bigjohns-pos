@@ -219,6 +219,7 @@ html[data-theme="light"] .discount-modal__tabs .active {
   outline: none !important;
   border: 2px solid var(--ui-accent-border) !important;
   box-shadow: none !important;
+  transform: none !important;
 }
 
 .order-line__increase {
