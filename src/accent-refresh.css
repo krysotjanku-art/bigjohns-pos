@@ -196,10 +196,13 @@ html[data-theme="light"] .discount-modal__tabs .active {
 .pos-app .menu-grid__tile strong,
 .pos-app .menu-grid__tile--pizza strong,
 .pos-app .menu-grid__tile:not(.menu-grid__tile--pizza) strong,
-.quick-add button strong,
-.order-panel footer .order-panel__total strong,
-html[data-theme="light"] .order-panel footer div strong {
+.quick-add button strong {
   color: var(--ui-accent-ink) !important;
+}
+
+/* The payable total is intentionally theme text, never an accent value. */
+.order-panel footer .order-panel__total strong {
+  color: var(--theme-text) !important;
 }
 
 .quick-add button:hover,
