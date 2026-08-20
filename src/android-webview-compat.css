@@ -12,11 +12,60 @@ html[data-platform="android"] .pos-app .pos-menu__header-actions .pos-menu__hist
 }
 
 html[data-platform="android"] .pos-app .quick-add > div {
+  display: flex !important;
+  flex-wrap: wrap !important;
   gap: 0 !important;
+  overflow: visible !important;
+}
+
+html[data-platform="android"] .pos-app .quick-add > span {
+  margin-right: 18px !important;
+}
+
+html[data-platform="android"] .pos-app .quick-add > div > button {
+  margin: 0 14px 12px 0 !important;
 }
 
 html[data-platform="android"] .pos-app .quick-add > div > button + button {
-  margin-left: 10px !important;
+  margin-left: 0 !important;
+}
+
+html[data-platform="android"] .pos-app .category-bar {
+  gap: 0 !important;
+  margin: -7px -7px 12px !important;
+}
+
+html[data-platform="android"] .pos-app .category-bar button {
+  margin: 0 5px 10px !important;
+}
+
+html[data-platform="android"] .pos-app .pos-menu__quick-row {
+  margin-bottom: 16px !important;
+}
+
+html[data-platform="android"] .order-line {
+  padding: 11px 0 !important;
+}
+
+html[data-platform="android"] .order-line__controls {
+  gap: 0 !important;
+  width: 120px !important;
+  min-width: 120px !important;
+  flex-basis: 120px !important;
+}
+
+html[data-platform="android"] .order-line__controls button + button {
+  margin-left: 6px !important;
+}
+
+html[data-platform="android"] .order-panel__secondary-actions {
+  display: flex !important;
+  gap: 0 !important;
+  margin-bottom: 14px !important;
+}
+
+html[data-platform="android"] .order-panel__secondary-actions button + button {
+  margin-left: 12px !important;
 }
 
 html[data-platform="android"][data-theme="dark"] .history-ui,
@@ -100,4 +149,60 @@ html[data-platform="android"][data-theme="dark"] .settings-ui input::placeholder
 html[data-platform="android"][data-theme="dark"] .menu-management-ui input::placeholder {
   color: #94a3b8 !important;
   opacity: 1 !important;
+}
+
+/* Android 7.1 does not apply flex gap.  Use child margins for report toolbars. */
+html[data-platform="android"] .daily-ui__top {
+  gap: 0 !important;
+  margin-bottom: 20px !important;
+}
+
+html[data-platform="android"] .daily-ui__top button + button {
+  margin-left: 14px !important;
+}
+
+html[data-platform="android"] .overview-ui__filters {
+  gap: 0 !important;
+  margin-bottom: 22px !important;
+}
+
+html[data-platform="android"] .overview-ui__filters > * {
+  margin: 0 12px 12px 0 !important;
+}
+
+html[data-platform="android"] .menu-management-ui__tabs,
+html[data-platform="android"] .menu-management-ui__header > div {
+  gap: 0 !important;
+}
+
+html[data-platform="android"] .menu-management-ui__tabs button {
+  margin: 0 9px 10px 0 !important;
+}
+
+html[data-platform="android"] .menu-management-ui__header > div > button {
+  margin: 0 10px 10px 0 !important;
+}
+
+/* Keep form and navigation controls from falling back to Android's light skin. */
+html[data-platform="android"][data-theme="dark"] .menu-management-ui > button,
+html[data-platform="android"][data-theme="dark"] .menu-management-ui__tabs button,
+html[data-platform="android"][data-theme="dark"] .menu-management-ui__header button {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background: #2b313a !important;
+  border-color: #3a424d !important;
+  color: #f8fafc !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .menu-management-ui__tabs button.active {
+  background: var(--ui-accent-surface-dark) !important;
+  border-color: var(--ui-accent) !important;
+  color: #f8fafc !important;
+}
+
+html[data-platform="android"][data-theme="dark"] .menu-management-ui input:not([type="checkbox"]),
+html[data-platform="android"][data-theme="dark"] .overview-ui input:not([type="checkbox"]),
+html[data-platform="android"][data-theme="dark"] .settings-ui input:not([type="checkbox"]) {
+  -webkit-appearance: none !important;
+  appearance: none !important;
 }
