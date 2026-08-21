@@ -29,14 +29,16 @@ describe("USB ESC/POS receipt", () => {
     expect(text).toContain("Sazba");
   });
 
-  it("uses a centred inverted order-number box and safe five-line margins", () => {
+  it("uses a centred compact inverted order-number square and safe five-line margins", () => {
     const text = receiptEscPosText(receipt);
+    const inverseStart = text.indexOf(`${GS}B\x01`);
+    const inverseEnd = text.indexOf(`${GS}B\x00`, inverseStart);
+    const square = text.slice(inverseStart, inverseEnd);
 
     expect(text).toContain(`${ESC}3 ${ESC}d\x05`);
-    expect(text).toContain(`${GS}B\x01`);
-    expect(text).toContain("OBJEDNÁVKA");
-    expect(text).toContain("023");
-    expect(text).toContain(`${GS}B\x00`);
+    expect(square).toContain("023");
+    expect(square).toContain(" ".repeat(10));
+    expect(square).not.toContain("OBJEDNÁVKA");
     expect(text).toContain(`${ESC}2${ESC}d\x05`);
     expect(text.lastIndexOf("www.bigjohnspizza.cz")).toBeLessThan(text.lastIndexOf(`${ESC}2${ESC}d\x05`));
   });
@@ -72,7 +74,7 @@ describe("USB ESC/POS receipt", () => {
       items: [{ ...receipt.items[0], selectedOptions: ["Extra sýr"] }, { id: 11, nazev: "Krabice M", cena: 15, pocet: 1, kategorie: "Krabice", vatRate: 21 }],
     });
 
-    expect(text).toContain("OBJEDNÁVKA");
+    expect(text).toContain(`${GS}B\x01`);
     expect(text).toContain("023");
     expect(text).toContain("Datum: 12.08.2026");
     expect(text).toContain("Čas: 10:30");
@@ -80,6 +82,7 @@ describe("USB ESC/POS receipt", () => {
     expect(text).toContain("1× 01 Margherita S");
     expect(text).toContain("  + Extra sýr");
     expect(text).toContain("1× Krabice M");
+    expect(text).not.toContain("OBJEDNÁVKA\n");
     expect(text).not.toContain("CELKEM");
     expect(text).not.toContain("Platba:");
     expect(text).not.toContain("Přehled DPH");
