@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { dailySummaryEscPosText, receiptEscPosText, testReceipt } from "./usbEscPosPrinter";
+import { dailySummaryEscPosText, internalOrderSlipEscPosText, receiptEscPosText, testReceipt } from "./usbEscPosPrinter";
 import type { ReceiptSnapshot } from "./receiptSnapshot";
 
 const ESC = "\x1B";
@@ -64,5 +64,25 @@ describe("USB ESC/POS receipt", () => {
     expect(text).toContain("Po");
     expect(text).toContain("PRODEJE");
     expect(text).toContain(`${ESC}d\x07`);
+  });
+
+  it("formats a separate internal slip with the order identity and preparation contents only", () => {
+    const text = internalOrderSlipEscPosText({
+      ...receipt,
+      items: [{ ...receipt.items[0], selectedOptions: ["Extra sýr"] }, { id: 11, nazev: "Krabice M", cena: 15, pocet: 1, kategorie: "Krabice", vatRate: 21 }],
+    });
+
+    expect(text).toContain("OBJEDNÁVKA");
+    expect(text).toContain("023");
+    expect(text).toContain("Datum: 12.08.2026");
+    expect(text).toContain("Čas: 10:30");
+    expect(text).toContain("OBSAH OBJEDNÁVKY");
+    expect(text).toContain("1× 01 Margherita S");
+    expect(text).toContain("  + Extra sýr");
+    expect(text).toContain("1× Krabice M");
+    expect(text).not.toContain("CELKEM");
+    expect(text).not.toContain("Platba:");
+    expect(text).not.toContain("Přehled DPH");
+    expect(text).toContain(`${ESC}d\x05`);
   });
 });

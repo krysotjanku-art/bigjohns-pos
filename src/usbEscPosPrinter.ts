@@ -1,6 +1,6 @@
 import { Capacitor, registerPlugin } from "@capacitor/core";
 import { calculateVatBreakdown, type ReceiptSnapshot } from "./receiptSnapshot";
-import { formatDateTime } from "./dateFormat";
+import { formatDate, formatDateTime } from "./dateFormat";
 import { paymentMethodLabel } from "./paymentMethod";
 import { defaultSettings, type CompanySettings } from "./settings";
 import type { DailySummary } from "./dailySummary";
@@ -141,6 +141,46 @@ export const printerStatus = async (): Promise<PrinterStatus> => {
 export const printEscPosReceipt = async (receipt: ReceiptSnapshot, company?: CompanySettings) => {
   if (!isNativeUsbPrintingAvailable()) return false;
   await nativePrinter.print({ content: receiptEscPosText(receipt, company) });
+  return true;
+};
+
+/**
+ * A compact, non-fiscal kitchen/staff slip.  It deliberately contains no
+ * company, payment, VAT, discount, receipt-number, or price information.
+ * The native printer appends the final cut to every print call, which keeps
+ * this physically separate from the preceding customer receipt.
+ */
+export const internalOrderSlipEscPosText = (receipt: ReceiptSnapshot) => {
+  const orderNumber = String(receipt.orderNumber).padStart(3, "0");
+  const issuedAt = receipt.issuedAt;
+  const time = `${String(issuedAt.getHours()).padStart(2, "0")}:${String(issuedAt.getMinutes()).padStart(2, "0")}`;
+  const contents = receipt.items.flatMap((item) => [
+    `${item.pocet}× ${item.nazev}\n`,
+    ...(item.selectedOptions?.map((option) => `  + ${option}\n`) ?? []),
+  ]);
+
+  return [
+    lineHeight(32),
+    feed(2),
+    align(1),
+    bold(true), "OBJEDNÁVKA\n", size(2, 2), `${orderNumber}\n`, size(1, 1), bold(false),
+    `${line}\n`,
+    align(0),
+    `Datum: ${formatDate(issuedAt)}\n`,
+    `Čas: ${time}\n`,
+    "\n",
+    bold(true), "OBSAH OBJEDNÁVKY\n", bold(false),
+    ...contents,
+    `${line}\n`,
+    defaultLineHeight,
+    feed(5),
+  ].join("");
+};
+
+/** Prints a second, separately cut internal slip after a completed checkout. */
+export const printEscPosInternalOrderSlip = async (receipt: ReceiptSnapshot) => {
+  if (!isNativeUsbPrintingAvailable()) return false;
+  await nativePrinter.print({ content: internalOrderSlipEscPosText(receipt) });
   return true;
 };
 

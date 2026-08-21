@@ -33,7 +33,7 @@ import { createReceiptSnapshot, type ReceiptSnapshot } from "./receiptSnapshot";
 import { calculateOrderTotals, fixedDiscount, percentageDiscount, type OrderDiscount } from "./discount";
 import { requiresPin } from "./pinProtection";
 import { addSuspendedOrder, createSuspendedOrder, loadSuspendedOrders, removeSuspendedOrder, restoreSuspendedOrder, saveSuspendedOrders, type SuspendedOrder } from "./suspendedOrders";
-import { isNativeUsbPrintingAvailable, printEscPosDailySummary, printEscPosReceipt, printerStatus, testReceipt, type PrinterStatus } from "./usbEscPosPrinter";
+import { isNativeUsbPrintingAvailable, printEscPosDailySummary, printEscPosInternalOrderSlip, printEscPosReceipt, printerStatus, testReceipt, type PrinterStatus } from "./usbEscPosPrinter";
 import type { Category, MenuItem, OrderItem, OrderItemInput, PizzaSize } from "./types/menu";
 
 // Set this before the first render so native-only CSS fallbacks never flash.
@@ -95,7 +95,17 @@ function App() {
       setHistory(updatedHistory);
     });
     if (isNativeUsbPrintingAvailable()) {
-      void printEscPosReceipt(currentOrderReceipt, settings.company).then(refreshPrinterStatus).catch(async () => { await refreshPrinterStatus(); });
+      void (async () => {
+        try {
+          // Each native print is cut by the USB plugin, so these are two
+          // separate physical slips: customer receipt first, internal slip second.
+          await printEscPosReceipt(currentOrderReceipt, settings.company);
+          await printEscPosInternalOrderSlip(currentOrderReceipt);
+          await refreshPrinterStatus();
+        } catch {
+          await refreshPrinterStatus();
+        }
+      })();
     } else requestAnimationFrame(() => window.print());
   };
   const reportPrintError = async (reason: unknown) => {
