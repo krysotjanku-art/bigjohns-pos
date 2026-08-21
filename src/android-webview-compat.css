@@ -368,6 +368,32 @@ html[data-platform="android"] .back-to-pos-button {
   appearance: none !important;
 }
 
+/* The broad Android Settings button skin also matches this shared navigation
+   button. Restore its desktop token-driven accent treatment with a more
+   specific selector so Settings cannot turn it into a neutral button. */
+html[data-platform="android"][data-theme] .settings-ui > .back-to-pos-button {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-color: rgba(var(--ui-accent-tint-rgb), .18) !important;
+  border-color: rgba(var(--ui-accent-tint-rgb), .38) !important;
+  color: var(--theme-text) !important;
+}
+
+/* Keep the intended flex gap for capable WebViews. Android 7.1 ignores flex
+   gap, so the following child margin is its explicit visual fallback. */
+html[data-platform="android"] .pin-dialog__actions {
+  gap: 14px !important;
+}
+
+html[data-platform="android"] .pin-dialog__actions button {
+  flex: 1 1 0 !important;
+  min-width: 0;
+}
+
+html[data-platform="android"] .pin-dialog__actions button + button {
+  margin-left: 14px !important;
+}
+
 /* Android 7.1 ignores flex gap in this toolbar.  These are real margins
    between the separate controls, not padding inside either button. */
 html[data-platform="android"] .history-ui__top,
