@@ -315,6 +315,12 @@ html[data-platform="android"][data-theme="dark"] .settings-ui__accent button.act
   color: var(--theme-text) !important;
 }
 
+html[data-platform="android"][data-theme="dark"] .settings-ui__pin-toggle[aria-checked="true"] {
+  background-color: var(--ui-accent-surface-dark) !important;
+  border-color: var(--ui-accent-border) !important;
+  color: var(--theme-text) !important;
+}
+
 html[data-platform="android"][data-theme="dark"] .settings-ui__actions button:first-child {
   background-color: var(--ui-accent) !important;
   border-color: var(--ui-accent-border) !important;
@@ -474,6 +480,12 @@ html[data-platform="android"][data-theme="light"] .settings-ui button {
 html[data-platform="android"][data-theme="light"] .settings-ui__appearance button.active,
 html[data-platform="android"][data-theme="light"] .settings-ui__accent button.active {
   background-color: rgba(var(--ui-accent-tint-rgb), .30) !important;
+  border-color: var(--ui-accent-border) !important;
+  color: var(--theme-text) !important;
+}
+
+html[data-platform="android"][data-theme="light"] .settings-ui__pin-toggle[aria-checked="true"] {
+  background-color: var(--ui-accent-surface) !important;
   border-color: var(--ui-accent-border) !important;
   color: var(--theme-text) !important;
 }
