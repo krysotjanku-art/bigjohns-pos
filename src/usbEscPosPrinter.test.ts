@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { dailySummaryEscPosText, internalOrderSlipEscPosText, receiptEscPosText, testReceipt } from "./usbEscPosPrinter";
+import { INTERNAL_SLIP_CUT_SETTLE_MS, dailySummaryEscPosText, internalOrderSlipEscPosText, receiptEscPosText, testReceipt } from "./usbEscPosPrinter";
 import type { ReceiptSnapshot } from "./receiptSnapshot";
 
 const ESC = "\x1B";
@@ -87,5 +87,9 @@ describe("USB ESC/POS receipt", () => {
     expect(text).not.toContain("Platba:");
     expect(text).not.toContain("Přehled DPH");
     expect(text).toContain(`${ESC}d\x05`);
+  });
+
+  it("keeps a bounded native settle interval between the internal and customer jobs", () => {
+    expect(INTERNAL_SLIP_CUT_SETTLE_MS).toBe(650);
   });
 });

@@ -33,7 +33,7 @@ import { createReceiptSnapshot, type ReceiptSnapshot } from "./receiptSnapshot";
 import { calculateOrderTotals, fixedDiscount, percentageDiscount, type OrderDiscount } from "./discount";
 import { requiresPin } from "./pinProtection";
 import { addSuspendedOrder, createSuspendedOrder, loadSuspendedOrders, removeSuspendedOrder, restoreSuspendedOrder, saveSuspendedOrders, type SuspendedOrder } from "./suspendedOrders";
-import { isNativeUsbPrintingAvailable, printEscPosDailySummary, printEscPosInternalOrderSlip, printEscPosReceipt, printerStatus, testReceipt, type PrinterStatus } from "./usbEscPosPrinter";
+import { INTERNAL_SLIP_CUT_SETTLE_MS, isNativeUsbPrintingAvailable, printEscPosDailySummary, printEscPosInternalOrderSlip, printEscPosReceipt, printerStatus, testReceipt, type PrinterStatus } from "./usbEscPosPrinter";
 import type { Category, MenuItem, OrderItem, OrderItemInput, PizzaSize } from "./types/menu";
 
 // Set this before the first render so native-only CSS fallbacks never flash.
@@ -97,13 +97,23 @@ function App() {
     if (isNativeUsbPrintingAvailable()) {
       void (async () => {
         try {
-          // Each native print is cut by the USB plugin, so these are two
-          // separate physical slips: customer receipt first, internal slip second.
+          // This native job includes its own cut. Its promise resolves only
+          // after a post-cut settle window, before the customer job can start.
+          await printEscPosInternalOrderSlip(currentOrderReceipt, INTERNAL_SLIP_CUT_SETTLE_MS);
+        } catch (reason) {
+          await refreshPrinterStatus();
+          const message = reason instanceof Error ? reason.message : String(reason);
+          window.alert(`Interní lístek se nepodařilo vytisknout. Zákaznická účtenka nebyla vytištěna. ${message}`);
+          return;
+        }
+        try {
+          // A second independent native USB job, with its own final full cut.
           await printEscPosReceipt(currentOrderReceipt, settings.company);
-          await printEscPosInternalOrderSlip(currentOrderReceipt);
           await refreshPrinterStatus();
-        } catch {
+        } catch (reason) {
           await refreshPrinterStatus();
+          const message = reason instanceof Error ? reason.message : String(reason);
+          window.alert(`Interní lístek byl vytištěn, ale zákaznická účtenka se nepodařila vytisknout. ${message}`);
         }
       })();
     } else requestAnimationFrame(() => window.print());

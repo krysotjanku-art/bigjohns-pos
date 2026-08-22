@@ -12,6 +12,8 @@ import android.hardware.usb.UsbEndpoint;
 import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.core.content.ContextCompat;
 
@@ -30,6 +32,7 @@ public class UsbEscPosPrinterPlugin extends Plugin {
     private static final String USB_PERMISSION = "cz.bigjohns.pos.USB_PRINTER_PERMISSION";
     private PluginCall pendingPrint;
     private String pendingContent;
+    private int pendingPostCutWaitMs;
     private BroadcastReceiver permissionReceiver;
 
     @Override
@@ -43,9 +46,11 @@ public class UsbEscPosPrinterPlugin extends Plugin {
                 if (pendingPrint == null) return;
                 PluginCall call = pendingPrint;
                 String content = pendingContent;
+                int postCutWaitMs = pendingPostCutWaitMs;
                 pendingPrint = null;
                 pendingContent = null;
-                if (granted && device != null) print(device, content, call);
+                pendingPostCutWaitMs = 0;
+                if (granted && device != null) print(device, content, postCutWaitMs, call);
                 else call.reject("Přístup k USB tiskárně nebyl povolen.");
             }
         };
@@ -74,6 +79,7 @@ public class UsbEscPosPrinterPlugin extends Plugin {
     @PluginMethod
     public void print(PluginCall call) {
         String content = call.getString("content", "");
+        int postCutWaitMs = Math.max(0, Math.min(call.getInt("postCutWaitMs", 0), 1000));
         if (content.trim().isEmpty()) { call.reject("Obsah účtenky je prázdný."); return; }
         UsbDevice device = findPrinter();
         if (device == null) { call.reject("Tiskárna RONGTA RP80-USE není připojena přes USB."); return; }
@@ -81,12 +87,13 @@ public class UsbEscPosPrinterPlugin extends Plugin {
         if (!manager.hasPermission(device)) {
             pendingPrint = call;
             pendingContent = content;
+            pendingPostCutWaitMs = postCutWaitMs;
             Intent permissionIntent = new Intent(USB_PERMISSION).setPackage(getContext().getPackageName());
             int flags = PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ? PendingIntent.FLAG_MUTABLE : 0);
             manager.requestPermission(device, PendingIntent.getBroadcast(getContext(), 0, permissionIntent, flags));
             return;
         }
-        print(device, content, call);
+        print(device, content, postCutWaitMs, call);
     }
 
     private UsbManager usbManager() { return (UsbManager) getContext().getSystemService(Context.USB_SERVICE); }
@@ -111,7 +118,7 @@ public class UsbEscPosPrinterPlugin extends Plugin {
         return false;
     }
 
-    private void print(UsbDevice device, String content, PluginCall call) {
+    private void print(UsbDevice device, String content, int postCutWaitMs, PluginCall call) {
         UsbManager manager = usbManager();
         UsbDeviceConnection connection = manager.openDevice(device);
         if (connection == null) { call.reject("Nepodařilo se otevřít USB tiskárnu."); return; }
@@ -141,7 +148,11 @@ public class UsbEscPosPrinterPlugin extends Plugin {
         connection.releaseInterface(printerInterface);
         connection.close();
         if (!ok) { call.reject("Tiskárna nepřijala data účtenky."); return; }
-        JSObject result = new JSObject(); result.put("printerName", printerName(device)); call.resolve(result);
+        JSObject result = new JSObject(); result.put("printerName", printerName(device));
+        if (postCutWaitMs == 0) { call.resolve(result); return; }
+        // bulkTransfer confirms USB acceptance, not completion of the cut.
+        // Resolve only after a bounded post-cut settle period.
+        new Handler(Looper.getMainLooper()).postDelayed(() -> call.resolve(result), postCutWaitMs);
     }
 
     private boolean write(UsbDeviceConnection connection, UsbEndpoint endpoint, byte[] data) { return connection.bulkTransfer(endpoint, data, data.length, 5000) == data.length; }

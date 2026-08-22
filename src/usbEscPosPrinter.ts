@@ -15,7 +15,7 @@ export interface PrinterStatus {
 
 interface UsbEscPosPrinterPlugin {
   getStatus(): Promise<PrinterStatus>;
-  print(options: { content: string }): Promise<{ printerName: string }>;
+  print(options: { content: string; postCutWaitMs?: number }): Promise<{ printerName: string }>;
 }
 
 const nativePrinter = registerPlugin<UsbEscPosPrinterPlugin>("UsbEscPosPrinter");
@@ -40,6 +40,8 @@ const size = (width: number, height: number) => `${GS}!${String.fromCharCode(((w
 const font = (value: 0 | 1) => `${ESC}M${String.fromCharCode(value)}`;
 const lineHeight = (dots: number) => `${ESC}3${String.fromCharCode(dots)}`;
 const defaultLineHeight = `${ESC}2`;
+/** Lets the RP80 complete the first feed/cut before the next USB job starts. */
+export const INTERNAL_SLIP_CUT_SETTLE_MS = 650;
 const ORDER_NUMBER_SQUARE_WIDTH = 10;
 const tableWidths = [7, 14, 14, 14] as const;
 const tableBorder = `+${tableWidths.map((width) => "-".repeat(width)).join("+")}+`;
@@ -180,10 +182,13 @@ export const internalOrderSlipEscPosText = (receipt: ReceiptSnapshot) => {
   ].join("");
 };
 
-/** Prints a second, separately cut internal slip after a completed checkout. */
-export const printEscPosInternalOrderSlip = async (receipt: ReceiptSnapshot) => {
+/**
+ * Prints a separately cut internal slip. A native post-cut wait keeps the
+ * following customer job out of the printer's still-processing buffer.
+ */
+export const printEscPosInternalOrderSlip = async (receipt: ReceiptSnapshot, postCutWaitMs = 0) => {
   if (!isNativeUsbPrintingAvailable()) return false;
-  await nativePrinter.print({ content: internalOrderSlipEscPosText(receipt) });
+  await nativePrinter.print({ content: internalOrderSlipEscPosText(receipt), postCutWaitMs });
   return true;
 };
 
