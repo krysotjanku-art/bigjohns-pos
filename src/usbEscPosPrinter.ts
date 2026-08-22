@@ -15,7 +15,7 @@ export interface PrinterStatus {
 
 interface UsbEscPosPrinterPlugin {
   getStatus(): Promise<PrinterStatus>;
-  print(options: { content: string; postCutWaitMs?: number }): Promise<{ printerName: string }>;
+  print(options: { content: string; jobName: string; postCutWaitMs?: number }): Promise<{ printerName: string }>;
 }
 
 const nativePrinter = registerPlugin<UsbEscPosPrinterPlugin>("UsbEscPosPrinter");
@@ -41,7 +41,9 @@ const font = (value: 0 | 1) => `${ESC}M${String.fromCharCode(value)}`;
 const lineHeight = (dots: number) => `${ESC}3${String.fromCharCode(dots)}`;
 const defaultLineHeight = `${ESC}2`;
 /** Lets the RP80 complete the first feed/cut before the next USB job starts. */
-export const INTERNAL_SLIP_CUT_SETTLE_MS = 650;
+export const INTERNAL_SLIP_CUT_SETTLE_MS = 1000;
+/** Keeps independently queued jobs from beginning directly on a prior cut. */
+export const PRINTER_JOB_CUT_SETTLE_MS = 350;
 const ORDER_NUMBER_SQUARE_WIDTH = 10;
 const tableWidths = [7, 14, 14, 14] as const;
 const tableBorder = `+${tableWidths.map((width) => "-".repeat(width)).join("+")}+`;
@@ -50,6 +52,40 @@ const tableCell = (value: string, width: number, left = false) => {
   return left ? safe.slice(0, width).padEnd(width, " ") : safe.slice(0, width).padStart(width, " ");
 };
 const tableRow = (values: readonly string[]) => `|${values.map((value, index) => tableCell(value, tableWidths[index], index === 0)).join("|")}|`;
+
+let printerQueue: Promise<void> = Promise.resolve();
+
+/**
+ * Every native operation enters this one queue. This protects the printer even
+ * when a checkout, copy, report, or test action is requested at the same time.
+ */
+const queueNativeOperation = (operationName: string, operation: () => Promise<void>) => {
+  const run = async () => {
+    console.info(`[printer] lock acquired: ${operationName}`);
+    try {
+      await operation();
+      console.info(`[printer] completed: ${operationName}`);
+    } finally {
+      console.info(`[printer] lock released: ${operationName}`);
+    }
+  };
+  const queued = printerQueue.then(run, run);
+  printerQueue = queued.catch(() => undefined);
+  return queued;
+};
+
+const queueNativePrint = (jobName: string, content: string, postCutWaitMs = PRINTER_JOB_CUT_SETTLE_MS) =>
+  queueNativeOperation(jobName, () => nativePrinter.print({ content, jobName, postCutWaitMs }).then(() => undefined));
+
+export class CheckoutPrintError extends Error {
+  readonly stage: "internal" | "customer";
+
+  constructor(stage: "internal" | "customer", cause: unknown) {
+    super(cause instanceof Error ? cause.message : String(cause));
+    this.name = "CheckoutPrintError";
+    this.stage = stage;
+  }
+}
 
 const vatTable = (receipt: ReceiptSnapshot) => {
   const vatTotals = receipt.vatBreakdown ?? calculateVatBreakdown(receipt.items);
@@ -144,7 +180,7 @@ export const printerStatus = async (): Promise<PrinterStatus> => {
 
 export const printEscPosReceipt = async (receipt: ReceiptSnapshot, company?: CompanySettings) => {
   if (!isNativeUsbPrintingAvailable()) return false;
-  await nativePrinter.print({ content: receiptEscPosText(receipt, company) });
+  await queueNativePrint("customer-receipt", receiptEscPosText(receipt, company));
   return true;
 };
 
@@ -186,9 +222,34 @@ export const internalOrderSlipEscPosText = (receipt: ReceiptSnapshot) => {
  * Prints a separately cut internal slip. A native post-cut wait keeps the
  * following customer job out of the printer's still-processing buffer.
  */
-export const printEscPosInternalOrderSlip = async (receipt: ReceiptSnapshot, postCutWaitMs = 0) => {
+export const printEscPosInternalOrderSlip = async (receipt: ReceiptSnapshot, postCutWaitMs = PRINTER_JOB_CUT_SETTLE_MS) => {
   if (!isNativeUsbPrintingAvailable()) return false;
-  await nativePrinter.print({ content: internalOrderSlipEscPosText(receipt), postCutWaitMs });
+  await queueNativePrint("internal-order-slip", internalOrderSlipEscPosText(receipt), postCutWaitMs);
+  return true;
+};
+
+/**
+ * One atomic checkout queue entry: no copy, report, or test job can get
+ * between the internal slip and its corresponding customer receipt.
+ */
+export const printCompletedOrderSlips = async (receipt: ReceiptSnapshot, company?: CompanySettings) => {
+  if (!isNativeUsbPrintingAvailable()) return false;
+  const internalContent = internalOrderSlipEscPosText(receipt);
+  const customerContent = receiptEscPosText(receipt, company);
+  await queueNativeOperation("checkout-order-slips", async () => {
+    try {
+      console.info(`[printer] internal slip started; ${internalContent.length} characters`);
+      await nativePrinter.print({ content: internalContent, jobName: "internal-order-slip", postCutWaitMs: INTERNAL_SLIP_CUT_SETTLE_MS });
+      console.info("[printer] internal slip settled; customer receipt starting");
+    } catch (reason) {
+      throw new CheckoutPrintError("internal", reason);
+    }
+    try {
+      await nativePrinter.print({ content: customerContent, jobName: "customer-receipt", postCutWaitMs: PRINTER_JOB_CUT_SETTLE_MS });
+    } catch (reason) {
+      throw new CheckoutPrintError("customer", reason);
+    }
+  });
   return true;
 };
 
@@ -248,7 +309,7 @@ export const dailySummaryEscPosText = (summary: DailySummary, issuedAt: Date, co
 
 export const printEscPosDailySummary = async (summary: DailySummary, issuedAt: Date, company?: CompanySettings) => {
   if (!isNativeUsbPrintingAvailable()) return false;
-  await nativePrinter.print({ content: dailySummaryEscPosText(summary, issuedAt, company) });
+  await queueNativePrint("daily-summary", dailySummaryEscPosText(summary, issuedAt, company));
   return true;
 };
 

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { CategoryBar } from "./components/CategoryBar";
 import { BackupScreen } from "./components/BackupScreen";
@@ -33,7 +33,7 @@ import { createReceiptSnapshot, type ReceiptSnapshot } from "./receiptSnapshot";
 import { calculateOrderTotals, fixedDiscount, percentageDiscount, type OrderDiscount } from "./discount";
 import { requiresPin } from "./pinProtection";
 import { addSuspendedOrder, createSuspendedOrder, loadSuspendedOrders, removeSuspendedOrder, restoreSuspendedOrder, saveSuspendedOrders, type SuspendedOrder } from "./suspendedOrders";
-import { INTERNAL_SLIP_CUT_SETTLE_MS, isNativeUsbPrintingAvailable, printEscPosDailySummary, printEscPosInternalOrderSlip, printEscPosReceipt, printerStatus, testReceipt, type PrinterStatus } from "./usbEscPosPrinter";
+import { CheckoutPrintError, isNativeUsbPrintingAvailable, printCompletedOrderSlips, printEscPosDailySummary, printEscPosReceipt, printerStatus, testReceipt, type PrinterStatus } from "./usbEscPosPrinter";
 import type { Category, MenuItem, OrderItem, OrderItemInput, PizzaSize } from "./types/menu";
 
 // Set this before the first render so native-only CSS fallbacks never flash.
@@ -63,6 +63,8 @@ function App() {
   const [systemDark,setSystemDark]=useState(()=>systemPrefersDark(typeof window.matchMedia === "function" ? window.matchMedia("(prefers-color-scheme: dark)") : undefined));
   const [discount,setDiscount]=useState<OrderDiscount|null>(null);
   const [discountOpen,setDiscountOpen]=useState(false);
+  const [isPrinting,setIsPrinting]=useState(false);
+  const checkoutPrintInFlight=useRef(false);
   const [drawerOpen,setDrawerOpen]=useState(false);
   const [printer,setPrinter]=useState<PrinterStatus>({connected:false,permissionGranted:false,message:"Kontrola USB tiskárny…"});
   const totals = useMemo(() => calculateOrderTotals(order, discount), [order,discount]);
@@ -83,6 +85,8 @@ function App() {
   const handleSize = (pizza: MenuItem, size: PizzaSize) => { const prices=pizza.pizzaSizePrices ?? pizzaPrices[pizza.pizzaPricing!]; addItem({ ...pizza, nazev: `${pizza.cislo} ${pizza.nazev} ${size.code}`, cena: prices[size.code], selectedSize: size.code, vatRate: settings.reducedVat }); setSelectedPizza(null); };
   const handlePay = () => {
     if (!order.length) { setReceipt(null); return; }
+    if (checkoutPrintInFlight.current) return;
+    checkoutPrintInFlight.current = true;
     const issuedAt = new Date();
     const currentOrderReceipt = createReceiptSnapshot(order, nextReceiptNumber(), nextOrderNumber(issuedAt), issuedAt,totals.discount);
     const completedOrder = createCompletedOrder(currentOrderReceipt);
@@ -93,30 +97,36 @@ function App() {
       setOrder([]);
       setDiscount(null);
       setHistory(updatedHistory);
+      setIsPrinting(isNativeUsbPrintingAvailable());
     });
     if (isNativeUsbPrintingAvailable()) {
       void (async () => {
         try {
-          // This native job includes its own cut. Its promise resolves only
-          // after a post-cut settle window, before the customer job can start.
-          await printEscPosInternalOrderSlip(currentOrderReceipt, INTERNAL_SLIP_CUT_SETTLE_MS);
-        } catch (reason) {
-          await refreshPrinterStatus();
-          const message = reason instanceof Error ? reason.message : String(reason);
-          window.alert(`Interní lístek se nepodařilo vytisknout. Zákaznická účtenka nebyla vytištěna. ${message}`);
-          return;
-        }
-        try {
-          // A second independent native USB job, with its own final full cut.
-          await printEscPosReceipt(currentOrderReceipt, settings.company);
+          await printCompletedOrderSlips(currentOrderReceipt, settings.company);
           await refreshPrinterStatus();
         } catch (reason) {
           await refreshPrinterStatus();
           const message = reason instanceof Error ? reason.message : String(reason);
-          window.alert(`Interní lístek byl vytištěn, ale zákaznická účtenka se nepodařila vytisknout. ${message}`);
+          if (reason instanceof CheckoutPrintError && reason.stage === "customer") {
+            if (window.confirm(`Interní lístek byl vytištěn, zákaznická účtenka se nevytiskla. Zkusit znovu vytisknout pouze zákaznickou účtenku? ${message}`)) {
+              try {
+                await printEscPosReceipt(currentOrderReceipt, settings.company);
+                await refreshPrinterStatus();
+              } catch (retryReason) {
+                await refreshPrinterStatus();
+                const retryMessage = retryReason instanceof Error ? retryReason.message : String(retryReason);
+                window.alert(`Zákaznická účtenka se nevytiskla ani při opakování. ${retryMessage}`);
+              }
+            }
+          } else {
+            window.alert(`Interní lístek se nepodařilo vytisknout. Zákaznická účtenka nebyla vytištěna. ${message}`);
+          }
+        } finally {
+          checkoutPrintInFlight.current = false;
+          setIsPrinting(false);
         }
       })();
-    } else requestAnimationFrame(() => window.print());
+    } else requestAnimationFrame(() => { checkoutPrintInFlight.current = false; window.print(); });
   };
   const reportPrintError = async (reason: unknown) => {
     await refreshPrinterStatus();
@@ -192,7 +202,7 @@ function App() {
   if (view === "settings") return <>{navigation}<main style={{ minHeight: "calc(100vh - 52px)", padding: 20, fontFamily: "Arial", background: "#f5f5f5" }}><SettingsScreen settings={settings} appearance={appearance} accent={accent} printerStatus={printer} onRefreshPrinterStatus={()=>void refreshPrinterStatus()} onPrintTest={()=>void printEscPosReceipt(testReceipt(), settings.company).then(refreshPrinterStatus).catch(refreshPrinterStatus)} onAppearanceChange={(next)=>{saveAppearance(localStorage,next);setAppearance(next)}} onAccentChange={(next)=>{saveAccent(localStorage,next);setAccent(next)}} onChangePin={(current,next,confirm)=>changePin(localStorage,current,next,confirm)} onPinEnabledChange={(pinEnabled)=>{const next={...settings,pinEnabled};saveSettings(localStorage,next);setSettings(next)}} onSave={(next) => { saveSettings(localStorage, next); setSettings(next); }} onBackToPos={() => setView("pos")} /></main><Receipt receipt={receipt} /></>;
   if(view==="menu")return <>{navigation}<main><MenuManagementScreen pizzas={pizzas} otherItems={otherMenu} onSavePizzas={next=>{if(valid(next)){savePizzas(localStorage,next);setPizzas(next)}}} onSaveOther={next=>{if(validOtherMenu(next)){saveOtherMenu(localStorage,next);setOtherMenu(next)}}} onResetPizzas={()=>{const next=defaults();savePizzas(localStorage,next);setPizzas(next)}} onResetCategory={category=>{const next=[...otherMenu.filter(item=>item.kategorie!==category),...defaultOtherMenu().filter(item=>item.kategorie===category)];saveOtherMenu(localStorage,next);setOtherMenu(next)}} onBackToPos={()=>setView("pos")}/></main></>;
 
-  return <>{navigation}<div className="pos-app" style={{ display: "flex", height: "calc(100vh - 52px)", fontFamily: "Arial" }}><main className="pos-menu" style={{ flex: "1 1 auto", minWidth: 0, padding: 20, background: "#f5f5f5" }}><div className="pos-menu__header"><h1>Menu</h1><div className="pos-menu__header-actions"><button className="pos-menu__history" type="button" onClick={() => setView("suspended")}>Pozastavené ({suspendedOrders.length})</button><button className="pos-menu__history" type="button" onClick={() => setView("history")}>Historie</button></div></div><CategoryBar activeCategory={activeCategory} onCategoryChange={setActiveCategory} /><div className="pos-menu__quick-row"><QuickAddPanel items={configuredMenu} onAdd={addMenuItem}/></div><div className="pos-menu__content"><PizzaGrid activeCategory={activeCategory} menuItems={configuredMenu} searching={false} onItemSelect={(item) => { if (item.kategorie === "Pizza") setSelectedPizza(item); else addMenuItem(item); }} /></div></main><OrderPanel items={order} subtotal={totals.subtotal} total={totals.total} discount={totals.discount} onDiscount={()=>setDiscountOpen(true)} onIncrement={(itemKey) => { setReceipt(null); setOrder((current) => current.map((item) => orderItemKey(item) === itemKey ? { ...item, pocet: item.pocet + 1 } : item)); }} onDecrement={decrementItem} onRemove={removeItem} onSuspend={suspendOrder} onPay={handlePay} /><PizzaModal pizza={selectedPizza} onClose={() => setSelectedPizza(null)} onSizeSelect={handleSize} />{discountOpen&&<DiscountModal hasDiscount={Boolean(totals.discount)} onClose={()=>setDiscountOpen(false)} onRemove={()=>{setDiscount(null);setDiscountOpen(false)}} onApply={(type,value)=>{const next=type==="percentage"?percentageDiscount(value,totals.subtotal):fixedDiscount(value,totals.subtotal);if(next){setDiscount(next);setDiscountOpen(false)}}}/>}</div><Receipt receipt={receipt} company={settings.company} /><DailySummaryReceipt summary={summaryPrint?.summary ?? null} issuedAt={summaryPrint?.issuedAt ?? null} /></>;
+  return <>{navigation}<div className="pos-app" style={{ display: "flex", height: "calc(100vh - 52px)", fontFamily: "Arial" }}><main className="pos-menu" style={{ flex: "1 1 auto", minWidth: 0, padding: 20, background: "#f5f5f5" }}><div className="pos-menu__header"><h1>Menu</h1><div className="pos-menu__header-actions"><button className="pos-menu__history" type="button" onClick={() => setView("suspended")}>Pozastavené ({suspendedOrders.length})</button><button className="pos-menu__history" type="button" onClick={() => setView("history")}>Historie</button></div></div><CategoryBar activeCategory={activeCategory} onCategoryChange={setActiveCategory} /><div className="pos-menu__quick-row"><QuickAddPanel items={configuredMenu} onAdd={addMenuItem}/></div><div className="pos-menu__content"><PizzaGrid activeCategory={activeCategory} menuItems={configuredMenu} searching={false} onItemSelect={(item) => { if (item.kategorie === "Pizza") setSelectedPizza(item); else addMenuItem(item); }} /></div></main><OrderPanel items={order} subtotal={totals.subtotal} total={totals.total} discount={totals.discount} isPrinting={isPrinting} onDiscount={()=>setDiscountOpen(true)} onIncrement={(itemKey) => { setReceipt(null); setOrder((current) => current.map((item) => orderItemKey(item) === itemKey ? { ...item, pocet: item.pocet + 1 } : item)); }} onDecrement={decrementItem} onRemove={removeItem} onSuspend={suspendOrder} onPay={handlePay} /><PizzaModal pizza={selectedPizza} onClose={() => setSelectedPizza(null)} onSizeSelect={handleSize} />{discountOpen&&<DiscountModal hasDiscount={Boolean(totals.discount)} onClose={()=>setDiscountOpen(false)} onRemove={()=>{setDiscount(null);setDiscountOpen(false)}} onApply={(type,value)=>{const next=type==="percentage"?percentageDiscount(value,totals.subtotal):fixedDiscount(value,totals.subtotal);if(next){setDiscount(next);setDiscountOpen(false)}}}/>}</div><Receipt receipt={receipt} company={settings.company} /><DailySummaryReceipt summary={summaryPrint?.summary ?? null} issuedAt={summaryPrint?.issuedAt ?? null} /></>;
 }
 
 export default App;

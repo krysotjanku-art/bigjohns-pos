@@ -90,6 +90,6 @@ describe("USB ESC/POS receipt", () => {
   });
 
   it("keeps a bounded native settle interval between the internal and customer jobs", () => {
-    expect(INTERNAL_SLIP_CUT_SETTLE_MS).toBe(650);
+    expect(INTERNAL_SLIP_CUT_SETTLE_MS).toBe(1000);
   });
 });
