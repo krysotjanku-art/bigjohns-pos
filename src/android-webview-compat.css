@@ -52,6 +52,12 @@ html[data-platform="android"] .pos-app .quick-add > div > button + button {
   margin-left: 0 !important;
 }
 
+/* Android 7.1 ignores the flex gap inside each favourite shortcut. Keep the
+   product name and its independently rendered price visibly separated. */
+html[data-platform="android"] .pos-app .quick-add > div > button strong {
+  margin-left: 8px !important;
+}
+
 html[data-platform="android"] .pos-app .category-bar {
   gap: 0 !important;
   margin: -7px -7px 12px !important;
@@ -366,6 +372,16 @@ html[data-platform="android"][data-theme="dark"] .daily-ui button.daily-ui__prin
 html[data-platform="android"] .back-to-pos-button {
   -webkit-appearance: none !important;
   appearance: none !important;
+}
+
+/* The broad Android dark-mode control fallback above uses the neutral button
+   surface for page buttons. The shared Back to POS control is intentionally
+   an accent action on every screen, so restore its token-driven treatment
+   after that fallback has been applied. */
+html[data-platform="android"][data-theme="dark"] .back-to-pos-button {
+  background: rgba(var(--ui-accent-tint-rgb), .18) !important;
+  border-color: rgba(var(--ui-accent-tint-rgb), .38) !important;
+  color: var(--theme-text) !important;
 }
 
 /* The broad Android Settings button skin also matches this shared navigation
